@@ -56,3 +56,4 @@ next-env.d.ts
 /graphify-out/.graphify_labels.json.sig
 /public/vendor/
 *.tmp
+verify-shots/
