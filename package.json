@@ -15,7 +15,8 @@
     "build:pages": "node scripts/check-visuals.mjs && node scripts/check-semantic.mjs && node scripts/copy-runtime.mjs && node scripts/build.mjs && node scripts/package-pages.mjs",
     "build:semantic": "node scripts/build-semantic-index.mjs",
     "publish:graph": "node scripts/publish-graph.mjs",
-    "check:semantic": "node scripts/check-semantic.mjs"
+    "check:semantic": "node scripts/check-semantic.mjs",
+    "verify": "node scripts/verify-site.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",
@@ -54,6 +55,7 @@
     "oxfmt": "0.61.0",
     "oxlint": "1.76.0",
     "oxlint-tsgolint": "7.0.2001",
+    "playwright": "1.61.0",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
     "vis-network": "9.1.6",
