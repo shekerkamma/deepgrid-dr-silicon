@@ -6,7 +6,7 @@
  "queryPrefix": "Represent this sentence for searching relevant passages: ",
  "counts": {
   "nodes": 1075,
-  "chunks": 177,
+  "chunks": 273,
   "themes": 14,
   "examples": 70
  },
@@ -112,7 +112,7 @@
   "Sovereign Supply Chain Immunity: The Three-Factory & 100% Domestic Architecture",
   "Hardware Lockstep: How DG32 Catches a Faulty Computation"
  ],
- "indexSha256": "f6089806a995e03f10a0e903e9de2b464ce7283fbe36802135605ab33b4b9a11",
- "rowKeySha256": "c6d263d8bd760ff372f57afbff7644123d8f59db7cb4e244ea338611ed64fbc8",
+ "indexSha256": "62a409324582d39620921835fc04725be10f752d0c1fd501da082fe862af185b",
+ "rowKeySha256": "ea5824e852195cd9ae063732a9f261a1b7a1d57a23835ed85af2f3c8539856c9",
  "modelSha256": "6c9c6101a956d62dfb5e7190c538226c0c5bb9cb27b651234b6df063ee7dbfe4"
 }

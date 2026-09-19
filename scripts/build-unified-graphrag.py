@@ -3,6 +3,31 @@ import json, re, math
 from pathlib import Path
 import fitz
 
+
+def pack(text, limit=1800):
+    """Split a page into passages of at most `limit` characters without losing any of it: break at sentence ends, and
+    split a longer sentence at a space, never inside a word or a figure. Pages used to be cut at 1,800 characters and
+    the rest dropped. Same packer as the showcase's build-unified-graphrag.py."""
+    text = re.sub(r'\s+', ' ', text).strip()
+    parts, cur = [], ''
+    for seg in re.split(r'(?<=[.!?])\s+(?=[A-Z0-9(₹$|])', text):
+        while len(seg) > limit:
+            cut = seg.rfind(' ', 0, limit)
+            cut = cut if cut > limit // 2 else limit
+            if cur:
+                parts.append(cur)
+                cur = ''
+            parts.append(seg[:cut].strip())
+            seg = seg[cut:].strip()
+        if cur and len(cur) + 1 + len(seg) > limit:
+            parts.append(cur)
+            cur = seg
+        else:
+            cur = f'{cur} {seg}'.strip()
+    if cur:
+        parts.append(cur)
+    return parts
+
 # repo root, so the script runs from any checkout and any working directory
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -120,17 +145,19 @@ def main():
                 if re.match(r"^[0-9]+(\.[0-9]+)*\s+[A-Z]", l) or "Section" in l or "Specification" in l:
                     section = l
                     break
-            corpus_chunks.append({
-                'id': f"pdf_{p.stem}_p{page_idx+1}",
-                'docTitle': meta['title'],
-                'docNum': meta['docNum'],
-                'pdfPath': f"./downloads/docs/{p.name}",
-                'pdfSize': meta['size'],
-                'specPath': meta['spec'],
-                'pageLabel': f"p. {page_idx+1}",
-                'section': section,
-                'text': text[:1800]
-            })
+            # a long page becomes several passages; the first keeps the page's id so existing references hold
+            for n, part in enumerate(pack(text), 1):
+                corpus_chunks.append({
+                    'id': f"pdf_{p.stem}_p{page_idx+1}" + (f"_{n}" if n > 1 else ''),
+                    'docTitle': meta['title'],
+                    'docNum': meta['docNum'],
+                    'pdfPath': f"./downloads/docs/{p.name}",
+                    'pdfSize': meta['size'],
+                    'specPath': meta['spec'],
+                    'pageLabel': f"p. {page_idx+1}",
+                    'section': section,
+                    'text': part
+                })
 
     print(f"Total PDF chunks: {len(corpus_chunks)}")
 
