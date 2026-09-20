@@ -39,6 +39,65 @@ export default function Home(){
  const devKey=view+'?'+route.params.toString();
  useCount(devKey); useDraw(devKey); useRail(devKey);
 
+// Verification Ladder - Evidence type icons and imagery mapping
+const evidenceIcons: Record<string, React.ReactNode> = {
+  Simulated: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="2"/>
+      <path d="M8 12h8M12 8v8"/>
+      <circle cx="12" cy="12" r="1" fill="currentColor"/>
+    </svg>
+  ),
+  'Post-route': (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4 12h16M12 4v16"/>
+      <path d="M8 8l4 4 4-4M8 16l4-4 4 4"/>
+    </svg>
+  ),
+  Analytic: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 9l4-4 4 4M3 15l4-4 4 4M3 21l4-4 4 4"/>
+      <path d="M15 3v18"/>
+    </svg>
+  ),
+  'Tool estimate': (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="2"/>
+      <path d="M9 12h6M12 9v6"/>
+    </svg>
+  ),
+  'Process nominal': (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    </svg>
+  ),
+};
+
+const evidenceImages: Record<string, string> = {
+  Simulated: './media/sims_image.png',
+  'Post-route': './media/sims_image2.png',
+  Analytic: './media/sims_image3.png',
+  'Tool estimate': './media/sims_image4.png',
+  'Process nominal': './media/sims_image5.png',
+};
+
+const evidenceBadges: Record<string, string> = {
+  Simulated: 'SIMULATION',
+  'Post-route': 'POST-ROUTE',
+  Analytic: 'ANALYTIC',
+  'Tool estimate': 'TOOL EST.',
+  'Process nominal': 'PROCESS',
+};
+
+const evidenceColors: Record<string, string> = {
+  Simulated: '#bf7f3b',
+  'Post-route': '#2f9e8c',
+  Analytic: '#8f9d6b',
+  'Tool estimate': '#7486ab',
+  'Process nominal': '#bf7f3b',
+};
+
+
 // Image mappings for visual enhancements
 const essenceImages: Record<string, string> = {
   'HARDWARE LOCKSTEP SAFETY': './media/deepgrid_soc2_die.jpg',
@@ -515,15 +574,69 @@ const safetyImages: Record<string, string> = {
   <FaultTrace steps={faultPath} intro={<><h2 className="dr-h2">From a wrong value<br/><em>to a safe bridge.</em></h2><p className="dr-lead">Software self-test runs periodically and cannot see a fault between runs. DG32-LITE compares every value the CPU commits, as it commits it, and the path from mismatch to a bridge that is switched off never passes through firmware.</p><p className="dr-lead">Firmware can still prove the path works: a locked injection register fires it on purpose, which is the only way to test it on real silicon.</p><button className="text-link" onClick={()=>openBlock(0)} aria-label="Inside the safety core">Inside the safety core <ArrowUpRight size={18} aria-hidden="true"/></button> <button className="text-link" onClick={()=>navigate('control')}>100 kHz Control Loop Timing <ArrowUpRight size={16}/></button> <button className="text-link" onClick={()=>go('ask')}>Query Safety in Ask DeepGrid <ArrowUpRight size={16}/></button></>}/>
  </section>
 
- <section id="verification-ladder" className="content-section"><div className="section-label"><Eyebrow>VERIFICATION LADDER</Eyebrow><span>WHAT EVIDENCE BACKS EVERY PRE-SILICON SPECIFICATION?</span></div>
-  <div className="dr-two"><div><h2 className="dr-h2">Every figure says<br/><em>how it was obtained.</em></h2><p className="dr-lead">DG32 is pre-silicon. Each number on this site comes from one of five kinds of evidence, and first-silicon bring-up turns these design values into measurements.</p></div><div className="dr-ladder">{evidenceLadder.map(e=><div key={e.kind}><span className="mono">{e.kind.toUpperCase()}</span><p>{e.means}</p><small>{e.examples}</small></div>)}</div></div>
-  <div className="dr-notclaimed"><p className="dr-kicker">WHAT THIS SITE DOES NOT CLAIM</p><ul>{notClaimed.map(n=><li key={n}>{n}</li>)}</ul></div>
-  <div className="dr-links dr-sec-gap">
-    <button className="text-link" onClick={()=>navigate('roadmap')}>Review Multi-Spin Roadmap & Gaps <ArrowUpRight size={16}/></button>
-    <button className="text-link" onClick={()=>go('library')}>Download Verified Documents & Whitepapers <ArrowUpRight size={16}/></button>
-    <button className="text-link" onClick={()=>go('ask')}>Audit Specifications in Ask DeepGrid <ArrowUpRight size={16}/></button>
-  </div>
- </section>
+
+
+    // Verification Ladder - Redesigned with visual evidence cards
+    <section id="verification-ladder" className="content-section dr-verification-ladder-section" data-rv data-rv-delay="200">
+      <div className="section-label">
+        <Eyebrow>VERIFICATION LADDER</Eyebrow>
+        <span>WHAT EVIDENCE BACKS EVERY PRE-SILICON SPECIFICATION?</span>
+      </div>
+      <div className="dr-verification-intro" data-rv data-rv-delay="100">
+        <h2 className="dr-h2">Every figure says<br/><em>how it was obtained.</em></h2>
+        <p className="dr-lead">DG32 is pre-silicon. Each number on this site comes from one of five kinds of evidence, and first-silicon bring-up turns these design values into measurements.</p>
+      </div>
+      <div className="dr-evidence-ladder" role="list" aria-label="Five evidence types backing every pre-silicon specification">
+        {evidenceLadder.map((e, idx) => (
+          <article
+            key={e.kind}
+            className="dr-evidence-card"
+            role="listitem"
+            data-rv
+            data-rv-delay={idx * 150 + 200}
+            style={{ '--evidence-color': evidenceColors[e.kind] }}
+          >
+            <figure className="dr-evidence-media">
+              <img
+                src={evidenceImages[e.kind]}
+                alt={`Evidence visualization: ${e.kind}`}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption className="dr-evidence-badge" style={{ background: evidenceColors[e.kind] }}>
+                {evidenceBadges[e.kind]}
+              </figcaption>
+            </figure>
+            <div className="dr-evidence-content">
+              <div className="dr-evidence-header">
+                <span className="dr-evidence-icon" style={{ color: evidenceColors[e.kind] }}>
+                  {evidenceIcons[e.kind]}
+                </span>
+                <h3 className="dr-evidence-kind">{e.kind}</h3>
+              </div>
+              <p className="dr-evidence-means">{e.means}</p>
+              <div className="dr-evidence-examples">
+                <span className="dr-evidence-label">Examples:</span>
+                <span>{e.examples}</span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div className="dr-evidence-disclaimer" data-rv data-rv-delay="800">
+        <p className="dr-kicker">WHAT THIS SITE DOES NOT CLAIM</p>
+        <ul className="dr-notclaimed">
+          {notClaimed.map((n, i) => (
+            <li key={i}>{n}</li>
+          ))}
+        </ul>
+      </div>
+      <nav className="dr-links dr-sec-gap" data-rv data-rv-delay="1000" aria-label="Verification ladder actions">
+        <a className="text-link" href="#roadmap">Review Multi-Spin Roadmap & Gaps <ArrowUpRight size={16} aria-hidden="true" /></a>
+        <a className="text-link" href="#library">Download Verified Documents & Whitepapers <ArrowUpRight size={16} aria-hidden="true" /></a>
+        <a className="text-link" href="#ask">Audit Specifications in Ask DeepGrid <ArrowUpRight size={16} aria-hidden="true" /></a>
+      </nav>
+    </section>
 
  <section className="silicon-teaser"><div><Eyebrow>3D DIE EXPLORER</Eyebrow><h2>How is the 64-pin die structured<br/><em>across six functional block groups?</em></h2><p>Safety core, memory and boot, motor drive, sensing, connectivity and the bus that ties them together. Select a group and see where it sits on the die, what each block does and why.</p><button className="primary" onClick={()=>navigate('architecture')} aria-label="Inside the architecture">Inside the architecture <ArrowUpRight size={19} aria-hidden="true"/></button></div><div className="teaser-canvas"><Silicon variant="lite" reduced={reduced} exploded selected={2}/><span className="canvas-caption">EXPLODED ASSEMBLY · DRAG TO ROTATE & PITCH</span></div></section>
 
