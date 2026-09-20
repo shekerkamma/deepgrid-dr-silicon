@@ -97,6 +97,22 @@ const evidenceColors: Record<string, string> = {
   'Process nominal': '#bf7f3b',
 };
 
+// Executive Pillars - Image mapping
+const execImages: Record<string, string> = {
+  'UNIT ECONOMICS': './media/deepgrid_soc2_die.jpg',
+  'SUPPLY CONTINUITY': './media/deepgrid_defence.jpg',
+  'TIME TO MARKET': './media/roadmap-poster.png',
+  'SAFETY HARDWARE': './media/dg32-lite-tapein-poster.jpg',
+};
+
+const execBadges: Record<string, string> = {
+  'UNIT ECONOMICS': 'UNIT ECONOMICS',
+  'SUPPLY CONTINUITY': 'SOVEREIGN',
+  'TIME TO MARKET': 'ROADMAP',
+  'SAFETY HARDWARE': 'SAFETY',
+};
+
+
 
 // Image mappings for visual enhancements
 const essenceImages: Record<string, string> = {
@@ -195,13 +211,15 @@ const safetyImages: Record<string, string> = {
    <p>Pre-silicon figures.<br/>Design values, not measurements.</p>
  </section>
 
+
+
   {/* Executive Commercial & Strategic Value Matrix */}
-  <section className="content-section dr-exec-pillars-section">
+  <section className="content-section dr-exec-pillars-section" data-rv data-rv-delay="100">
     <div className="section-label">
       <Eyebrow>EXECUTIVE IMPACT</Eyebrow>
       <span>WHAT ARE THE COMMERCIAL & STRATEGIC VALUE DRIVERS?</span>
     </div>
-    <div className="thesis-heading">
+    <div className="thesis-heading" data-rv data-rv-delay="200">
       <h2>Sovereign economics.<br/><em>Automotive-grade</em> safety.</h2>
       <div>
         <p>DeepGrid delivers a domestic mature-node alternative to imported motor-control microcontrollers. By co-locating hardware lockstep safety, hardwired field-oriented control acceleration, and dual-foundry production, OEMs achieve lower bill-of-materials costs while insulating production from geopolitical export restrictions.</p>
@@ -212,52 +230,66 @@ const safetyImages: Record<string, string> = {
     </div>
 
     <div className="dr-exec-grid">
-      {executivePillars.map((p) => (
-        <article key={p.kpi} className="dr-exec-card">
-          <div className="dr-exec-card-head">
-            <span className="mono dr-exec-kpi">{p.kpi}</span>
-            <span className="dr-exec-metric">{p.metric}</span>
-          </div>
-          <h3>{p.title}</h3>
-          <p>{p.summary}</p>
-          {p.details && p.details.length > 0 && (
-            <div className="dr-pillar-details">
-              <ul>
+      {executivePillars.map((p, idx) => (
+        <article
+          key={p.kpi}
+          className="dr-exec-card"
+          data-rv
+          data-rv-delay={idx * 150 + 300}
+        >
+          <figure className="dr-exec-media">
+            <img
+              src={execImages[p.kpi] || './media/deepgrid_soc2_die.jpg'}
+              alt={p.title}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption className="dr-exec-badge">{execBadges[p.kpi] || 'PILLAR'}</figcaption>
+          </figure>
+          <div className="dr-exec-card-content">
+            <div className="dr-exec-card-head">
+              <span className="mono dr-exec-kpi">{p.kpi}</span>
+              <span className="dr-exec-metric">{p.metric}</span>
+            </div>
+            <h3>{p.title}</h3>
+            <p>{p.summary}</p>
+            {p.details && p.details.length > 0 && (
+              <div className="dr-exec-story-pills">
                 {p.details.map((d) => (
-                  <li key={d}>
-                    <Check size={13} aria-hidden="true" />
+                  <span key={d} className="dr-story-pill">
+                    <Check size={12} aria-hidden="true" />
                     <span>{d}</span>
-                  </li>
+                  </span>
                 ))}
-              </ul>
+              </div>
+            )}
+            <div className="dr-exec-impact">
+              <span className="mono">EXECUTIVE TAKEAWAY:</span>
+              <strong>{p.businessImpact}</strong>
             </div>
-          )}
-          <div className="dr-exec-impact">
-            <span className="mono">EXECUTIVE TAKEAWAY:</span>
-            <strong>{p.businessImpact}</strong>
-          </div>
-          <div className="dr-exec-citation">
-            <span className="mono">{p.citation}</span>
-          </div>
-          {p.links && p.links.length > 0 && (
-            <div className="dr-pillar-links">
-              {p.links.map((l) => (
-                <button
-                  key={l.label}
-                  className="text-link dr-pillar-link"
-                  onClick={() => {
-                    if (l.isScroll) {
-                      document.getElementById(l.target)?.scrollIntoView({ behavior: "smooth" });
-                    } else {
-                      navigate(l.target);
-                    }
-                  }}
-                >
-                  {l.label} <ArrowUpRight size={14} aria-hidden="true" />
-                </button>
-              ))}
+            <div className="dr-exec-citation">
+              <span className="mono">{p.citation}</span>
             </div>
-          )}
+            {p.links && p.links.length > 0 && (
+              <div className="dr-pillar-links">
+                {p.links.map((l) => (
+                  <button
+                    key={l.label}
+                    className="text-link dr-pillar-link"
+                    onClick={() => {
+                      if (l.isScroll) {
+                        document.getElementById(l.target)?.scrollIntoView({ behavior: "smooth" });
+                      } else {
+                        navigate(l.target);
+                      }
+                    }}
+                  >
+                    {l.label} <ArrowUpRight size={14} aria-hidden="true" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </article>
       ))}
     </div>
