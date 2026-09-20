@@ -39,6 +39,84 @@ export default function Home(){
  const devKey=view+'?'+route.params.toString();
  useCount(devKey); useDraw(devKey); useRail(devKey);
 
+// Image mappings for visual enhancements
+const essenceImages: Record<string, string> = {
+  'HARDWARE LOCKSTEP SAFETY': './media/deepgrid_soc2_die.jpg',
+  'DETERMINISTIC 100 kHz LOOP': './media/dg32-lite-architecture-poster.jpg',
+  'SINGLE-PCB DUAL-SoC PLATFORM': './media/dg32-2dom-architecture-poster.jpg',
+  'SOVEREIGN MATURE SUPPLY': './media/deepgrid_defence.jpg',
+};
+const essenceBadges: Record<string, string> = {
+  'HARDWARE LOCKSTEP SAFETY': 'DIE LAYOUT',
+  'DETERMINISTIC 100 kHz LOOP': 'WAVEFORM',
+  'SINGLE-PCB DUAL-SoC PLATFORM': 'ARCHITECTURE',
+  'SOVEREIGN MATURE SUPPLY': 'FOUNDRY',
+};
+
+const useCaseImages: Record<string, string> = {
+  rotating: './media/deepgrid_truck.jpg',
+  electrical: './media/deepgrid_robotics.jpg',
+  motion: './media/deepgrid_logistics.jpg',
+  degradation: './media/deepgrid_defence.jpg',
+};
+const useCaseBadges: Record<string, string> = {
+  rotating: 'ROTATING MACHINERY',
+  electrical: 'MCSA',
+  motion: 'PRECISION MOTION',
+  degradation: 'RUL / PHM',
+};
+
+const hubImages: Record<string, string> = {
+  family: './media/dg32-lite-architecture-poster.jpg',
+  architecture: './media/dg32-2dom-architecture-poster.jpg',
+  control: './media/control-waveform.png',
+  pinout: './media/diagrams/dg32-lite-architecture.svg',
+  roadmap: './media/roadmap-poster.png',
+  library: './media/dg32-lite-datasheet-poster.jpg',
+  ask: './media/deepgrid_soc2_die.jpg',
+};
+const hubBadges: Record<string, string> = {
+  family: 'PRODUCT FAMILY',
+  architecture: 'ARCHITECTURE',
+  control: 'CONTROL LOOP',
+  pinout: 'PINOUT',
+  roadmap: 'ROADMAP',
+  library: 'MEDIA',
+  ask: 'INTELLIGENCE',
+};
+
+const sovereignImages: Record<string, string> = {
+  'DG32-LITE': './media/dg32-lite-architecture-poster.jpg',
+  'DG32-2DOM': './media/dg32-2dom-architecture-poster.jpg',
+  'DG-D100': './media/dg32-2dom-architecture-poster.jpg',
+  'DG-RADAR-77': './media/deepgrid_defence.jpg',
+  'DG-DISP-17': './media/deepgrid_robotics.jpg',
+  'DG-SDV-ZONE': './media/deepgrid_logistics.jpg',
+};
+const sovereignBadges: Record<string, string> = {
+  'DG32-LITE': 'LITE',
+  'DG32-2DOM': '2DOM',
+  'DG-D100': 'D100',
+  'DG-RADAR-77': 'RADAR',
+  'DG-DISP-17': 'DISPLAY',
+  'DG-SDV-ZONE': 'SDV',
+};
+
+const whitepaperImages: Record<string, string> = {
+  doc1: './media/dg32-lite-datasheet-poster.jpg',
+  doc2: './media/dg32-2dom-architecture-poster.jpg',
+  doc3: './media/dg32-lite-datasheet-poster.jpg',
+  doc4: './media/dg32-2dom-architecture-poster.jpg',
+  doc5: './media/deepgrid_defence.jpg',
+  doc6: './media/deepgrid_soc2_die.jpg',
+};
+
+const safetyImages: Record<string, string> = {
+  'Lockstep Core': './media/deepgrid_soc2_die.jpg',
+  'Fault Isolation': './media/dg32-lite-tapein-poster.jpg',
+  'Supply Monitor': './media/deepgrid_soc2_die.jpg',
+};
+
  return <div className={'site-shell view-'+view}>
  <a className="skip-link" href="#main" onClick={e=>{e.preventDefault();document.getElementById('main')?.focus();document.getElementById('main')?.scrollIntoView()}}>Skip to content</a>
  <header className="topbar"><button className="brand" onClick={()=>navigate('overview')} aria-label="DeepGrid Semi home"><Brand/></button><div className="topline"><span>DG32 · LOCKSTEP RISC-V MOTOR-CONTROL SILICON</span><span className="status-dot">FIRST SILICON · SEP 2026</span></div><button className="contact-link" onClick={()=>navigate('architecture')}>Inside the chip <ArrowUpRight size={17}/></button><button className="mobile-menu" aria-label="Open navigation" onClick={()=>setMenu(true)}><span>{titles[view]}</span><Menu/></button></header>
@@ -50,7 +128,13 @@ export default function Home(){
  <section className="hero dr-hero"><div className="hero-canvas"><Silicon variant="lite" reduced={reduced} selected={0}/></div><div className="hero-shade"/>
   <div className="hero-copy"><Eyebrow>DG32 / MOTOR-CONTROL SILICON</Eyebrow><h1>Lockstep safety.<br/><em>Entry-level</em><br/>silicon.</h1><p>DG32-LITE puts a RISC-V MCU, the motor-control peripherals and a hardware lockstep safety monitor on one 130&nbsp;nm chip.<br/>First silicon rides the September 2026 shuttle.</p><div className="hero-actions"><button className="primary" onClick={()=>navigate('architecture')} aria-label="Explore the architecture">Explore the architecture <ArrowUpRight size={19} aria-hidden="true"/></button><button className="text-link" onClick={()=>go('library?pkg=lite')} aria-label="Watch the architecture film">Watch the architecture film <ArrowRight size={18} aria-hidden="true"/></button><button className="text-link" onClick={()=>{document.getElementById('fault-isolation')?.scrollIntoView({behavior:'smooth'})}} aria-label="Inspect 39-cycle fault isolation">Inspect 39-cycle fault isolation <ArrowRight size={18} aria-hidden="true"/></button></div></div>
   <div className="hero-annotation"><span className="cross">+</span><div>DG32-LITE<small>QFN-64 · 9 × 9 MM · 130 NM CMOS</small></div></div><p className="image-disclaimer">ILLUSTRATIVE MODEL · NOT A MASK LAYOUT · DRAG TO ROTATE</p><div className="hero-bottom"><span>DEEPGRID SEMI PVT LTD / HYDERABAD, INDIA</span></div></section>
- <section className="metrics-strip">{headline.map(([v,l])=><div key={l}><strong>{v}</strong><span>{l}</span></div>)}<p>Pre-silicon figures.<br/>Design values, not measurements.</p></section>
+ <section className="metrics-strip">
+   {headline.map(([v,l])=><div key={l}><strong>{v}</strong><span>{l}</span></div>)}
+   <div>
+     <img src="./media/deepgrid_soc2_die.jpg" alt="DG32 die layout showing six functional blocks" className="metrics-die-preview" />
+   </div>
+   <p>Pre-silicon figures.<br/>Design values, not measurements.</p>
+ </section>
 
   {/* Executive Commercial & Strategic Value Matrix */}
   <section className="content-section dr-exec-pillars-section">
@@ -136,6 +220,10 @@ export default function Home(){
     <div className="dr-gist-grid">
       {productEssence.map(e => (
         <article key={e.label} className="dr-gist-card">
+          <figure className="dr-gist-media">
+            <img src={essenceImages[e.label] || './media/deepgrid_soc2_die.jpg'} alt={e.headline} loading="lazy" decoding="async" />
+            <figcaption className="dr-gist-badge">{essenceBadges[e.label] || 'SILICON'}</figcaption>
+          </figure>
           <div className="dr-gist-card-top">
             <span className="mono dr-gist-label">{e.label}</span>
             <span className="dr-gist-metric">{e.metric}</span>
@@ -193,6 +281,10 @@ export default function Home(){
     <div className="dr-usecases-grid">
       {useCaseDomains.map(d => (
         <article key={d.id} className="dr-usecase-card">
+          <figure className="dr-usecase-media">
+            <img src={useCaseImages[d.id] || './media/deepgrid_truck.jpg'} alt={d.title} loading="lazy" decoding="async" />
+            <figcaption className="dr-usecase-badge">{useCaseBadges[d.id] || 'INDUSTRIAL'}</figcaption>
+          </figure>
           <div className="dr-usecase-card-head">
             <div className="dr-usecase-header-meta">
               <span className="mono dr-usecase-tasks">{d.tasksCount}</span>
@@ -275,6 +367,10 @@ export default function Home(){
     <div className="dr-hub-grid">
       {platformSections.map(sec => (
         <article key={sec.hash} className="dr-hub-card">
+          <figure className="dr-hub-media">
+            <img src={hubImages[sec.hash] || './media/deepgrid_soc2_die.jpg'} alt={sec.title} loading="lazy" decoding="async" />
+            <figcaption className="dr-hub-badge">{hubBadges[sec.hash] || 'SECTION'}</figcaption>
+          </figure>
           <div className="dr-hub-card-top">
             <span className="mono dr-hub-tag">{sec.tag}</span>
             <span className="dr-hub-chip">{sec.chip}</span>
