@@ -750,9 +750,57 @@ const safetyImages: Record<string, string> = {
 
  <section className="content-section"><div className="section-label"><Eyebrow>SILICON INTELLIGENCE</Eyebrow><span>HOW ARE DEEPGRID SPECS & DEFENSE MOATS AUDITED?</span></div><div className="thesis-heading"><h2>Ask DeepGrid.<br/><em>Every spec, cited.</em></h2><div><p>Query the entire 10-chip SKU compendium, mature-node physics (130nm/180nm BCD, SiGe 77GHz), the 198-day silicon shuttle loop, and sovereign defense moats (DAP-2020 Make-II, SCL Mohali). Zero hallucination, strictly vector-grounded in the master whitepaper and technical annex.</p><button className="text-link" onClick={()=>navigate('ask')} aria-label="Launch Ask DeepGrid Console">Launch Ask DeepGrid Console <ArrowUpRight size={18} aria-hidden="true"/></button></div></div></section>
 
- <section id="fault-isolation" className="content-section"><div className="section-label"><Eyebrow>FAULT ISOLATION</Eyebrow><span>HOW DOES HARDWARE TRIP THE BRIDGE IN 39 CYCLES WITHOUT FIRMWARE?</span></div>
-  <FaultTrace steps={faultPath} intro={<><h2 className="dr-h2">From a wrong value<br/><em>to a safe bridge.</em></h2><p className="dr-lead">Software self-test runs periodically and cannot see a fault between runs. DG32-LITE compares every value the CPU commits, as it commits it, and the path from mismatch to a bridge that is switched off never passes through firmware.</p><p className="dr-lead">Firmware can still prove the path works: a locked injection register fires it on purpose, which is the only way to test it on real silicon.</p><button className="text-link" onClick={()=>openBlock(0)} aria-label="Inside the safety core">Inside the safety core <ArrowUpRight size={18} aria-hidden="true"/></button> <button className="text-link" onClick={()=>navigate('control')}>100 kHz Control Loop Timing <ArrowUpRight size={16}/></button> <button className="text-link" onClick={()=>go('ask')}>Query Safety in Ask DeepGrid <ArrowUpRight size={16}/></button></>}/>
- </section>
+   <section id="fault-isolation" className="content-section dr-fault-section" data-rv data-rv-delay="100">
+    <div className="section-label">
+      <Eyebrow>FAULT ISOLATION</Eyebrow>
+      <span>HOW DOES HARDWARE TRIP THE BRIDGE IN 39 CYCLES WITHOUT FIRMWARE?</span>
+    </div>
+    <div className="thesis-heading" data-rv data-rv-delay="200">
+      <h2>From a wrong value<br/><em>to a safe bridge.</em></h2>
+      <div>
+        <p>Software self-test runs periodically and cannot see a fault between runs. DG32-LITE compares every value the CPU commits, as it commits it, and the path from mismatch to a bridge that is switched off never passes through firmware.</p>
+        <p>Firmware can still prove the path works: a locked injection register fires it on purpose, which is the only way to test it on real silicon.</p>
+        <div className="dr-fault-actions">
+          <button className="text-link" onClick={()=>openBlock(0)} aria-label="Inside the safety core">
+            Inside the safety core <ArrowUpRight size={16} aria-hidden="true" />
+          </button>
+          <button className="text-link" onClick={()=>navigate("control")}>
+            100 kHz Control Loop Timing <ArrowUpRight size={16} />
+          </button>
+          <button className="text-link" onClick={()=>go("ask")}>
+            Query Safety in Ask DeepGrid <ArrowUpRight size={16} />
+          </button>
+        </div>
+      </div>
+    </div>
+    <div className="dr-fault-visual" data-rv data-rv-delay="300">
+      <img
+        src="./media/dg32-lite-tapein-poster.jpg"
+        alt="DG32-LITE tape-in block diagram showing fault isolation path"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption className="dr-fault-caption">DG32-LITE tape-in diagram · Fault isolation path highlighted</figcaption>
+    </div>
+    <FaultTrace steps={faultPath} intro={
+      <>
+        <h2 className="dr-h2">From a wrong value<br/><em>to a safe bridge.</em></h2>
+        <p className="dr-lead">Software self-test runs periodically and cannot see a fault between runs. DG32-LITE compares every value the CPU commits, as it commits it, and the path from mismatch to a bridge that is switched off never passes through firmware.</p>
+        <p className="dr-lead">Firmware can still prove the path works: a locked injection register fires it on purpose, which is the only way to test it on real silicon.</p>
+        <div className="dr-fault-actions">
+          <button className="text-link" onClick={()=>openBlock(0)} aria-label="Inside the safety core">
+            Inside the safety core <ArrowUpRight size={18} aria-hidden="true" />
+          </button>
+          <button className="text-link" onClick={()=>navigate("control")}>
+            100 kHz Control Loop Timing <ArrowUpRight size={16} />
+          </button>
+          <button className="text-link" onClick={()=>go("ask")}>
+            Query Safety in Ask DeepGrid <ArrowUpRight size={16} />
+          </button>
+        </div>
+      </>
+    }/>
+  </section>
 
 
 
