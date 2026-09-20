@@ -309,39 +309,49 @@ const safetyImages: Record<string, string> = {
     </div>
 
     <div className="dr-gist-grid">
-      {productEssence.map(e => (
-        <article key={e.label} className="dr-gist-card">
+      {productEssence.map((e, idx) => (
+        <article
+          key={e.label}
+          className="dr-gist-card"
+          data-rv
+          data-rv-delay={idx * 150 + 300}
+        >
           <figure className="dr-gist-media">
-            <img src={essenceImages[e.label] || './media/deepgrid_soc2_die.jpg'} alt={e.headline} loading="lazy" decoding="async" />
+            <img
+              src={essenceImages[e.label] || './media/deepgrid_soc2_die.jpg'}
+              alt={e.headline}
+              loading="lazy"
+              decoding="async"
+            />
             <figcaption className="dr-gist-badge">{essenceBadges[e.label] || 'SILICON'}</figcaption>
           </figure>
-          <div className="dr-gist-card-top">
-            <span className="mono dr-gist-label">{e.label}</span>
-            <span className="dr-gist-metric">{e.metric}</span>
-          </div>
-          <h3>{e.headline}</h3>
-          <p>{e.detail}</p>
-          {e.highlights && e.highlights.length > 0 && (
-            <div className="dr-pillar-details">
-              <ul>
+          <div className="dr-gist-card-content">
+            <div className="dr-gist-card-top">
+              <span className="mono dr-gist-label">{e.label}</span>
+              <span className="dr-gist-metric">{e.metric}</span>
+            </div>
+            <h3>{e.headline}</h3>
+            <p>{e.detail}</p>
+            {e.highlights && e.highlights.length > 0 && (
+              <div className="dr-gist-story-pills">
                 {e.highlights.map((h) => (
-                  <li key={h}>
-                    <Check size={13} aria-hidden="true" />
+                  <span key={h} className="dr-gist-story-pill">
+                    <Check size={12} aria-hidden="true" />
                     <span>{h}</span>
-                  </li>
+                  </span>
                 ))}
-              </ul>
+              </div>
+            )}
+            <div className="dr-gist-bottom">
+              <div className="dr-pillar-links">
+                {e.links.map(l => (
+                  <button key={l.label} className="text-link dr-pillar-link" onClick={()=>navigate(l.target)}>
+                    {l.label} <ArrowUpRight size={14} aria-hidden="true" />
+                  </button>
+                ))}
+              </div>
+              <span className="mono dr-gist-ref">{e.reference}</span>
             </div>
-          )}
-          <div className="dr-gist-bottom">
-            <div className="dr-pillar-links">
-              {e.links.map(l => (
-                <button key={l.label} className="text-link dr-pillar-link" onClick={()=>navigate(l.target)}>
-                  {l.label} <ArrowUpRight size={14} aria-hidden="true" />
-                </button>
-              ))}
-            </div>
-            <span className="mono dr-gist-ref">{e.reference}</span>
           </div>
         </article>
       ))}
