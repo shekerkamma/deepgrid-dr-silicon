@@ -98,6 +98,15 @@ for (const [tag, viewport] of [['desktop', {width: 1440, height: 900}], ['phone'
   const p = await b.newPage({viewport: {width: 1440, height: 900}}); watch(p, 'fault');
   await p.goto(BASE + '#overview', {waitUntil: 'networkidle'}); await p.waitForTimeout(900);
   const nh = await navH(p);
+  // Measure the wrapper only after its section has finished revealing. An entrance holds a
+  // translateY on the section, so a rect read at load sits ~14px below where the block will
+  // settle; every scroll position derived from it then overshoots, and the last one slides the
+  // pinned stage out from under the nav. The page is right in that case and the gate is wrong,
+  // which is the reading that costs a debugging cycle.
+  await p.evaluate(() => { const w = document.querySelector('.dr-fault'); scrollTo({top: w.getBoundingClientRect().top + scrollY - 300, behavior: 'instant'}); });
+  await p.evaluate(async () => { const t0 = performance.now(); const sec = document.querySelector('.dr-fault-section') || document.querySelector('.dr-fault');
+    while (performance.now() - t0 < 3000 && (!sec.classList.contains('rv-in') || getComputedStyle(sec).transform !== 'none')) await new Promise(r => setTimeout(r, 100)); });
+  await settleFrames(p);
   const g = await p.evaluate(() => { const w = document.querySelector('.dr-fault'), r = w.getBoundingClientRect(); return {pinned: w.classList.contains('is-pinned'), top: r.top + scrollY, height: r.height}; });
   if (!g.pinned) fail('fault trace is not pinned at 1440x900');
   const travel = g.height - (900 - nh), steps = [];

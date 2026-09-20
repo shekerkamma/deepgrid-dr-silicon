@@ -53,7 +53,8 @@ export function useReveal(key: string) {
         if (r.bottom < 0) { el.classList.add('rv-in', 'rv-done'); return false; }
         const parent = el.parentElement!, i = counts.get(parent) || 0;
         counts.set(parent, i + 1);
-        const delay = reduce ? 0 : Math.min(i, 6) * 60;
+        const authoredDelay = Number(el.dataset.rvDelay);
+        const delay = reduce ? 0 : Number.isFinite(authoredDelay) && el.dataset.rvDelay ? authoredDelay : Math.min(i, 6) * 60;
         el.style.setProperty('--rv-d', delay + 'ms');
         el.classList.add('rv-in');
         // hand transitions back to the element once the entrance is over, so hover and press stay fast.
@@ -67,9 +68,16 @@ export function useReveal(key: string) {
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(sweep); };
     const start = requestAnimationFrame(() => {
-      for (const el of document.querySelectorAll<HTMLElement>(REVEAL)) {
-        if (el.dataset.rv !== undefined || el.closest('[data-rv-skip]') || el.parentElement?.closest('[data-rv]')) continue;
-        el.dataset.rv = ''; pending.push(el);
+      // Two kinds of target: elements matching REVEAL, which the sweep marks itself, and elements the
+      // page authored `data-rv` on directly. `data-rv` is also the sweep's own "claimed" marker, so a
+      // hand-authored one used to be read as already handled and skipped forever — with
+      // `[data-rv]{opacity:0}` in the stylesheet that left 46 of the overview's 62 blocks invisible on
+      // the live site. Claim with a separate attribute so the two meanings cannot collide.
+      const authored = [...document.querySelectorAll<HTMLElement>('[data-rv]')];
+      for (const el of [...document.querySelectorAll<HTMLElement>(REVEAL), ...authored]) {
+        if (el.dataset.rvClaimed !== undefined || el.closest('[data-rv-skip]')) continue;
+        if (!authored.includes(el) && el.parentElement?.closest('[data-rv]')) continue;
+        el.dataset.rvClaimed = ''; el.dataset.rv = ''; pending.push(el);
       }
       addEventListener('scroll', onScroll, {passive: true});
       addEventListener('resize', onScroll);
