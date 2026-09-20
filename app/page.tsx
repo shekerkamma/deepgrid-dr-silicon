@@ -186,6 +186,15 @@ const whitepaperImages: Record<string, string> = {
   doc6: './media/deepgrid_soc2_die.jpg',
 };
 
+const whitepaperBadges: Record<string, string> = {
+  doc1: 'DOC #1',
+  doc2: 'DOC #2',
+  doc3: 'DOC #3',
+  doc4: 'DOC #4',
+  doc5: 'DOC #5',
+  doc6: 'DOC #6',
+};
+
 const safetyImages: Record<string, string> = {
   'Lockstep Core': './media/deepgrid_soc2_die.jpg',
   'Fault Isolation': './media/dg32-lite-tapein-poster.jpg',
@@ -830,7 +839,7 @@ const safetyImages: Record<string, string> = {
             role="listitem"
             data-rv
             data-rv-delay={idx * 150 + 200}
-            style={{ '--evidence-color': evidenceColors[e.kind] }}
+            style={{ '--evidence-color': evidenceColors[e.kind] } as React.CSSProperties}
           >
             <figure className="dr-evidence-media">
               <img
