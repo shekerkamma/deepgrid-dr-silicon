@@ -78,7 +78,7 @@ const evidenceImages: Record<string, string> = {
   'Post-route': './media/sims_image2.png',
   Analytic: './media/sims_image3.png',
   'Tool estimate': './media/sims_image4.png',
-  'Process nominal': './media/sims_image5.png',
+  'Process nominal': './media/sims_image4.png',
 };
 
 const evidenceBadges: Record<string, string> = {
