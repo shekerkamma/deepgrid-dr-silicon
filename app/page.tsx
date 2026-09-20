@@ -542,8 +542,22 @@ const safetyImages: Record<string, string> = {
     </div>
 
     <div className="dr-sovereign-grid">
-      {sovereignSkuHorizon.map(item => (
-        <article key={item.sku} className="dr-sovereign-card">
+      {sovereignSkuHorizon.map((item, idx) => (
+        <article
+          key={item.sku}
+          className="dr-sovereign-card"
+          data-rv
+          data-rv-delay={idx * 150 + 300}
+        >
+          <figure className="dr-sovereign-media">
+            <img
+              src={sovereignImages[item.name] || './media/deepgrid_soc2_die.jpg'}
+              alt={item.name}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption className="dr-sovereign-badge">{sovereignBadges[item.name] || 'SKU'}</figcaption>
+          </figure>
           <div className="dr-sovereign-top">
             <span className="mono dr-sovereign-sku">{item.sku}</span>
             <span className="dr-sovereign-phase">{item.phase}</span>
@@ -596,8 +610,22 @@ const safetyImages: Record<string, string> = {
     </div>
 
     <div className="dr-whitepapers-grid">
-      {whitepaperDownloads.map(doc => (
-        <article key={doc.id} className="dr-whitepaper-card">
+      {whitepaperDownloads.map((doc, idx) => (
+        <article
+          key={doc.id}
+          className="dr-whitepaper-card"
+          data-rv
+          data-rv-delay={idx * 150 + 300}
+        >
+          <figure className="dr-whitepaper-media">
+            <img
+              src={whitepaperImages[doc.id] || './media/deepgrid_soc2_die.jpg'}
+              alt={doc.title}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption className="dr-whitepaper-badge">{whitepaperBadges[doc.id] || 'DOC'}</figcaption>
+          </figure>
           <div className="dr-whitepaper-head">
             <span className="mono dr-whitepaper-doc">{doc.docNum}</span>
             <span className="dr-whitepaper-pages">{doc.pages}</span>
