@@ -322,6 +322,8 @@ const safetyImages: Record<string, string> = {
               alt={e.headline}
               loading="lazy"
               decoding="async"
+              width={400}
+              height={225}
             />
             <figcaption className="dr-gist-badge">{essenceBadges[e.label] || 'SILICON'}</figcaption>
           </figure>
@@ -555,6 +557,8 @@ const safetyImages: Record<string, string> = {
               alt={item.name}
               loading="lazy"
               decoding="async"
+              width={400}
+              height={225}
             />
             <figcaption className="dr-sovereign-badge">{sovereignBadges[item.name] || 'SKU'}</figcaption>
           </figure>
@@ -623,6 +627,8 @@ const safetyImages: Record<string, string> = {
               alt={doc.title}
               loading="lazy"
               decoding="async"
+              width={400}
+              height={225}
             />
             <figcaption className="dr-whitepaper-badge">{whitepaperBadges[doc.id] || 'DOC'}</figcaption>
           </figure>
@@ -779,6 +785,8 @@ const safetyImages: Record<string, string> = {
         alt="DG32-LITE tape-in block diagram showing fault isolation path"
         loading="lazy"
         decoding="async"
+        width={800}
+        height={450}
       />
       <figcaption className="dr-fault-caption">DG32-LITE tape-in diagram · Fault isolation path highlighted</figcaption>
     </div>
@@ -830,6 +838,8 @@ const safetyImages: Record<string, string> = {
                 alt={`Evidence visualization: ${e.kind}`}
                 loading="lazy"
                 decoding="async"
+                width={400}
+                height={225}
               />
               <figcaption className="dr-evidence-badge" style={{ background: evidenceColors[e.kind] }}>
                 {evidenceBadges[e.kind]}

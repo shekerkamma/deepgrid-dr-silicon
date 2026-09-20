@@ -178,6 +178,8 @@ export default function GroundedAnswerView({query, onSelectQuery, go}: GroundedA
               alt={result.visualEvidence.title}
               className="dr-visual-img"
               loading="lazy"
+              width={800}
+              height={450}
             />
           </div>
 
