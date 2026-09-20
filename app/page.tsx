@@ -69,8 +69,8 @@ const useCaseBadges: Record<string, string> = {
 const hubImages: Record<string, string> = {
   family: './media/dg32-lite-architecture-poster.jpg',
   architecture: './media/dg32-2dom-architecture-poster.jpg',
-  control: './media/control-waveform.png',
-  pinout: './media/diagrams/dg32-lite-architecture.svg',
+  control: './media/dg32-lite-architecture-poster.jpg',
+  pinout: './media/dg32-lite-datasheet-poster.jpg',
   roadmap: './media/roadmap-poster.png',
   library: './media/dg32-lite-datasheet-poster.jpg',
   ask: './media/deepgrid_soc2_die.jpg',
