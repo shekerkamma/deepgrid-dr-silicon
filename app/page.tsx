@@ -647,12 +647,91 @@ const safetyImages: Record<string, string> = {
     </div>
   </section>
 
- <section className="content-section"><div className="section-label"><Eyebrow>THE SAFETY IMPERATIVE</Eyebrow><span>WHY DOES ENTRY-LEVEL SILICON NEED A SECOND CORE?</span></div><div className="thesis-heading"><h2>A silent CPU fault<br/><em>can destroy a bridge.</em></h2><div><p>A motor drive switches power transistors thousands of times a second. If the CPU silently computes a wrong value, it writes a wrong PWM edge, and a wrong edge can short a leg of the power bridge: the power stage fails, not only the code.</p><p>On an entry-level motor-control MCU, faults are caught by watchdogs, brown-out reset and periodic software self-test. Those checks run between faults, not during them. Hardware lockstep, which checks every value as it is committed, has lived in automotive MCUs such as Infineon AURIX, NXP S32K and TI Hercules.</p><p className="muted">DG32 brings a second, checking core to the entry-level tier and gives it one job: catch the first core when it is wrong.</p><button className="text-link" onClick={()=>navigate('roadmap')} aria-label="Compare with STM32G0">Compare with STM32G0 <ArrowUpRight size={18} aria-hidden="true"/></button></div></div>
-  <div className="dr-cards">
-   <button className="dr-card" onClick={()=>openBlock(0)}><span className="mono">SAFETY</span><ShieldCheck size={26} aria-hidden="true"/><h3>Two cores <br/>must agree.</h3><p>CHECKER trails MAIN by two cycles on mirrored inputs and compares every committed store. Divergence latches the first cause and drives the FAULT pin.</p><span className="open-product">Safety core <ArrowRight size={16} aria-hidden="true"/></span></button>
-   <button className="dr-card" onClick={()=>navigate('control')}><span className="mono">CONTROL</span><Gauge size={26} aria-hidden="true"/><h3>The loop runs <br/>in hardware.</h3><p>Current sampling, Park transforms and PWM edges run in dedicated blocks, so one loop costs about 300&nbsp;hardware cycles at any rate. The CPU keeps only the two PI regulators.</p><span className="open-product">Loop budget <ArrowRight size={16} aria-hidden="true"/></span></button>
-   <button className="dr-card" onClick={()=>go('architecture?chip=2dom')}><span className="mono">COMPUTE</span><BrainCircuit size={26} aria-hidden="true"/><h3>Monitoring on <br/>the drive chip.</h3><p>DG32-2DOM adds an INT8 attention engine on its own 114&nbsp;MHz clock, behind bridges, with the same pinout and the same frozen control core.</p><span className="open-product">Inside DG32-2DOM <ArrowRight size={16} aria-hidden="true"/></span></button>
-  </div>
+ <section className="content-section"><div className="section-label"><Eyebrow>THE SAFETY IMPERATIVE</Eyebrow><span>WHY DOES ENTRY-LEVEL SILICON NEED A SECOND CORE?</span></div><div className="thesis-heading" data-rv data-rv-delay="200"><h2>A silent CPU fault<br/><em>can destroy a bridge.</em></h2><div><p>A motor drive switches power transistors thousands of times a second. If the CPU silently computes a wrong value, it writes a wrong PWM edge, and a wrong edge can short a leg of the power bridge: the power stage fails, not only the code.</p><p>On an entry-level motor-control MCU, faults are caught by watchdogs, brown-out reset and periodic software self-test. Those checks run between faults, not during them. Hardware lockstep, which checks every value as it is committed, has lived in automotive MCUs such as Infineon AURIX, NXP S32K and TI Hercules.</p><p className="muted">DG32 brings a second, checking core to the entry-level tier and gives it one job: catch the first core when it is wrong.</p><button className="text-link" onClick={()=>navigate("roadmap")} aria-label="Compare with STM32G0">Compare with STM32G0 <ArrowUpRight size={18} aria-hidden="true"/></button></div></div>
+    <div className="dr-safety-grid" data-rv data-rv-delay="300">
+      <article
+        className="dr-safety-card"
+        data-rv
+        data-rv-delay="400"
+      >
+        <figure className="dr-safety-media">
+          <img
+            src={safetyImages["Lockstep Core"]}
+            alt="Lockstep safety core diagram"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption className="dr-safety-badge">SAFETY CORE</figcaption>
+        </figure>
+        <div className="dr-safety-card-top">
+          <span className="dr-safety-icon">
+            <ShieldCheck size={28} aria-hidden="true" />
+          </span>
+          <h3>Two cores <br/>must agree.</h3>
+          <p>CHECKER trails MAIN by two cycles on mirrored inputs and compares every committed store. Divergence latches the first cause and drives the FAULT pin.</p>
+        </div>
+        <div className="dr-safety-card-footer">
+          <button className="text-link" onClick={()=>openBlock(0)}>
+            Safety core <ArrowUpRight size={16} aria-hidden="true" />
+          </button>
+        </div>
+      </article>
+      <article
+        className="dr-safety-card"
+        data-rv
+        data-rv-delay="500"
+      >
+        <figure className="dr-safety-media">
+          <img
+            src={safetyImages["Fault Isolation"]}
+            alt="Fault isolation timeline"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption className="dr-safety-badge">CONTROL LOOP</figcaption>
+        </figure>
+        <div className="dr-safety-card-top">
+          <span className="dr-safety-icon">
+            <Gauge size={28} aria-hidden="true" />
+          </span>
+          <h3>The loop runs <br/>in hardware.</h3>
+          <p>Current sampling, Park transforms and PWM edges run in dedicated blocks, so one loop costs about 300&nbsp;hardware cycles at any rate. The CPU keeps only the two PI regulators.</p>
+        </div>
+        <div className="dr-safety-card-footer">
+          <button className="text-link" onClick={()=>navigate("control")}>
+            Loop budget <ArrowUpRight size={16} aria-hidden="true" />
+          </button>
+        </div>
+      </article>
+      <article
+        className="dr-safety-card"
+        data-rv
+        data-rv-delay="600"
+      >
+        <figure className="dr-safety-media">
+          <img
+            src={safetyImages["Supply Monitor"]}
+            alt="Supply monitor and DG32-2DOM attention engine"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption className="dr-safety-badge">COMPUTE</figcaption>
+        </figure>
+        <div className="dr-safety-card-top">
+          <span className="dr-safety-icon">
+            <BrainCircuit size={28} aria-hidden="true" />
+          </span>
+          <h3>Monitoring on <br/>the drive chip.</h3>
+          <p>DG32-2DOM adds an INT8 attention engine on its own 114&nbsp;MHz clock, behind bridges, with the same pinout and the same frozen control core.</p>
+        </div>
+        <div className="dr-safety-card-footer">
+          <button className="text-link" onClick={()=>go("architecture?chip=2dom")}>
+            Inside DG32-2DOM <ArrowUpRight size={16} aria-hidden="true" />
+          </button>
+        </div>
+      </article>
+
+    </div>
  </section>
 
  <section className="content-section dr-apps-section"><div className="section-label"><Eyebrow>TARGET APPLICATIONS</Eyebrow><span>WHERE DOES DG32 SILICON DEPLOY?</span></div>
