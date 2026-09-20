@@ -449,7 +449,38 @@ const safetyImages: Record<string, string> = {
         </div>
       </div>
     </div>
-    <DataTable caption="Executive Procurement Scorecard: DeepGrid vs Western Incumbents" head={['Strategic Dimension', 'DeepGrid Semi', 'Western Incumbents', 'Executive Takeaway']} rows={procurementScorecard} wide/>
+    <div className="dr-procure-scorecard" data-rv data-rv-delay="300">
+      {procurementScorecard.map((row, idx) => (
+        <article
+          key={row[0]}
+          className="dr-scorecard-row"
+          data-rv
+          data-rv-delay={idx * 100 + 400}
+        >
+          <div className="dr-scorecard-dimension">
+            <span className="dr-scorecard-label">{row[0]}</span>
+          </div>
+          <div className="dr-scorecard-compare">
+            <div className="dr-scorecard-cell dr-scorecard-win">
+              <span className="dr-scorecard-cell-label">DeepGrid Semi</span>
+              <span className="dr-scorecard-cell-value">{row[1]}</span>
+              <span className="dr-win-badge" aria-label="Advantage DeepGrid">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+            </div>
+            <div className="dr-scorecard-vs">vs</div>
+            <div className="dr-scorecard-cell dr-scorecard-loss">
+              <span className="dr-scorecard-cell-label">Western Incumbents</span>
+              <span className="dr-scorecard-cell-value">{row[2]}</span>
+            </div>
+          </div>
+          <div className="dr-scorecard-takeaway">
+            <span className="dr-takeaway-label">Executive Takeaway:</span>
+            <span>{row[3]}</span>
+          </div>
+        </article>
+      ))}
+    </div>
   </section>
 
   {/* Platform Directory & Section Gateway */}

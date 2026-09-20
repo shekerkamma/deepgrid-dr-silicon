@@ -4550,3 +4550,197 @@ input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-sea
   }
 }
 
+
+/* ============================================================================
+   PROCUREMENT BENCHMARK - Visual Scorecard with Win/Loss Indicators
+   ============================================================================ */
+
+.dr-procure-section {
+  padding: 80px 8% 64px;
+}
+
+.dr-procure-section .thesis-heading {
+  margin-bottom: 40px;
+}
+
+.dr-procure-section .thesis-heading h2 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.dr-procure-section .thesis-heading > div > p {
+  font-size: var(--sc-t-body);
+  line-height: 1.7;
+  color: var(--ink-2);
+  max-width: 56ch;
+}
+
+.dr-procure-scorecard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.dr-scorecard-row {
+  border: 1px solid var(--rule);
+  background: #131615;
+  border-radius: var(--sc-radius-md, 8px);
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dr-scorecard-row:hover {
+  border-color: var(--copper);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.dr-scorecard-dimension {
+  padding: 20px 24px;
+  background: #101212;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  min-width: 220px;
+  flex-shrink: 0;
+}
+
+.dr-scorecard-label {
+  font: 500 0.72rem monospace;
+  letter-spacing: 0.8px;
+  color: var(--copper);
+  text-transform: uppercase;
+  display: block;
+}
+
+.dr-scorecard-compare {
+  display: flex;
+  flex: 1;
+  padding: 16px 24px;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.dr-scorecard-cell {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: #101212;
+  border: 1px solid var(--rule);
+  border-radius: var(--sc-radius-sm, 4px);
+  position: relative;
+}
+
+.dr-scorecard-cell.dr-scorecard-win {
+  border-color: #10b981;
+  background: #0d150d;
+}
+
+.dr-scorecard-cell.dr-scorecard-loss {
+  border-color: var(--rule);
+  background: #101212;
+}
+
+.dr-scorecard-cell-label {
+  font: 500 0.6rem monospace;
+  letter-spacing: 0.5px;
+  color: var(--copper);
+  text-transform: uppercase;
+}
+
+.dr-scorecard-cell-value {
+  font: 400 0.9rem var(--serif);
+  color: #eee6d4;
+  line-height: 1.4;
+}
+
+.dr-scorecard-cell.dr-scorecard-win .dr-scorecard-cell-value {
+  color: #4ade80;
+}
+
+.dr-win-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  background: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #101212;
+}
+
+.dr-win-badge svg {
+  width: 16px;
+  height: 16px;
+  stroke: #101212;
+}
+
+.dr-scorecard-vs {
+  font: 500 0.6rem monospace;
+  letter-spacing: 0.5px;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.dr-scorecard-takeaway {
+  padding: 20px 24px;
+  background: #101212;
+  border-top: 1px solid var(--rule);
+  font-size: var(--sc-t-body);
+  line-height: 1.6;
+  color: #ddd6c6;
+}
+
+.dr-takeaway-label {
+  font: 500 0.65rem monospace;
+  letter-spacing: 0.5px;
+  color: var(--copper);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.dr-scorecard-takeaway > span:last-child {
+  color: #ddd6c6;
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .dr-scorecard-compare {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .dr-scorecard-vs {
+    writing-mode: horizontal-tb;
+    text-align: center;
+    padding: 8px 0;
+  }
+  
+  .dr-scorecard-dimension {
+    border-right: none;
+    border-bottom: 1px solid var(--rule);
+  }
+}
+
+@media (max-width: 640px) {
+  .dr-scorecard-cell {
+    min-width: 100%;
+  }
+  
+  .dr-procure-section {
+    padding: 56px 5% 48px;
+  }
+}
