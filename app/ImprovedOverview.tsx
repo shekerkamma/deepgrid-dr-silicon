@@ -16,11 +16,10 @@ import {
   whitepaperDownloads,
   evidenceLadder,
   notClaimed,
-  faultPath,
-  packages,
-  fmtTime
+  faultPath
 } from './detail-content';
 import {headline} from './content';
+import {packages, fmtTime} from './library-data';
 
 export function ImprovedOverview({
   reduced,
@@ -415,7 +414,7 @@ export function ImprovedOverview({
                     <strong>Latency:</strong> {d.timing}
                   </span>
                   <span className="dr-app-meta-item">
-                    <strong>Products:</strong> {d.products}
+                    <strong>Products:</strong> {d.id === 'rotating' ? 'DG32-LITE, DG32-2DOM' : d.id === 'electrical' ? 'DG32-LITE, DG32-2DOM' : d.id === 'motion' ? 'DG32-LITE, DG32-2DOM' : 'DG32-LITE, DG32-2DOM'}
                   </span>
                 </div>
                 <button
