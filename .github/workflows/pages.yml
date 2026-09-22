@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # github.io project site for now. For dr.deepgridsemi.com set PAGES_BASE: / and PAGES_DOMAIN: dr.deepgridsemi.com
-      PAGES_BASE: /deepgrid-dr-silicon/
+      PAGES_BASE: /deepgrid-dr-silicon_new/
       PAGES_DOMAIN: ''
       # Zero-API-cost static build: no external model keys or endpoints are inlined.
       # Ask DeepGrid runs fully in-browser over the 280-node knowledge graph and deterministic council.
@@ -35,10 +35,10 @@ jobs:
       - name: Serve the build
         run: |
           mkdir -p "$RUNNER_TEMP/srv"
-          ln -s "$PWD/dist/pages" "$RUNNER_TEMP/srv/deepgrid-dr-silicon"
+          ln -s "$PWD/dist/pages" "$RUNNER_TEMP/srv/deepgrid-dr-silicon_new"
           python3 -m http.server 8768 --directory "$RUNNER_TEMP/srv" >/dev/null 2>&1 &
-          until curl -sf http://127.0.0.1:8768/deepgrid-dr-silicon/ >/dev/null; do sleep 1; done
-      - run: npm run verify -- http://127.0.0.1:8768/deepgrid-dr-silicon/ verify-shots
+          until curl -sf http://127.0.0.1:8768/deepgrid-dr-silicon_new/ >/dev/null; do sleep 1; done
+      - run: npm run verify -- http://127.0.0.1:8768/deepgrid-dr-silicon_new/ verify-shots
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -67,7 +67,7 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     env:
-      SITE: https://shekerkamma.github.io/deepgrid-dr-silicon/
+      SITE: https://shekerkamma.github.io/deepgrid-dr-silicon_new/
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v4
