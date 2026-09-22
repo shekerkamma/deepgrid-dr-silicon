@@ -1,23 +1,19 @@
 'use client';
 import {lazy,Suspense,useEffect,useState} from 'react';
-import {ArrowUpRight,ArrowRight,ArrowLeft,Menu,ShieldCheck,Gauge,BrainCircuit,Check,Play,Download} from 'lucide-react';
+import {ArrowUpRight,ArrowRight,ArrowLeft,Menu,Check} from 'lucide-react';
 import {Sheet,SheetContent,SheetTitle,SheetDescription} from '@/components/ui/sheet';
-import Silicon from './silicon';
 import Library from './library';
 import Architecture from './architecture';
-import FaultTrace from './fault-trace';
 // Ask DeepGrid carries a 1.5 MB graph index and the semantic-search loader; split it out so the other
 // views do not download it (first-load JS had grown from 392 to 713 KB gzipped).
 const AskDeepGrid = lazy(() => import('./ask'));
 import ControlWaveform from './control-waveform';
-import AppCard from './app-card';
 import {useReveal,useScrollVars} from './motion';
 import {useCount,useDraw,useRail} from './devices';
-import {packages,fmtTime} from './library-data';
 import {views,useNavigation} from './use-navigation';
-import {headline,parts,blocks,loopStages,loopRates,CLOCK_HZ,HW_FIXED_CYCLES,CYCLES_PER_INSTRUCTION,fmax,pinGroups,comparison,leads,gaps,applications} from './content';
+import {parts,blocks,loopStages,loopRates,CLOCK_HZ,HW_FIXED_CYCLES,CYCLES_PER_INSTRUCTION,fmax,pinGroups,comparison,leads,gaps} from './content';
 import {Eyebrow,SectionHead,Sec,ExplainedGrid,DataTable,Callout,Stats} from './detail';
-import {faultPath,evidenceLadder,notClaimed,familyCompare,operating,absoluteMax,fetchBound,controlNotes,peripheralLimits,packageSides,powerNotes,fixedVsPreliminary,positionNotes,roadmapDetail,executivePillars,procurementScorecard,platformSections,useCaseDomains,productEssence,sovereignSkuHorizon,whitepaperDownloads} from './detail-content';
+import {notClaimed,familyCompare,operating,absoluteMax,fetchBound,controlNotes,peripheralLimits,packageSides,powerNotes,fixedVsPreliminary,positionNotes,roadmapDetail,procurementScorecard} from './detail-content';
 import {ImprovedOverview} from './ImprovedOverview';
 
 const titles:Record<string,string>={overview:'Overview',family:'Product family',architecture:'Architecture',control:'Control loop',pinout:'Pinout & package',roadmap:'Position & roadmap',library:'Documents & media',ask:'Ask DeepGrid'};
@@ -34,173 +30,10 @@ export default function Home(){
  useEffect(()=>{const q=matchMedia('(prefers-reduced-motion: reduce)');setReduced(q.matches);const motion=()=>setReduced(q.matches);q.addEventListener('change',motion);return()=>q.removeEventListener('change',motion);},[]);
  const viewIndex=views.indexOf(view);
  const navLinks=<>{views.map(id=><a href={'#'+id} key={id} className={view===id?'active':''} onClick={e=>{e.preventDefault();navigate(id)}} aria-current={view===id?'page':undefined}>{titles[id]}</a>)}</>;
- const openBlock=(i:number)=>{if(view==='architecture')update({block:String(i)});else{go('architecture?block='+i);}};
  useScrollVars();
  useReveal(view+'?'+route.params.toString());
  const devKey=view+'?'+route.params.toString();
  useCount(devKey); useDraw(devKey); useRail(devKey);
-
-// Verification Ladder - Evidence type icons and imagery mapping
-const evidenceIcons: Record<string, React.ReactNode> = {
-  Simulated: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="2" y="2" width="20" height="20" rx="2"/>
-      <path d="M8 12h8M12 8v8"/>
-      <circle cx="12" cy="12" r="1" fill="currentColor"/>
-    </svg>
-  ),
-  'Post-route': (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M4 12h16M12 4v16"/>
-      <path d="M8 8l4 4 4-4M8 16l4-4 4 4"/>
-    </svg>
-  ),
-  Analytic: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M3 9l4-4 4 4M3 15l4-4 4 4M3 21l4-4 4 4"/>
-      <path d="M15 3v18"/>
-    </svg>
-  ),
-  'Tool estimate': (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="3" y="3" width="18" height="18" rx="2"/>
-      <path d="M9 12h6M12 9v6"/>
-    </svg>
-  ),
-  'Process nominal': (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-    </svg>
-  ),
-};
-
-const evidenceImages: Record<string, string> = {
-  Simulated: './media/sims_image.png',
-  'Post-route': './media/sims_image2.png',
-  Analytic: './media/sims_image3.png',
-  'Tool estimate': './media/sims_image4.png',
-  'Process nominal': './media/sims_image4.png',
-};
-
-const evidenceBadges: Record<string, string> = {
-  Simulated: 'SIMULATION',
-  'Post-route': 'POST-ROUTE',
-  Analytic: 'ANALYTIC',
-  'Tool estimate': 'TOOL EST.',
-  'Process nominal': 'PROCESS',
-};
-
-const evidenceColors: Record<string, string> = {
-  Simulated: '#bf7f3b',
-  'Post-route': '#2f9e8c',
-  Analytic: '#8f9d6b',
-  'Tool estimate': '#7486ab',
-  'Process nominal': '#bf7f3b',
-};
-
-// Executive Pillars - Image mapping
-const execImages: Record<string, string> = {
-  'UNIT ECONOMICS': './media/deepgrid_soc2_die.jpg',
-  'SUPPLY CONTINUITY': './media/deepgrid_defence.jpg',
-  'TIME TO MARKET': './media/roadmap-poster.png',
-  'SAFETY HARDWARE': './media/dg32-lite-tapein-poster.jpg',
-};
-
-const execBadges: Record<string, string> = {
-  'UNIT ECONOMICS': 'UNIT ECONOMICS',
-  'SUPPLY CONTINUITY': 'SOVEREIGN',
-  'TIME TO MARKET': 'ROADMAP',
-  'SAFETY HARDWARE': 'SAFETY',
-};
-
-
-
-// Image mappings for visual enhancements
-const essenceImages: Record<string, string> = {
-  'HARDWARE LOCKSTEP SAFETY': './media/deepgrid_soc2_die.jpg',
-  'DETERMINISTIC 100 kHz LOOP': './media/dg32-lite-architecture-poster.jpg',
-  'SINGLE-PCB DUAL-SoC PLATFORM': './media/dg32-2dom-architecture-poster.jpg',
-  'SOVEREIGN MATURE SUPPLY': './media/deepgrid_defence.jpg',
-};
-const essenceBadges: Record<string, string> = {
-  'HARDWARE LOCKSTEP SAFETY': 'DIE LAYOUT',
-  'DETERMINISTIC 100 kHz LOOP': 'WAVEFORM',
-  'SINGLE-PCB DUAL-SoC PLATFORM': 'ARCHITECTURE',
-  'SOVEREIGN MATURE SUPPLY': 'FOUNDRY',
-};
-
-const useCaseImages: Record<string, string> = {
-  rotating: './media/deepgrid_truck.jpg',
-  electrical: './media/deepgrid_robotics.jpg',
-  motion: './media/deepgrid_logistics.jpg',
-  degradation: './media/deepgrid_defence.jpg',
-};
-const useCaseBadges: Record<string, string> = {
-  rotating: 'ROTATING MACHINERY',
-  electrical: 'MCSA',
-  motion: 'PRECISION MOTION',
-  degradation: 'RUL / PHM',
-};
-
-const hubImages: Record<string, string> = {
-  family: './media/dg32-lite-architecture-poster.jpg',
-  architecture: './media/dg32-2dom-architecture-poster.jpg',
-  control: './media/dg32-lite-architecture-poster.jpg',
-  pinout: './media/dg32-lite-datasheet-poster.jpg',
-  roadmap: './media/roadmap-poster.png',
-  library: './media/dg32-lite-datasheet-poster.jpg',
-  ask: './media/deepgrid_soc2_die.jpg',
-};
-const hubBadges: Record<string, string> = {
-  family: 'PRODUCT FAMILY',
-  architecture: 'ARCHITECTURE',
-  control: 'CONTROL LOOP',
-  pinout: 'PINOUT',
-  roadmap: 'ROADMAP',
-  library: 'MEDIA',
-  ask: 'INTELLIGENCE',
-};
-
-const sovereignImages: Record<string, string> = {
-  'DG32-LITE': './media/dg32-lite-architecture-poster.jpg',
-  'DG32-2DOM': './media/dg32-2dom-architecture-poster.jpg',
-  'DG-D100': './media/dg32-2dom-architecture-poster.jpg',
-  'DG-RADAR-77': './media/deepgrid_defence.jpg',
-  'DG-DISP-17': './media/deepgrid_robotics.jpg',
-  'DG-SDV-ZONE': './media/deepgrid_logistics.jpg',
-};
-const sovereignBadges: Record<string, string> = {
-  'DG32-LITE': 'LITE',
-  'DG32-2DOM': '2DOM',
-  'DG-D100': 'D100',
-  'DG-RADAR-77': 'RADAR',
-  'DG-DISP-17': 'DISPLAY',
-  'DG-SDV-ZONE': 'SDV',
-};
-
-const whitepaperImages: Record<string, string> = {
-  doc1: './media/dg32-lite-datasheet-poster.jpg',
-  doc2: './media/dg32-2dom-architecture-poster.jpg',
-  doc3: './media/dg32-lite-datasheet-poster.jpg',
-  doc4: './media/dg32-2dom-architecture-poster.jpg',
-  doc5: './media/deepgrid_defence.jpg',
-  doc6: './media/deepgrid_soc2_die.jpg',
-};
-
-const whitepaperBadges: Record<string, string> = {
-  doc1: 'DOC #1',
-  doc2: 'DOC #2',
-  doc3: 'DOC #3',
-  doc4: 'DOC #4',
-  doc5: 'DOC #5',
-  doc6: 'DOC #6',
-};
-
-const safetyImages: Record<string, string> = {
-  'Lockstep Core': './media/deepgrid_soc2_die.jpg',
-  'Fault Isolation': './media/dg32-lite-tapein-poster.jpg',
-  'Supply Monitor': './media/deepgrid_soc2_die.jpg',
-};
 
  return <div className={'site-shell view-'+view}>
  <a className="skip-link" href="#main" onClick={e=>{e.preventDefault();document.getElementById('main')?.focus();document.getElementById('main')?.scrollIntoView()}}>Skip to content</a>
@@ -212,76 +45,6 @@ const safetyImages: Record<string, string> = {
   {view==='overview'&&<>
   <ImprovedOverview reduced={reduced} navigate={navigate} go={go} />
 </>}
-
-
-
-    // Verification Ladder - Redesigned with visual evidence cards
-    <section id="verification-ladder" className="content-section dr-verification-ladder-section" data-rv data-rv-delay="200">
-      <div className="section-label">
-        <Eyebrow>VERIFICATION LADDER</Eyebrow>
-        <span>WHAT EVIDENCE BACKS EVERY PRE-SILICON SPECIFICATION?</span>
-      </div>
-      <div className="dr-verification-intro" data-rv data-rv-delay="100">
-        <h2 className="dr-h2">Every figure says<br/><em>how it was obtained.</em></h2>
-        <p className="dr-lead">DG32 is pre-silicon. Each number on this site comes from one of five kinds of evidence, and first-silicon bring-up turns these design values into measurements.</p>
-      </div>
-      <div className="dr-evidence-ladder" role="list" aria-label="Five evidence types backing every pre-silicon specification">
-        {evidenceLadder.map((e, idx) => (
-          <article
-            key={e.kind}
-            className="dr-evidence-card"
-            role="listitem"
-            data-rv
-            data-rv-delay={idx * 150 + 200}
-            style={{ '--evidence-color': evidenceColors[e.kind] } as React.CSSProperties}
-          >
-            <figure className="dr-evidence-media">
-              <img
-                src={evidenceImages[e.kind]}
-                alt={`Evidence visualization: ${e.kind}`}
-                loading="lazy"
-                decoding="async"
-                width={400}
-                height={225}
-              />
-              <figcaption className="dr-evidence-badge" style={{ background: evidenceColors[e.kind] }}>
-                {evidenceBadges[e.kind]}
-              </figcaption>
-            </figure>
-            <div className="dr-evidence-content">
-              <div className="dr-evidence-header">
-                <span className="dr-evidence-icon" style={{ color: evidenceColors[e.kind] }}>
-                  {evidenceIcons[e.kind]}
-                </span>
-                <h3 className="dr-evidence-kind">{e.kind}</h3>
-              </div>
-              <p className="dr-evidence-means">{e.means}</p>
-              <div className="dr-evidence-examples">
-                <span className="dr-evidence-label">Examples:</span>
-                <span>{e.examples}</span>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-      <div className="dr-evidence-disclaimer" data-rv data-rv-delay="800">
-        <p className="dr-kicker">WHAT THIS SITE DOES NOT CLAIM</p>
-        <ul className="dr-notclaimed">
-          {notClaimed.map((n, i) => (
-            <li key={i}>{n}</li>
-          ))}
-        </ul>
-      </div>
-      <nav className="dr-links dr-sec-gap" data-rv data-rv-delay="1000" aria-label="Verification ladder actions">
-        <a className="text-link" href="#roadmap">Review Multi-Spin Roadmap & Gaps <ArrowUpRight size={16} aria-hidden="true" /></a>
-        <a className="text-link" href="#library">Download Verified Documents & Whitepapers <ArrowUpRight size={16} aria-hidden="true" /></a>
-        <a className="text-link" href="#ask">Audit Specifications in Ask DeepGrid <ArrowUpRight size={16} aria-hidden="true" /></a>
-      </nav>
-    </section>
-
- <section className="silicon-teaser"><div><Eyebrow>3D DIE EXPLORER</Eyebrow><h2>How is the 64-pin die structured<br/><em>across six functional block groups?</em></h2><p>Safety core, memory and boot, motor drive, sensing, connectivity and the bus that ties them together. Select a group and see where it sits on the die, what each block does and why.</p><button className="primary" onClick={()=>navigate('architecture')} aria-label="Inside the architecture">Inside the architecture <ArrowUpRight size={19} aria-hidden="true"/></button></div><div className="teaser-canvas"><Silicon variant="lite" reduced={reduced} exploded selected={2}/><span className="canvas-caption">EXPLODED ASSEMBLY · DRAG TO ROTATE & PITCH</span></div></section>
-
- <section className="proof-section"><Eyebrow>AUTHORITATIVE MEDIA PACKAGES</Eyebrow><h2>Two chips. <em>Where are the narrated films and client-ready decks?</em></h2><div className="dr-pkg-cards">{packages.filter(p=>p.kind==='architecture').map(p=><article className="dr-pkg-card" key={p.id}><button className="dr-pkg-poster" onClick={()=>go('library?pkg='+p.id)} aria-label={'Watch the '+p.name+' architecture film'}><img src={p.poster} alt="" loading="lazy" width={1280} height={720}/><span className="dr-play"><Play size={20} fill="currentColor"/></span></button><div className="dr-pkg-body"><span className="mono">{p.name} · {p.slides.length} SLIDES · {fmtTime(p.duration)} FILM</span><h3>{p.headline}</h3><p>{p.summary}</p><div className="dr-pkg-actions"><button className="text-link" onClick={()=>go('library?pkg='+p.id)}>Watch and browse <ArrowUpRight size={17}/></button><a className="text-link" href={p.deck} download>Download .pptx <Download size={16}/></a></div></div></article>)}</div><div className="dr-pkg-mini">{packages.filter(p=>p.kind==='datasheet').map(p=><button key={p.id} className="dr-pkg-mini-card" onClick={()=>go('library?pkg='+p.id)}><img src={p.poster} alt="" loading="lazy" width={1280} height={720}/><span className="mono">{p.name} {p.doc.toUpperCase()} · {fmtTime(p.duration)}</span><strong>{p.headline}</strong><span className="open-product">Deck and film <ArrowRight size={15}/></span></button>)}</div><div className="proof-bottom"><p>Client-ready PowerPoint decks and narrated films for every source document (the two architecture documents, both datasheets and the tape-in block diagram), plus draw.io diagrams. {PRE_SILICON}</p><button className="text-link" onClick={()=>navigate('library')}>All decks and films <ArrowUpRight size={18}/></button></div></section>
 
  {view==='library'&&<section className="page-wrap"><SectionHead tag="07 / DESIGN DOCUMENTS & MEDIA" title="Authoritative Documents, Decks & Films" copy="Complete publication PDFs, engineering specifications, client-ready PowerPoint decks, and narrated walkthrough films across the DG32 platform."/><Library pkgId={route.params.get('pkg')||'lite'} slide={Number(route.params.get('slide'))||1} onChange={update} go={go}/></section>}
 
