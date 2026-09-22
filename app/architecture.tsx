@@ -40,7 +40,7 @@ function Lite({block,reduced,setReduced,exploded,setExploded,update,go}:Props){
    <div className="dr-links"><button className="text-link" onClick={()=>go('library?pkg=lite')}>Architecture deck and film <ArrowUpRight size={16}/></button><button className="text-link" onClick={()=>go('control')}>Control-loop budget <ArrowUpRight size={16}/></button></div>
   </Intro>
   <Stats items={[['50 MHz','ONE CLOCK DOMAIN'],['2','BUS MASTERS'],['16','INTERRUPT SOURCES'],['64 KB','BOOT ROM'],['32 KB','DUAL-PORT SRAM'],['39 cycles','FAULT TO LATCH, SIMULATED']]}/>
-  <Diagram src="./diagrams/dg32-lite-architecture.svg" title="DG32-LITE system architecture" width={1518} height={1045} drawio="./downloads/dg32-lite-architecture.drawio" guide="./downloads/dg32-lite-architecture-guide.md"
+  <Diagram src="/diagrams/dg32-lite-architecture.svg" title="DG32-LITE system architecture" width={1518} height={1045} drawio="/downloads/dg32-lite-architecture.drawio" guide="/downloads/dg32-lite-architecture-guide.md"
    alt="DG32-LITE system architecture diagram: safety core, memory and boot, supervision, on-chip bus, motor drive, sensing and math, connectivity and test, with the numbered current-control loop and the hardware fault path"
    caption={<>Numbered circles trace one current-control loop: ① the PWM fires the ADC sample, ② phase current goes to the CORDIC, ③ the transforms go to the CPU, ④ the PI output sets the PWM duty. The dashed red line is the hardware fault trip from the fault latch to the gate driver. Dashed boxes are off-chip.</>}/>
 
@@ -83,7 +83,7 @@ function Dom({go,update,reduced,setReduced,exploded,setExploded}:Props){
    <div className="dr-links"><button className="text-link" onClick={()=>go('library?pkg=2dom')}>Architecture deck and film <ArrowUpRight size={16}/></button><button className="text-link" onClick={()=>go('library?pkg=2dom-datasheet')}>Datasheet deck and film <ArrowUpRight size={16}/></button></div>
   </Intro>
   <Stats items={[['114 MHz','COMPUTE CLOCK'],['50 MHz','CONTROL DOMAIN'],['Bit-exact','TO THE SOFTWARE MODEL'],['400','KEYS PER HEAD'],['~3,242','CYCLES PER ROW, ANALYTIC'],['0','PADS ADDED']]}/>
-  <Diagram src="./diagrams/dg32-2dom-architecture.svg" title="DG32-2DOM system architecture" width={1453} height={895} drawio="./downloads/dg32-2dom-architecture.drawio" guide="./downloads/dg32-2dom-architecture-guide.md"
+  <Diagram src="/diagrams/dg32-2dom-architecture.svg" title="DG32-2DOM system architecture" width={1453} height={895} drawio="/downloads/dg32-2dom-architecture.drawio" guide="/downloads/dg32-2dom-architecture-guide.md"
    alt="DG32-2DOM system architecture diagram: the 50 MHz control domain identical to DG32-LITE, three clock-domain bridges, and the 114 MHz compute domain with the six-stage INT8 attention engine and its key, value and weight-table buffers"
    caption={<>One attention kick: ① the CPU programs the shapes through the lite bridge, ② keys and values load once through the burst read bridge, ③ the INT8 output writes back through the burst write bridge, ④ a done interrupt reaches both cores. The engine reaches memory only through the bridges.</>}/>
 

@@ -16,7 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # github.io project site for now. For dr.deepgridsemi.com set PAGES_BASE: / and PAGES_DOMAIN: dr.deepgridsemi.com
-      PAGES_BASE: /deepgrid-dr-silicon_new/
+      PAGES_BASE: /deepgrid-dr-silicon-v2/
+      # Baked into the bundle so server-rendered HTML carries correct hrefs, not just hydrated HTML.
+      NEXT_PUBLIC_PAGES_BASE: /deepgrid-dr-silicon-v2/
       PAGES_DOMAIN: ''
       # Zero-API-cost static build: no external model keys or endpoints are inlined.
       # Ask DeepGrid runs fully in-browser over the 280-node knowledge graph and deterministic council.
@@ -29,16 +31,16 @@ jobs:
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npm run typecheck
       - run: npm run build:pages
-      # The browser gate (scripts/verify-site.mjs) on the built site, served under the same base path Pages uses.
+      # The multi-route browser gate (scripts/verify-routes.mjs) on the built site, served under the same base path Pages uses.
       # A red gate stops the deploy.
       - run: npx playwright install --with-deps chromium
       - name: Serve the build
         run: |
           mkdir -p "$RUNNER_TEMP/srv"
-          ln -s "$PWD/dist/pages" "$RUNNER_TEMP/srv/deepgrid-dr-silicon_new"
+          ln -s "$PWD/dist/pages" "$RUNNER_TEMP/srv/deepgrid-dr-silicon-v2"
           python3 -m http.server 8768 --directory "$RUNNER_TEMP/srv" >/dev/null 2>&1 &
-          until curl -sf http://127.0.0.1:8768/deepgrid-dr-silicon_new/ >/dev/null; do sleep 1; done
-      - run: npm run verify -- http://127.0.0.1:8768/deepgrid-dr-silicon_new/ verify-shots
+          until curl -sf http://127.0.0.1:8768/deepgrid-dr-silicon-v2/ >/dev/null; do sleep 1; done
+      - run: node scripts/verify-routes.mjs http://127.0.0.1:8768/deepgrid-dr-silicon-v2/ verify-shots
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -67,7 +69,7 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     env:
-      SITE: https://shekerkamma.github.io/deepgrid-dr-silicon_new/
+      SITE: https://shekerkamma.github.io/deepgrid-dr-silicon-v2/
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v4
@@ -83,7 +85,7 @@ jobs:
             sleep 10
           done
           echo "Pages did not serve $GITHUB_SHA within 10 minutes"; exit 1
-      - run: npm run verify -- "$SITE" verify-shots
+      - run: node scripts/verify-routes.mjs "$SITE" verify-shots
       - if: failure()
         uses: actions/upload-artifact@v4
         with:

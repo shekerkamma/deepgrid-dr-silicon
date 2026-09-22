@@ -227,7 +227,7 @@ export const applications = [
     title: 'E-Mobility & Heavy Trucks',
     sub: 'COMMERCIAL POWERTRAINS',
     desc: 'Light-EV traction, commercial drive-by-wire steering drives, and AIS-162/188 multi-camera smart mirror sensor fusion.',
-    image: './media/deepgrid_truck.jpg',
+    image: '/media/deepgrid_truck.jpg',
     metric: '18,000 UNITS FY32 · ₹450 CR',
     alt: 'DeepGrid Commercial EV Smart Mirror and Truck Traction System',
     tag: 'MANDATE WEDGE'
@@ -237,7 +237,7 @@ export const applications = [
     title: 'Autonomous Aerial & Defence',
     sub: 'MISSION-CRITICAL ACTUATORS',
     desc: 'D-HUMR defence robotics, drone ESCs, and eVTOL actuators powered by secure hardware lockstep and root of trust.',
-    image: './media/deepgrid_defence.jpg',
+    image: '/media/deepgrid_defence.jpg',
     metric: 'DAP-2020 IDDM COMPLIANT',
     alt: 'DeepGrid Sentinel Autonomous Defence and Aerial Actuator Platform',
     tag: 'SOVEREIGN DEFENCE'
@@ -247,7 +247,7 @@ export const applications = [
     title: 'Industrial Servos & Robotics',
     sub: 'FACTORY AUTOMATION JOINTS',
     desc: 'Precision servo motor drives, factory robot joints, and autonomous warehouse forklift retrofits with ±5cm stopping precision.',
-    image: './media/deepgrid_robotics.jpg',
+    image: '/media/deepgrid_robotics.jpg',
     metric: '4,200 UNITS · L4 AMR PROOF',
     alt: 'DeepGrid Autonomous Industrial Forklift and Precision Robotics',
     tag: 'LEVEL 4 AUTONOMY'
@@ -257,7 +257,7 @@ export const applications = [
     title: 'Seaport Logistics & AGVs',
     sub: 'HEAVY TERMINAL AUTOMATION',
     desc: 'Autonomous container yard vehicles and port logistics transporters operating 24/7 on electric drivetrains with 92% gross margin.',
-    image: './media/deepgrid_logistics.jpg',
+    image: '/media/deepgrid_logistics.jpg',
     metric: '50 AGV FLEETS · 92% GM',
     alt: 'DeepGrid Autonomous Seaport Yard and Logistics AGV Fleet',
     tag: 'LIVE DEPLOYMENT'

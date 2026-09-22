@@ -6,6 +6,10 @@ const source=path.join(root,'dist/client'), output=path.join(root,'dist/pages');
 // PAGES_BASE is the URL path the site is served under; PAGES_DOMAIN writes a CNAME when set.
 // github.io project site: PAGES_BASE=/deepgrid-dr-silicon/ PAGES_DOMAIN=
 // custom domain:          PAGES_BASE=/                     PAGES_DOMAIN=dr.deepgridsemi.com
+// Content assets are authored root-absolute ("/media/x.jpg") so they resolve from any route depth;
+// a relative "./media/x.jpg" breaks the moment a page lives at /technology/safety. The export leaves
+// them at the site root, so they need the same base prefix /_next/ gets.
+const CONTENT_ROOTS=['images','decks','media','downloads','diagrams'];
 const base=(process.env.PAGES_BASE||'/deepgrid-dr-silicon/').replace(/\/?$/,'/').replace(/^\/?/,'/');
 const domain=(process.env.PAGES_DOMAIN||'').trim();
 fs.rmSync(output,{recursive:true,force:true});
@@ -14,11 +18,23 @@ if(base!=='/'){
  // The export emits scripts and styles under an absolute /_next/ prefix, which a project site cannot serve.
  // Vite's preload map lists deps as "_next/static/..." and its URL builder prepends "/", so those
  // need the base without its leading slash or every preload 404s beside the working import.
- const walk=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walk(file);else if(/\.(html|js|rsc|json|css)$/.test(file)){let text=fs.readFileSync(file,'utf8').replaceAll('/_next/',base+'_next/');if(file.endsWith('.js'))text=text.replaceAll('"_next/static/','"'+base.slice(1)+'_next/static/');fs.writeFileSync(file,text);}}};
+ const walk=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walk(file);else if(/\.(html|js|rsc|json|css)$/.test(file)){let text=fs.readFileSync(file,'utf8').replaceAll('/_next/',base+'_next/');if(file.endsWith('.js'))text=text.replaceAll('"_next/static/','"'+base.slice(1)+'_next/static/');for(const dir of CONTENT_ROOTS)text=text.replaceAll('"/'+dir+'/','"'+base+dir+'/');if(file.endsWith('.html'))text=text.replace(/(<meta name="site-base" content=")[^"]*(")/,'$1'+base+'$2');fs.writeFileSync(file,text);}}};
  walk(output);
  const chunks=path.join(output,'_next/static/chunks');
  for(const f of fs.readdirSync(chunks).filter(f=>f.endsWith('.js')))if(fs.readFileSync(path.join(chunks,f),'utf8').includes('"_next/static/'))throw Error('Unprefixed preload dependency in '+f);
 }
+// A page that lost its base meta would render every nav link pointing at the domain root,
+// which looks like a working build and 404s on click. Check each page, not just index.html.
+const pages=[];(function scanHtml(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){const f=path.join(dir,e.name);if(e.isDirectory()){if(e.name!=='_next'&&e.name!=='downloads')scanHtml(f);}else if(e.name.endsWith('.html'))pages.push(f);}})(output);
+for(const f of pages){const t=fs.readFileSync(f,'utf8');if(!t.includes('<meta name="site-base" content="'+base+'"'))throw Error('Missing or wrong site-base meta in '+path.relative(output,f));}
+// Every route declared in app/routes.ts must have exported a page. vinext reports an
+// unprerendered route as "skipped" and still exits 0, so a build can go green having
+// silently dropped pages — which it did, losing /applications and /evidence.
+const routeSrc=fs.readFileSync(path.join(root,'app/routes.ts'),'utf8');
+const declared=[...routeSrc.matchAll(/href:\s*'([^']+)'/g)].map(m=>m[1]);
+if(declared.length<8)throw Error(`Only ${declared.length} routes parsed from app/routes.ts; the route table looks wrong`);
+const missing=declared.filter(r=>{const f=r==='/'?'index.html':r.replace(/^\//,'')+'.html';return !fs.existsSync(path.join(output,f));});
+if(missing.length)throw Error(`Declared routes missing from the export: ${missing.join(', ')}`);
 fs.writeFileSync(path.join(output,'.nojekyll'),'');
 if(domain)fs.writeFileSync(path.join(output,'CNAME'),domain+'\n');
 fs.writeFileSync(path.join(output,'build-info.json'),JSON.stringify({commit:process.env.GITHUB_SHA||'local',base,domain:domain||null,builtAt:new Date().toISOString()}));
@@ -26,15 +42,21 @@ const html=fs.readFileSync(path.join(output,'index.html'),'utf8');
 let checked=0;
 for(const [,ref] of html.matchAll(/(?:src|href)="([^"?#]+)"/g)){
  if(/^(https?:|data:|mailto:|#)/.test(ref))continue;
- if(ref.startsWith('/')&&!ref.startsWith(base))throw Error('Unprefixed asset: '+ref);
+ // Navigation hrefs (/products, /technology/safety) are routes, not files. They still have to
+ // carry the base — a bare "/products" points at the domain root and 404s on a project site —
+ // but they are checked against the route map, not the filesystem.
+ const isAsset=/\.[a-z0-9]{2,5}$/i.test(ref);
+ if(ref.startsWith('/')&&!ref.startsWith(base))throw Error((isAsset?'Unprefixed asset: ':'Unprefixed link: ')+ref);
+ if(!isAsset)continue;
  const relative=ref.startsWith(base)?ref.slice(base.length):ref.replace(/^\.\//,'');
  if(!fs.existsSync(path.join(output,relative)))throw Error('Missing asset: '+ref);
  checked++;
 }
-const appSource=fs.readdirSync(path.join(root,'app')).filter(f=>/\.(tsx?|css)$/.test(f)).map(f=>fs.readFileSync(path.join(root,'app',f),'utf8')).join('\n');
+const appFiles=[];(function scan(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){const f=path.join(dir,e.name);if(e.isDirectory())scan(f);else if(/\.(tsx?|css)$/.test(e.name))appFiles.push(f);}})(path.join(root,'app'));
+const appSource=appFiles.map(f=>fs.readFileSync(f,'utf8')).join('\n');
 // Every literal ./images|decks|media|downloads|diagrams path in the app must exist in the artifact,
 // plus one slide image per film segment, since slide paths are built at runtime.
-const images=[...new Set([...appSource.matchAll(/\.\/((?:images|decks|media|downloads|diagrams)\/[\w./-]+\.(?:webp|png|svg|jpg|mp4|vtt|pptx|drawio|md|pdf))/g)].map(m=>m[1]))];
+const images=[...new Set([...appSource.matchAll(/["'`]\/((?:images|decks|media|downloads|diagrams)\/[\w./-]+\.(?:webp|png|svg|jpg|mp4|vtt|pptx|drawio|md|pdf))/g)].map(m=>m[1]))];
 for(const rel of images)if(!fs.existsSync(path.join(output,rel)))throw Error('Missing asset: '+rel);
 for(const film of fs.readdirSync(path.join(root,'app/data')).filter(f=>f.endsWith('-film.json'))){
  const dir=film.replace(/-film\.json$/,'');

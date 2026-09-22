@@ -392,7 +392,7 @@ export default function AskDeepGrid({go}: {go: (hash: string) => void}) {
 
             <div className="dr-graphify-header-right">
               <a
-                href={`./downloads/graph.html${query ? `?search=${encodeURIComponent(query)}` : ''}`}
+                href={`/downloads/graph.html${query ? `?search=${encodeURIComponent(query)}` : ''}`}
                 target="_blank"
                 rel="noreferrer"
                 className="dr-graphify-btn outline"
@@ -401,7 +401,7 @@ export default function AskDeepGrid({go}: {go: (hash: string) => void}) {
                 <Maximize2 size={13} /> Fullscreen
               </a>
               <a
-                href="./downloads/graph.json"
+                href="/downloads/graph.json"
                 download="deepgrid-graph.json"
                 className="dr-graphify-btn outline"
                 title="Download 1,037-node Graphify JSON"
@@ -409,7 +409,7 @@ export default function AskDeepGrid({go}: {go: (hash: string) => void}) {
                 <Download size={13} /> Graph JSON
               </a>
               <a
-                href="./downloads/GRAPH_REPORT.md"
+                href="/downloads/GRAPH_REPORT.md"
                 target="_blank"
                 rel="noreferrer"
                 className="dr-graphify-btn primary"
@@ -479,7 +479,7 @@ export default function AskDeepGrid({go}: {go: (hash: string) => void}) {
           <div className="dr-graphify-frame-wrap">
             <iframe
               ref={graphIframeRef}
-              src={`./downloads/graph.html${query ? `?search=${encodeURIComponent(query)}` : ''}`}
+              src={`/downloads/graph.html${query ? `?search=${encodeURIComponent(query)}` : ''}`}
               title="DeepGrid Graphify Knowledge Network"
               className="dr-graphify-iframe"
               loading="lazy"

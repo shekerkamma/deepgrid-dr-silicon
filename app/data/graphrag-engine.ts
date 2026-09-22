@@ -228,9 +228,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'Thirty Use Cases, No Accelerator',
     section: 'Section 4.2: Goertzel Recurrence vs. 8 MB FFT',
     page: 'p. 11',
-    pdfPath: './downloads/docs/deepgrid-dg32-ai-30-use-cases.pdf',
+    pdfPath: '/downloads/docs/deepgrid-dg32-ai-30-use-cases.pdf',
     pdfSize: '414 KB',
-    specPath: './downloads/docs/deepgrid-dg32-ai-architecture.md',
+    specPath: '/downloads/docs/deepgrid-dg32-ai-architecture.md',
     refLinks: [
       { label: 'Explore 30 Industrial AI Tasks', hash: 'overview', description: 'Review the full 30 use cases and their physical compute envelopes.' },
       { label: 'Inspect 100 kHz Control Loop Budget', hash: 'control', description: 'Analyze cycle budgets showing 82% unburdened CPU headroom.' },
@@ -259,9 +259,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'Thirty Use Cases, No Accelerator',
     section: 'Section 4.3: The Kurtosis Non-Monotonicity Trap',
     page: 'p. 6',
-    pdfPath: './downloads/docs/deepgrid-dg32-ai-30-use-cases.pdf',
+    pdfPath: '/downloads/docs/deepgrid-dg32-ai-30-use-cases.pdf',
     pdfSize: '414 KB',
-    specPath: './downloads/docs/deepgrid-dg32-ai-architecture.md',
+    specPath: '/downloads/docs/deepgrid-dg32-ai-architecture.md',
     refLinks: [
       { label: 'Explore DSP Feature Pipeline', hash: 'overview', description: 'Review CORDIC demodulation and statistical moment extraction.' },
       { label: 'Review Bearing Diagnostic Playbook', hash: 'architecture', description: 'Inspect ISO 20816 vibration severity thresholds.' },
@@ -290,9 +290,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'Thirty Use Cases, No Accelerator',
     section: 'Section 1–3: Physical Compute Envelope & Model Hierarchy',
     page: 'p. 1',
-    pdfPath: './downloads/docs/deepgrid-dg32-ai-30-use-cases.pdf',
+    pdfPath: '/downloads/docs/deepgrid-dg32-ai-30-use-cases.pdf',
     pdfSize: '414 KB',
-    specPath: './downloads/docs/deepgrid-dg32-ai-architecture.md',
+    specPath: '/downloads/docs/deepgrid-dg32-ai-architecture.md',
     refLinks: [
       { label: 'Explore 30 Industrial AI Tasks', hash: 'overview', description: 'Review the full 30 use cases and their physical compute envelopes.' },
       { label: 'Inspect 100 kHz Control Loop Budget', hash: 'control', description: 'Analyze cycle budgets showing 82% unburdened CPU headroom.' },
@@ -321,9 +321,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'Thirty Use Cases, No Accelerator',
     section: 'Section 5–8: The 30-Use-Case Master Compendium',
     page: 'p. 4–10',
-    pdfPath: './downloads/docs/deepgrid-dg32-ai-30-use-cases.pdf',
+    pdfPath: '/downloads/docs/deepgrid-dg32-ai-30-use-cases.pdf',
     pdfSize: '414 KB',
-    specPath: './downloads/docs/deepgrid-dg32-ai-architecture.md',
+    specPath: '/downloads/docs/deepgrid-dg32-ai-architecture.md',
     refLinks: [
       { label: 'Explore 30 Industrial AI Tasks', hash: 'overview', description: 'Review the full 30 use cases and their physical compute envelopes.' },
       { label: 'Inspect 100 kHz Control Loop Budget', hash: 'control', description: 'Analyze cycle budgets showing 82% unburdened CPU headroom.' },
@@ -352,9 +352,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'Thirty Use Cases, No Accelerator',
     section: 'Section 10: Basis, Methodology & Benchmark Integrity',
     page: 'p. 12',
-    pdfPath: './downloads/docs/deepgrid-dg32-ai-30-use-cases.pdf',
+    pdfPath: '/downloads/docs/deepgrid-dg32-ai-30-use-cases.pdf',
     pdfSize: '414 KB',
-    specPath: './downloads/docs/deepgrid-dg32-ai-architecture.md',
+    specPath: '/downloads/docs/deepgrid-dg32-ai-architecture.md',
     refLinks: [
       { label: 'Review AI Playbook Methodology', hash: 'overview', description: 'Review benchmark audit procedures and dataset split protocols.' },
       { label: 'Inspect Dual-Core Lockstep Safety Gate', hash: 'architecture', description: 'Review the hardware fault isolation gate that decouples advisory AI.' }
@@ -382,9 +382,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'Master Whitepaper v3 (Mature-Node Silicon)',
     section: 'Section 11: Two Ways to Sell the Same Chip & Statutory Moats',
     page: 'p. 45–52',
-    pdfPath: './downloads/docs/deepgrid-mature-node-silicon-master-whitepaper-v3.pdf',
+    pdfPath: '/downloads/docs/deepgrid-mature-node-silicon-master-whitepaper-v3.pdf',
     pdfSize: '5.4 MB',
-    specPath: './downloads/docs/deepgrid-mature-silicon-architecture.md',
+    specPath: '/downloads/docs/deepgrid-mature-silicon-architecture.md',
     refLinks: [
       { label: 'Executive Procurement Scorecard', hash: 'overview', description: 'Review commercial comparisons across BOM cost, turnaround agility, and export risks.' },
       { label: 'Dual-Foundry Manufacturing Strategy', hash: 'roadmap', description: 'Examine SkyWater 130 nm and SCL Mohali 180 nm qualification milestones.' }
@@ -412,9 +412,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'Hardware DShot RX Specification',
     section: 'Section 2: Frame Timing, GCR Decoding & Telemetry Pipeline',
     page: 'p. 3–7',
-    pdfPath: './downloads/docs/deepgrid-dshot-rx-block-spec.pdf',
+    pdfPath: '/downloads/docs/deepgrid-dshot-rx-block-spec.pdf',
     pdfSize: '345 KB',
-    specPath: './downloads/docs/deepgrid-dshot-rx-architecture.md',
+    specPath: '/downloads/docs/deepgrid-dshot-rx-architecture.md',
     refLinks: [
       { label: 'Download dgrid_dshot_rx Specification PDF', hash: 'library', description: 'Read the complete 8-page RTL block specification.' },
       { label: 'Inspect Drone ESC Architecture & Pinout', hash: 'pinout', description: 'Review QFN-64 pin assignments for DShot telemetry.' }
@@ -442,9 +442,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'DG32-2DOM System Architecture',
     section: 'Section 2.1: Clock Distribution & Timing Closure Budget',
     page: 'p. 8–14',
-    pdfPath: './downloads/docs/deepgrid-dg32-2dom-system-architecture.pdf',
+    pdfPath: '/downloads/docs/deepgrid-dg32-2dom-system-architecture.pdf',
     pdfSize: '77 KB',
-    specPath: './downloads/docs/deepgrid-2dom-architecture.md',
+    specPath: '/downloads/docs/deepgrid-2dom-architecture.md',
     refLinks: [
       { label: 'Inspect 100 kHz Control Loop Budget', hash: 'control', description: 'Analyze the 500-cycle timeline showing hardwired math vs CPU firmware headroom.' },
       { label: 'View Dual-Core Architecture Floorplan', hash: 'architecture', description: 'Inspect MAIN and CHECKER RV32IM cores and physical comparator registers.' }
@@ -472,9 +472,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'Technical Annex v3 (10 SKUs, D100 & SDV)',
     section: 'Section 4: Competitive Benchmarks & Procurement Scorecard',
     page: 'p. 8',
-    pdfPath: './downloads/docs/deepgrid-sku-compendium-technical-annex-v3.pdf',
+    pdfPath: '/downloads/docs/deepgrid-sku-compendium-technical-annex-v3.pdf',
     pdfSize: '4.8 MB',
-    specPath: './downloads/docs/deepgrid-sku-compendium-architecture.md',
+    specPath: '/downloads/docs/deepgrid-sku-compendium-architecture.md',
     refLinks: [
       { label: 'Executive Procurement Scorecard', hash: 'overview', description: 'Review commercial comparisons across BOM cost, turnaround agility, and export risks.' },
       { label: 'Compare Product Family SKUs', hash: 'family', description: 'Review head-to-head silicon specifications across the catalogue.' }
@@ -502,9 +502,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'Master Whitepaper v3 (Mature-Node Silicon)',
     section: 'Section 13: Financial Model, Unit Economics & Use of Funds',
     page: 'p. 58–64',
-    pdfPath: './downloads/docs/deepgrid-mature-node-silicon-master-whitepaper-v3.pdf',
+    pdfPath: '/downloads/docs/deepgrid-mature-node-silicon-master-whitepaper-v3.pdf',
     pdfSize: '5.4 MB',
-    specPath: './downloads/docs/deepgrid-mature-silicon-architecture.md',
+    specPath: '/downloads/docs/deepgrid-mature-silicon-architecture.md',
     refLinks: [
       { label: 'Review Financial Model in Detail', hash: 'overview', description: 'Inspect the 5-year financial projections and unit economics breakdown.' },
       { label: 'Sovereign 10-SKU Portfolio Horizon', hash: 'overview', description: 'Explore the 10-SKU roadmap addressing India’s $9B import deficit.' }
@@ -532,9 +532,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'Master Whitepaper v3 (Mature-Node Silicon)',
     section: 'Section 12 & 14: Competitor Insulation & Risk Matrix',
     page: 'p. 53–57',
-    pdfPath: './downloads/docs/deepgrid-mature-node-silicon-master-whitepaper-v3.pdf',
+    pdfPath: '/downloads/docs/deepgrid-mature-node-silicon-master-whitepaper-v3.pdf',
     pdfSize: '5.4 MB',
-    specPath: './downloads/docs/deepgrid-mature-silicon-architecture.md',
+    specPath: '/downloads/docs/deepgrid-mature-silicon-architecture.md',
     refLinks: [
       { label: 'Review Risk Audit & Stop Rules', hash: 'overview', description: 'Read the complete Charlie Munger inversion audit and risk matrix.' },
       { label: 'Dual-Foundry Manufacturing Strategy', hash: 'roadmap', description: 'Examine multi-fab redundancy across SkyWater, IHP, and SCL.' }
@@ -562,9 +562,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'DG32 QFN-64 Engineering Datasheet',
     section: 'Section 2: Complete 64-Pin QFN Physical Pin Map',
     page: 'p. 2–8',
-    pdfPath: './downloads/docs/deepgrid-datasheets-qfn64.pdf',
+    pdfPath: '/downloads/docs/deepgrid-datasheets-qfn64.pdf',
     pdfSize: '76 KB',
-    specPath: './downloads/docs/deepgrid-datasheets-engineering-spec.md',
+    specPath: '/downloads/docs/deepgrid-datasheets-engineering-spec.md',
     refLinks: [
       { label: 'Inspect QFN-64 Pinout & Layout Rules', hash: 'pinout', description: 'Review full 64-pin table and high-speed PCB routing rules.' },
       { label: 'Download QFN-64 Datasheet PDF', hash: 'library', description: 'Access the complete 24-page electrical and physical datasheet.' }
@@ -597,9 +597,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'Master Whitepaper v3 (Mature-Node Silicon)',
     section: 'Section 4 & 9: Sovereign Supply Architecture & Three-Factory Strategy',
     page: 'p. 18–24',
-    pdfPath: './downloads/docs/deepgrid-mature-node-silicon-master-whitepaper-v3.pdf',
+    pdfPath: '/downloads/docs/deepgrid-mature-node-silicon-master-whitepaper-v3.pdf',
     pdfSize: '5.4 MB',
-    specPath: './downloads/docs/deepgrid-mature-silicon-architecture.md',
+    specPath: '/downloads/docs/deepgrid-mature-silicon-architecture.md',
     refLinks: [
       { label: 'Examine Three-Factory Roadmap', hash: 'roadmap', description: 'Review the multi-fab transition across SkyWater, IHP, and SCL Mohali.' },
       { label: 'Inspect DAP-2020 Defence Moats', hash: 'overview', description: 'Read statutory indigenisation requirements under Make-II rules.' },
@@ -633,9 +633,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     docTitle: 'DG32-2DOM System Architecture',
     section: 'Section 4.1: Lockstep CPU core pair and comparator',
     page: 'p. 4, 13',
-    pdfPath: './downloads/docs/deepgrid-dg32-2dom-system-architecture.pdf',
+    pdfPath: '/downloads/docs/deepgrid-dg32-2dom-system-architecture.pdf',
     pdfSize: '77 KB',
-    specPath: './downloads/docs/deepgrid-2dom-architecture.md',
+    specPath: '/downloads/docs/deepgrid-2dom-architecture.md',
     refLinks: [
       { label: 'Step through the 39-cycle fault trace', hash: 'overview', description: 'Follow one wrong value from the main core to a bridge that is switched off.' },
       { label: 'Inside the safety core', hash: 'architecture', description: 'The lockstep pair, comparator and fault register in the block diagram.' }

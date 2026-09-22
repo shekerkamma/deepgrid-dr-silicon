@@ -18,7 +18,7 @@ export type Pkg = {
 };
 
 const media = (slug: string) => ({
-  deck: `./downloads/${slug}.pptx`, film: `./media/${slug}.mp4`, captions: `./media/${slug}.vtt`, poster: `./media/${slug}-poster.jpg`,
+  deck: `/downloads/${slug}.pptx`, film: `/media/${slug}.mp4`, captions: `/media/${slug}.vtt`, poster: `/media/${slug}-poster.jpg`,
 });
 
 export const packages: Pkg[] = [
@@ -26,8 +26,8 @@ export const packages: Pkg[] = [
     id: 'lite', kind: 'architecture', name: 'DG32-LITE', doc: 'Architecture',
     headline: 'Lockstep safety on an entry-level motor chip',
     summary: 'The motor-control SoC: two lockstep RISC-V cores, a fixed-cost control loop in hardware, and a 44-signal QFN-64.',
-    ...media('dg32-lite-architecture'), slideDir: './decks/dg32-lite',
-    diagram: './diagrams/dg32-lite-architecture.svg', drawio: './downloads/dg32-lite-architecture.drawio', guide: './downloads/dg32-lite-architecture-guide.md',
+    ...media('dg32-lite-architecture'), slideDir: '/decks/dg32-lite',
+    diagram: '/diagrams/dg32-lite-architecture.svg', drawio: '/downloads/dg32-lite-architecture.drawio', guide: '/downloads/dg32-lite-architecture-guide.md',
     duration: liteFilm.duration, chapters: liteFilm.chapters, segments: liteFilm.segments,
     slides: [
       'Lockstep safety on an entry-level motor chip', 'One chip carries the MCU and its safety monitor',
@@ -51,8 +51,8 @@ export const packages: Pkg[] = [
     id: '2dom', kind: 'architecture', name: 'DG32-2DOM', doc: 'Architecture',
     headline: 'Condition monitoring on the motor-control chip',
     summary: 'DG32-LITE plus an INT8 attention engine on its own 114 MHz clock, added behind bridges so the control core is untouched.',
-    ...media('dg32-2dom-architecture'), slideDir: './decks/dg32-2dom',
-    diagram: './diagrams/dg32-2dom-architecture.svg', drawio: './downloads/dg32-2dom-architecture.drawio', guide: './downloads/dg32-2dom-architecture-guide.md',
+    ...media('dg32-2dom-architecture'), slideDir: '/decks/dg32-2dom',
+    diagram: '/diagrams/dg32-2dom-architecture.svg', drawio: '/downloads/dg32-2dom-architecture.drawio', guide: '/downloads/dg32-2dom-architecture-guide.md',
     duration: domFilm.duration, chapters: domFilm.chapters, segments: domFilm.segments,
     slides: [
       'Condition monitoring on the motor-control chip', 'DG32-2DOM adds an INT8 engine, not a new core',
@@ -73,7 +73,7 @@ export const packages: Pkg[] = [
     id: 'lite-datasheet', kind: 'datasheet', name: 'DG32-LITE', doc: 'Datasheet',
     headline: 'A lockstep motor MCU in a QFN-64 package',
     summary: 'The preliminary datasheet at overview level: pin groups and placement, electrical limits, power, clock, boot and peripheral limits.',
-    ...media('dg32-lite-datasheet'), slideDir: './decks/dg32-lite-datasheet',
+    ...media('dg32-lite-datasheet'), slideDir: '/decks/dg32-lite-datasheet',
     diagram: null, drawio: null, guide: null,
     duration: liteDsFilm.duration, chapters: liteDsFilm.chapters, segments: liteDsFilm.segments,
     slides: [
@@ -90,7 +90,7 @@ export const packages: Pkg[] = [
     id: '2dom-datasheet', kind: 'datasheet', name: 'DG32-2DOM', doc: 'Datasheet',
     headline: 'DG32-2DOM: DG32-LITE plus one engine',
     summary: 'What the DG32-2DOM preliminary datasheet adds (one attention engine on its own clock) and everything it leaves unchanged.',
-    ...media('dg32-2dom-datasheet'), slideDir: './decks/dg32-2dom-datasheet',
+    ...media('dg32-2dom-datasheet'), slideDir: '/decks/dg32-2dom-datasheet',
     diagram: null, drawio: null, guide: null,
     duration: domDsFilm.duration, chapters: domDsFilm.chapters, segments: domDsFilm.segments,
     slides: [
@@ -106,7 +106,7 @@ export const packages: Pkg[] = [
     id: 'lite-tapein', kind: 'datasheet', name: 'DG32-LITE', doc: 'Tape-in block diagram',
     headline: 'DG32-LITE as built for tape-in',
     summary: 'The tape-in block diagram, block by block: clock and reset, lockstep, fetch and bus, 18 blocks, the 44-pad plan, scan test and four sign-off gates.',
-    ...media('dg32-lite-tapein'), slideDir: './decks/dg32-lite-tapein',
+    ...media('dg32-lite-tapein'), slideDir: '/decks/dg32-lite-tapein',
     diagram: null, drawio: null, guide: null,
     duration: tapeinFilm.duration, chapters: tapeinFilm.chapters, segments: tapeinFilm.segments,
     slides: [

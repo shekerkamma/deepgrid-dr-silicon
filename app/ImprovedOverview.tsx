@@ -17,11 +17,11 @@ const evidenceColors: Record<string, string> = {
   'Process nominal': '#bf7f3b',
 };
 const evidenceImages: Record<string, string> = {
-  Simulated: './media/sims_image.png',
-  'Post-route': './media/sims_image2.png',
-  Analytic: './media/sims_image3.png',
-  'Tool estimate': './media/sims_image4.png',
-  'Process nominal': './media/sims_image4.png',
+  Simulated: '/media/sims_image.png',
+  'Post-route': '/media/sims_image2.png',
+  Analytic: '/media/sims_image3.png',
+  'Tool estimate': '/media/sims_image4.png',
+  'Process nominal': '/media/sims_image4.png',
 };
 const evidenceBadges: Record<string, string> = {
   Simulated: 'SIMULATION',
@@ -51,10 +51,10 @@ const evidenceIcons: Record<string, React.ReactNode> = {
 // One representative task per domain, taken verbatim from useCaseDomains.
 // The full task inventory belongs on the domain's own material, not the overview.
 const domainImages: Record<string, string> = {
-  rotating: './media/deepgrid_truck.jpg',
-  electrical: './media/deepgrid_robotics.jpg',
-  motion: './media/deepgrid_logistics.jpg',
-  degradation: './media/deepgrid_defence.jpg',
+  rotating: '/media/deepgrid_truck.jpg',
+  electrical: '/media/deepgrid_robotics.jpg',
+  motion: '/media/deepgrid_logistics.jpg',
+  degradation: '/media/deepgrid_defence.jpg',
 };
 const domainBadges: Record<string, string> = {
   rotating: 'ROTATING MACHINERY',
@@ -264,7 +264,7 @@ export function ImprovedOverview({
             <article key={d.id} className="dr-usecase-card" data-rv data-rv-delay={idx * 150 + 300}>
               <figure className="dr-usecase-media">
                 <img
-                  src={domainImages[d.id] || './media/deepgrid_truck.jpg'}
+                  src={domainImages[d.id] || '/media/deepgrid_truck.jpg'}
                   alt={d.title}
                   loading="lazy"
                   decoding="async"
