@@ -146,17 +146,6 @@ export function ImprovedOverview({
 
       <section className="metrics-strip">
         {headline.map(([v, l]) => <div key={l}><strong>{v}</strong><span>{l}</span></div>)}
-        <div>
-          <img
-            src="./media/deepgrid_soc2_die.jpg"
-            alt="DG32 die layout showing six functional blocks"
-            className="metrics-die-preview"
-            width={400}
-            height={225}
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
         <p>Pre-silicon figures.<br/>Design values, not measurements.</p>
       </section>
 
