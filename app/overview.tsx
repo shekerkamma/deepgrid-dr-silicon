@@ -3,9 +3,10 @@
 import {ArrowUpRight, ArrowRight, Check, Download} from 'lucide-react';
 import Silicon from './silicon';
 import FaultTrace from './fault-trace';
-import {Eyebrow} from './detail';
+import {Eyebrow, DataTable, Callout} from './detail';
 import {evidenceLadder, faultPath, notClaimed, useCaseDomains as domains} from './detail-content';
 import {headline} from './content';
+import './overview.css';
 
 // The site's front door: what DG32 is, who it is for, why the architecture matters, where it
 // fits, what is verifiable today, and what to do next. Six sections, the spine from PLAN.md.
@@ -237,44 +238,32 @@ export function Overview({
         }/>
       </section>
 
-      {/* 4 — APPLICATIONS. Four domains, one representative task each. */}
-      <section className="content-section dr-usecases-section" data-rv data-rv-delay="100">
+      {/* 4 — APPLICATIONS. Four domains, named and routed. The tasks, standards and latency
+          envelopes live on /applications, which is the page that exists to carry them. */}
+      <section className="content-section" data-rv data-rv-delay="100">
         <div className="section-label">
           <Eyebrow>APPLICATIONS</Eyebrow>
-          <span>WHERE MIGHT THIS FIT?</span>
+          <span>WHERE DOES IT FIT?</span>
         </div>
         <div className="thesis-heading" data-rv data-rv-delay="200">
           <h2>Four domains,<br/><em>one silicon envelope.</em></h2>
           <div>
             <p>
               DG32 runs edge diagnostics on the motor-control SoC itself, with no external
-              coprocessor. Each domain below shows one representative task; the full task
-              inventory, its conditions and its evidence status are in the whitepaper.
+              coprocessor. Each domain carries its own tasks, the standards they work against and
+              the latency they were simulated at.
             </p>
-            <div className="dr-usecase-header-actions">
-              <button className="primary" onClick={() => go('library?pkg=lite')}>
-                Download the use-case whitepaper (PDF) <Download size={16} aria-hidden="true"/>
-              </button>
-              <button className="text-link" onClick={() => navigate('ask')}>
-                Query use cases in Ask DeepGrid <ArrowUpRight size={16} aria-hidden="true"/>
-              </button>
-            </div>
           </div>
         </div>
-
+        {/* The card keeps its photograph and its head. The task list and the executive-value
+            paragraph are dropped: /applications carries those, and four full cards on the front
+            door is the inventory-on-the-overview problem this rebuild exists to fix. */}
         <div className="dr-usecases-grid">
           {domains.map((d, idx) => (
-            <article key={d.id} className="dr-usecase-card" data-rv data-rv-delay={idx * 150 + 300}>
+            <article key={d.id} className="dr-usecase-card" data-rv data-rv-delay={idx * 120 + 300}>
               <figure className="dr-usecase-media">
-                <img
-                  src={domainImages[d.id] || '/media/deepgrid_truck.jpg'}
-                  alt={d.title}
-                  loading="lazy"
-                  decoding="async"
-                  width={400}
-                  height={225}
-                />
-                <figcaption className="dr-usecase-badge">{domainBadges[d.id] || 'INDUSTRIAL'}</figcaption>
+                <img src={domainImages[d.id]} alt={d.title} loading="lazy" decoding="async" width={400} height={225}/>
+                <figcaption className="dr-usecase-badge">{domainBadges[d.id]}</figcaption>
               </figure>
               <div className="dr-usecase-card-head">
                 <div className="dr-usecase-header-meta">
@@ -284,108 +273,52 @@ export function Overview({
                 <h3>{d.title}</h3>
                 <p className="dr-usecase-sub">{d.subtitle}</p>
               </div>
-              <div className="dr-usecase-tasks-list">
-                <span className="mono dr-usecase-list-label">REPRESENTATIVE TASK:</span>
-                <ul>
-                  <li>
-                    <Check size={14} aria-hidden="true"/>
-                    <span>{d.examples[0]}</span>
-                  </li>
-                </ul>
-              </div>
               <div className="dr-usecase-card-footer">
                 <div className="dr-usecase-timing">
-                  <span className="mono">LATENCY:</span>
-                  <strong>{d.timing}</strong>
-                </div>
-                <div className="dr-usecase-benefit">
-                  <span className="mono">WHY IT MATTERS:</span>
-                  <p>{d.businessBenefit}</p>
+                  <span className="mono">LATENCY:</span><strong>{d.timing}</strong>
                 </div>
               </div>
             </article>
           ))}
         </div>
-
-        <div className="dr-usecases-footer-bar">
-          <div className="dr-usecases-callout">
-            <strong>Scope:</strong> task latencies are simulated figures for the stated sample
-            rates and are not measurements on fabricated parts.
-          </div>
-          <div className="dr-usecases-links">
-            <button className="text-link" onClick={() => navigate('control')}>
-              Inspect the control headroom <ArrowUpRight size={16} aria-hidden="true"/>
-            </button>
-            <button className="text-link" onClick={() => navigate('family')}>
-              DG32-LITE vs DG32-2DOM <ArrowUpRight size={16} aria-hidden="true"/>
-            </button>
-          </div>
+        <div className="dr-links dr-sec-gap">
+          <button className="text-link" onClick={() => navigate('applications')}>
+            All four domains and their tasks <ArrowUpRight size={16} aria-hidden="true"/>
+          </button>
+          <button className="text-link" onClick={() => navigate('control')}>
+            The control headroom they run in <ArrowUpRight size={16} aria-hidden="true"/>
+          </button>
         </div>
       </section>
 
-      {/* 5 — EVIDENCE. What is verifiable today, and what is not claimed. */}
-      <section id="verification-ladder" className="content-section dr-verification-ladder-section" data-rv data-rv-delay="100">
+      {/* 5 — EVIDENCE. The posture and the five kinds, stated plainly. The register, the
+          artefacts and the full "does not claim" list live on /evidence. */}
+      <section className="content-section" data-rv data-rv-delay="100">
         <div className="section-label">
           <Eyebrow>EVIDENCE</Eyebrow>
           <span>WHAT CAN BE VERIFIED TODAY?</span>
         </div>
-        <div className="dr-verification-intro" data-rv data-rv-delay="200">
-          <h2 className="dr-h2">Every figure says<br/><em>how it was obtained.</em></h2>
-          <p className="dr-lead">
-            DG32 is pre-silicon as of September 2026. Numbers on this site carry the kind of
-            evidence behind them. These are different kinds of evidence, not stages of a ladder,
-            and none of them is a measurement on fabricated silicon. Three representative kinds
-            are below; the full register covers five.
-          </p>
+        <div className="thesis-heading" data-rv data-rv-delay="200">
+          <h2>Every figure says<br/><em>how it was obtained.</em></h2>
+          <div>
+            <p>
+              DG32 is pre-silicon as of September 2026. Every number on this site carries the kind
+              of evidence behind it. These are five different kinds of evidence, not five stages of
+              a ladder, and none of them is a measurement on fabricated silicon.
+            </p>
+          </div>
         </div>
-        <div className="dr-evidence-ladder" role="list" aria-label="Representative evidence types behind the specifications">
-          {evidenceLadder.slice(0, 3).map((e, idx) => (
-            <article
-              key={e.kind}
-              className="dr-evidence-card"
-              role="listitem"
-              data-rv
-              data-rv-delay={idx * 150 + 300}
-              style={{'--evidence-color': evidenceColors[e.kind]} as React.CSSProperties}
-            >
-              <figure className="dr-evidence-media">
-                <img
-                  src={evidenceImages[e.kind]}
-                  alt={`Evidence visualization: ${e.kind}`}
-                  loading="lazy"
-                  decoding="async"
-                  width={400}
-                  height={225}
-                />
-                <figcaption className="dr-evidence-badge" style={{background: evidenceColors[e.kind]}}>
-                  {evidenceBadges[e.kind]}
-                </figcaption>
-              </figure>
-              <div className="dr-evidence-content">
-                <div className="dr-evidence-header">
-                  <span className="dr-evidence-icon" style={{color: evidenceColors[e.kind]}}>
-                    {evidenceIcons[e.kind]}
-                  </span>
-                  <h3 className="dr-evidence-kind">{e.kind}</h3>
-                </div>
-                <p className="dr-evidence-means">{e.means}</p>
-                <div className="dr-evidence-examples">
-                  <span className="dr-evidence-label">Examples:</span>
-                  <span>{e.examples}</span>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className="dr-evidence-disclaimer" data-rv data-rv-delay="700">
-          <p className="dr-kicker">WHAT THIS SITE DOES NOT CLAIM</p>
-          <ul className="dr-notclaimed">
-            {notClaimed.map((n, i) => <li key={i}>{n}</li>)}
-          </ul>
-        </div>
+        <DataTable
+          caption="The five kinds of evidence behind the figures on this site"
+          head={['Evidence kind', 'What it means']}
+          rows={evidenceLadder.map(e => [e.kind, e.means] as const)}
+        />
+        <Callout label="WHAT THIS SITE DOES NOT CLAIM">
+          {notClaimed[0]}
+        </Callout>
         <div className="dr-links dr-sec-gap">
-          <button className="text-link" onClick={() => navigate('roadmap')}>
-            Full verification register &amp; gaps <ArrowUpRight size={16} aria-hidden="true"/>
+          <button className="text-link" onClick={() => navigate('evidence')}>
+            The full evidence register <ArrowUpRight size={16} aria-hidden="true"/>
           </button>
           <button className="text-link" onClick={() => go('library?pkg=lite')}>
             Download the specification suite <Download size={16} aria-hidden="true"/>
