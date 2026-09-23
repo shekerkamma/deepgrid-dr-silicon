@@ -52,6 +52,26 @@ correct hrefs. For a custom domain set both to `/` and set `PAGES_DOMAIN`.
 
 ## Deploying
 
+**v2 is the only source.** `deepgrid-dr-silicon` and `deepgrid-dr-silicon_new` are mirrors of it,
+serving the same commit at their own base paths. They are independent repositories, not forks, and
+nothing syncs them automatically unless `MIRROR_TOKEN` is set. Never commit to a mirror: the sync is
+a force-push and will discard it.
+
+```bash
+npm run sync        # push main to all three, then wait for and report all three deployments
+```
+
+The workflow also has a `mirror` job that does this in CI after `verify-live` passes, so one push to
+v2 updates all three. It needs a PAT with `repo` scope on the two mirrors, because `GITHUB_TOKEN` is
+scoped to the repository running the workflow and cannot push anywhere else:
+
+```bash
+gh secret set MIRROR_TOKEN --repo shekerkamma/deepgrid-dr-silicon-v2
+```
+
+Without that secret the job prints a notice and exits clean, so a missing credential never fails a
+green build. Until it is set, `npm run sync` is the way to propagate.
+
 Push to `main`. `.github/workflows/pages.yml` runs typecheck, builds, gates the build in a
 browser, deploys through `actions/deploy-pages`, then re-runs the same gate against the live URL
 once Pages serves that commit. A red gate stops the deploy.

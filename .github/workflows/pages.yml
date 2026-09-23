@@ -96,3 +96,35 @@ jobs:
         with:
           name: verify-live-shots
           path: verify-shots
+
+  # Propagate this commit to the two mirror repos, so one push to v2 updates all three sites.
+  #
+  # Runs only in the source repo and only after verify-live: a mirror must never receive a commit
+  # that failed its own gate in the repo that owns it.
+  #
+  # MIRROR_TOKEN is a PAT with `repo` scope on the two mirrors. GITHUB_TOKEN cannot be used: it is
+  # scoped to the repository running the workflow, so it can push here and nowhere else. Without
+  # the secret this job reports what it would have done and exits clean, rather than failing a
+  # green build on a credential nobody has configured yet.
+  mirror:
+    if: github.event_name != 'pull_request' && github.repository == 'shekerkamma/deepgrid-dr-silicon-v2'
+    needs: verify-live
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with: {fetch-depth: 0}
+      - name: Push to mirrors
+        env:
+          MIRROR_TOKEN: ${{ secrets.MIRROR_TOKEN }}
+        run: |
+          if [ -z "$MIRROR_TOKEN" ]; then
+            echo "::notice::MIRROR_TOKEN is not set, so the mirrors were not updated."
+            echo "Set it with: gh secret set MIRROR_TOKEN --repo shekerkamma/deepgrid-dr-silicon-v2"
+            echo "Until then, run: npm run sync"
+            exit 0
+          fi
+          for repo in deepgrid-dr-silicon deepgrid-dr-silicon_new; do
+            echo "Pushing ${{ github.sha }} to $repo"
+            git push --force "https://x-access-token:$MIRROR_TOKEN@github.com/shekerkamma/$repo.git" \
+              "${{ github.sha }}:refs/heads/main"
+          done
