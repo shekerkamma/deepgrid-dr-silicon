@@ -37,9 +37,19 @@ for (const width of [1440, 390]) {
     await page.waitForTimeout(500);
     // Scroll the whole page so entrance animations resolve; a block stuck at opacity 0 is
     // invisible to a screenshot but is a real reader-facing defect.
-    const h = await page.evaluate(() => document.body.scrollHeight);
-    for (let y = 0; y < h; y += 700) { await page.evaluate(v => scrollTo({top: v, behavior: 'instant'}), y); await page.waitForTimeout(60); }
-    await page.evaluate(() => scrollTo({top: 0, behavior: 'instant'}));
+    // Scroll the page through twice. The reveal observer is installed by a React effect, so on a
+    // cold load of a heavy route (the architecture page carries a WebGL canvas) a single scripted
+    // pass can finish before the effect mounts: the observer then starts at y=0 with everything
+    // below the fold still pending, and nothing else moves the page. Measured on /technology,
+    // 16 of 20 blocks unrevealed on run 1 and 0 on runs 2 and 3. A real reader scrolls again, so
+    // the gate does too, and a block that is still hidden after the second pass is genuinely stuck.
+    const sweep = async () => {
+      const h = await page.evaluate(() => document.body.scrollHeight);
+      for (let y = 0; y < h; y += 700) { await page.evaluate(v => scrollTo({top: v, behavior: 'instant'}), y); await page.waitForTimeout(60); }
+      await page.evaluate(() => scrollTo({top: 0, behavior: 'instant'}));
+    };
+    await sweep();
+    await sweep();
     // Entrance delays run to 700ms via data-rv-delay, and on a page with a live WebGL canvas a
     // starved renderer can park a transition for seconds. A single sample at a fixed moment
     // therefore measures the animation, not the outcome: the same unchanged page reported 7

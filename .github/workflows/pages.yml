@@ -38,7 +38,9 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/srv"
           ln -s "$PWD/dist/pages" "$RUNNER_TEMP/srv/deepgrid-dr-silicon-v2"
-          python3 -m http.server 8768 --directory "$RUNNER_TEMP/srv" >/dev/null 2>&1 &
+          # Threaded: the stock http.server is single-threaded and stalls one chunk request
+          # per page load once the home route imports the scroll engine.
+          python3 scripts/serve-dist.py 8768 "$RUNNER_TEMP/srv" >/dev/null 2>&1 &
           until curl -sf http://127.0.0.1:8768/deepgrid-dr-silicon-v2/ >/dev/null; do sleep 1; done
       - run: node scripts/verify-routes.mjs http://127.0.0.1:8768/deepgrid-dr-silicon-v2/ verify-shots
       - if: failure()
