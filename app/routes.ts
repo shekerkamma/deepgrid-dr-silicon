@@ -14,7 +14,8 @@ export function url(path: string): string {
 
 export type RouteId =
   | 'home' | 'products' | 'technology' | 'safety' | 'control' | 'die'
-  | 'package' | 'applications' | 'evidence' | 'resources' | 'procurement' | 'ask';
+  | 'package' | 'applications' | 'evidence' | 'resources' | 'procurement' | 'ask'
+  | 'company' | 'contact';
 
 export type Route = {id: RouteId; href: string; label: string; nav?: boolean; parent?: RouteId; tag?: string};
 
@@ -31,6 +32,10 @@ export const routes: Route[] = [
   {id: 'procurement',  href: '/procurement',             label: 'Procurement',  nav: true, tag: '05 / PROCUREMENT'},
   {id: 'resources',    href: '/resources',               label: 'Resources',    nav: true, tag: '06 / DOCUMENTS & MEDIA'},
   {id: 'ask',          href: '/ask',                     label: 'Ask DeepGrid', nav: true, tag: '07 / SILICON INTELLIGENCE'},
+  {id: 'company',      href: '/company',                 label: 'Company',      nav: true, tag: '08 / COMPANY'},
+  // Reached from the header CTA on every page, from /company and from the footer. Kept out of
+  // the primary nav so the bar still fits a phone without scrolling sideways.
+  {id: 'contact',      href: '/contact',                 label: 'Contact',      tag: '09 / CONTACT'},
 ];
 
 export const byId = Object.fromEntries(routes.map(r => [r.id, r])) as Record<RouteId, Route>;

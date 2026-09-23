@@ -59,7 +59,7 @@ export function Shell({
           <span>DG32 · LOCKSTEP RISC-V MOTOR-CONTROL SILICON</span>
           <span className="status-dot">FIRST SILICON · SEP 2026</span>
         </div>
-        <a className="contact-link" href={href('/ask')}>Discuss your application <ArrowUpRight size={17}/></a>
+        <a className="contact-link" href={href('/contact')}>Discuss your application <ArrowUpRight size={17}/></a>
         <button className="mobile-menu" aria-label="Open navigation" onClick={() => setMenu(true)}>
           <span>{here.label}</span><Menu/>
         </button>
