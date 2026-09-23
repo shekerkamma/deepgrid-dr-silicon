@@ -8,9 +8,13 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+# Pages keeps its own deployment queue, separate from Actions runs. cancel-in-progress cancels a
+# *run*, which does nothing about a deployment already finalising, so two pushes close together
+# collided: the second failed with "due to in progress deployment, please cancel <sha> first".
+# A stable group that queues rather than cancels lets the second wait for the first instead.
 concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  group: pages-${{ github.repository }}
+  cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
