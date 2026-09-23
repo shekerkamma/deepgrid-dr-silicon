@@ -21,8 +21,21 @@ if(base!=='/'){
  // The export emits scripts and styles under an absolute /_next/ prefix, which a project site cannot serve.
  // Vite's preload map lists deps as "_next/static/..." and its URL builder prepends "/", so those
  // need the base without its leading slash or every preload 404s beside the working import.
- const walk=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walk(file);else if(/\.(html|js|rsc|json|css)$/.test(file)){let text=fs.readFileSync(file,'utf8').replaceAll('/_next/',base+'_next/');if(file.endsWith('.js'))text=text.replaceAll('"_next/static/','"'+base.slice(1)+'_next/static/');for(const dir of CONTENT_ROOTS)text=text.replaceAll('"/'+dir+'/','"'+base+dir+'/');if(file.endsWith('.html'))text=text.replace(/(<meta name="site-base" content=")[^"]*(")/,'$1'+base+'$2');fs.writeFileSync(file,text);}}};
+ const walk=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walk(file);else if(/\.(html|js|rsc|json|css)$/.test(file)){let text=fs.readFileSync(file,'utf8').replaceAll('/_next/',base+'_next/');if(file.endsWith('.js'))text=text.replaceAll('"_next/static/','"'+base.slice(1)+'_next/static/');for(const dir of CONTENT_ROOTS)for(const q of ['"',"'",'`'])text=text.replaceAll(q+'/'+dir+'/',q+base+dir+'/');if(file.endsWith('.html'))text=text.replace(/(<meta name="site-base" content=")[^"]*(")/,'$1'+base+'$2');fs.writeFileSync(file,text);}}};
  walk(output);
+ // The rewrite is a string substitution, so it only sees a reference that is quoted the way it
+ // expects. It first matched only a double quote; the bundler emits template literals, so 43
+ // references kept a bare root and every one of them 404'd -- but ONLY after a client render,
+ // because the server-rendered HTML for the same page was rewritten correctly. A fresh load of
+ // every route therefore passed while /ask's graph link was dead. Scan the whole package instead
+ // of trusting the substitution, and fail the build rather than shipping it.
+ const ROOT_REF=new RegExp('[\'"`]/(?:'+CONTENT_ROOTS.join('|')+')/','g');
+ const stale=[];
+ (function scan(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){const f=path.join(dir,e.name);
+  if(e.isDirectory())scan(f);
+  else if(/\.(html|js|rsc|json|css)$/.test(f)){const t=fs.readFileSync(f,'utf8');
+   for(const m of t.matchAll(ROOT_REF))stale.push(path.relative(output,f)+': '+t.slice(m.index,m.index+52).split('\n')[0]);}}})(output);
+ if(stale.length)throw Error('Unprefixed asset reference survived packaging ('+stale.length+'):\n  '+stale.slice(0,12).join('\n  '));
  const chunks=path.join(output,'_next/static/chunks');
  for(const f of fs.readdirSync(chunks).filter(f=>f.endsWith('.js')))if(fs.readFileSync(path.join(chunks,f),'utf8').includes('"_next/static/'))throw Error('Unprefixed preload dependency in '+f);
 }
