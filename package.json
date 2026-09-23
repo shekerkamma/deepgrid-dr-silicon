@@ -16,7 +16,8 @@
     "build:semantic": "node scripts/build-semantic-index.mjs",
     "publish:graph": "node scripts/publish-graph.mjs",
     "check:semantic": "node scripts/check-semantic.mjs",
-    "verify": "node scripts/verify-site.mjs"
+    "verify": "bash scripts/verify-local.sh",
+    "verify:url": "node scripts/verify-routes.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",

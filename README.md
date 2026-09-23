@@ -1,116 +1,111 @@
-# dr.deepgridsemi.com — DG32 silicon site
+# DG32 silicon site
 
-Live site: https://shekerkamma.github.io/deepgrid-dr-silicon/ (moves to https://dr.deepgridsemi.com/ once DNS is in place)
+**Live: https://shekerkamma.github.io/deepgrid-dr-silicon-v2/**
 
-The public page for Deepgrid Semi's DG32 motor-control silicon: DG32-LITE (dual-core lockstep
-RISC-V SoC) and DG32-2DOM (the same chip plus an INT8 attention engine). It is built from the
-same React / Vinext / Three.js project as
-[deepgrid-platform-showcase](https://github.com/shekerkamma/deepgrid-platform-showcase), with
-all ADAS and platform content replaced.
+The public site for DeepGrid Semi's DG32 motor-control silicon: DG32-LITE, a dual-core lockstep
+RISC-V SoC, and DG32-2DOM, the same chip plus an INT8 attention engine. Pre-silicon: every figure
+is a design value carrying the kind of evidence that produced it, not a measurement on fabricated
+parts.
 
-## Run locally
+This is the multi-page rebuild. The earlier site (`deepgrid-dr-silicon`) was one hash-routed
+document serving eight views from a single `index.html`; nothing could be linked, crawled or
+cached per page. This repo is 12 routes that each export their own HTML, on the same React 19
+stack and the same design system.
 
-Node 24:
+## Routes
 
-```sh
-npm ci --ignore-scripts
-npm run dev
+| Route | Register | What it carries |
+|---|---|---|
+| `/` | live surface | The control loop running, and its cycle budget spent by scrolling |
+| `/products` | showcase | DG32-LITE against DG32-2DOM, one footprint |
+| `/technology` | reference | Block-by-block architecture, per chip |
+| `/technology/safety` | reference | Lockstep, and the 39-cycle path from a wrong value to a safe bridge |
+| `/technology/control-loop` | reference | Loop timing and the cycle budget at four rates |
+| `/technology/die` | showcase | The interactive die, six functional block groups |
+| `/technology/package` | reference | QFN-64 pinout, supplies, electrical limits |
+| `/applications` | showcase | Four domains, their tasks and latency envelopes |
+| `/evidence` | reference | Five kinds of evidence, and what the site does not claim |
+| `/procurement` | reference | Position against the STM32G0, scorecard, roadmap |
+| `/resources` | reference | 45 documents, 43 downloads, five narrated films |
+| `/ask` | reference | Ask DeepGrid, grounded in the whitepaper, running in the browser |
+
+Two registers on purpose. Showcase routes carry motion and depth; reference routes stay dense,
+static, printable and deep-linkable. An engineer hunting a supply limit should not have to scroll
+through a 3D world to reach a table. `PLAN.md` carries the reasoning.
+
+## Commands
+
+```bash
+npm ci
+npm run dev                  # vinext dev
+
 npm run typecheck
-npm run build:pages   # static artifact in dist/pages, with CNAME
+npm run build:pages          # static export + packaging, fails if a declared route did not export
+
+npm run verify                   # serve dist/pages at the real base path, then gate it
+npm run verify:url -- https://shekerkamma.github.io/deepgrid-dr-silicon-v2/   # gate the live site
 ```
 
-## Where to make changes
+`PAGES_BASE` and `NEXT_PUBLIC_PAGES_BASE` must agree. The first tells the packager where to
+rewrite asset paths; the second is baked into the bundle so server-rendered HTML already carries
+correct hrefs. For a custom domain set both to `/` and set `PAGES_DOMAIN`.
 
-| Change | Edit |
-| --- | --- |
-| Every number, spec, block description, comparison row and roadmap item | `app/content.ts` |
-| Detailed explanations: block rationale, design premises, data flows, engine, tape-in, electrical, positioning | `app/detail-content.ts` |
-| Architecture view (DG32-LITE, DG32-2DOM and tape-in tabs) | `app/architecture.tsx`, layout primitives in `app/detail.tsx` |
-| Scroll behaviour: block reveals, page-progress hairline, nav height for sticky elements | `app/motion.tsx` (styles at the end of `app/dr.css`) |
-| The pinned fault trace on the Overview, with its phone and reduced-motion fallback | `app/fault-trace.tsx` |
-| Page layout and copy around the data | `app/page.tsx` |
-| Section styles and chart colours | `app/dr.css` (base tokens in `app/globals.css`, `app/ux.css`) |
-| Interactive 3D package and die model | `app/silicon.tsx` |
-| Images | `public/images/` |
+## Deploying
 
-## Decks & films
+Push to `main`. `.github/workflows/pages.yml` runs typecheck, builds, gates the build in a
+browser, deploys through `actions/deploy-pages`, then re-runs the same gate against the live URL
+once Pages serves that commit. A red gate stops the deploy.
 
-The **Decks & films** view links one package per source document: the two architecture documents, both datasheets and the tape-in block diagram. Every file is served
-from this repository:
+Pages is configured as `build_type: workflow` from `main`. The `github-pages` environment must
+list `main` in its deployment branch policy or the deploy job fails before running a step.
 
-| Package | Deck | Film | Diagram | Guide |
-| --- | --- | --- | --- | --- |
-| DG32-LITE | `public/downloads/dg32-lite-architecture.pptx` (16 slides) | `public/media/dg32-lite-architecture.mp4` + `.vtt` | `public/diagrams/dg32-lite-architecture.svg`, source `public/downloads/*.drawio` | `public/downloads/dg32-lite-architecture-guide.md` |
-| DG32-2DOM | `public/downloads/dg32-2dom-architecture.pptx` (13 slides) | `public/media/dg32-2dom-architecture.mp4` + `.vtt` | `public/diagrams/dg32-2dom-architecture.svg` | `public/downloads/dg32-2dom-architecture-guide.md` |
-| DG32-LITE datasheet | `public/downloads/dg32-lite-datasheet.pptx` (12 slides) | `public/media/dg32-lite-datasheet.mp4` + `.vtt` | — | — |
-| DG32-2DOM datasheet | `public/downloads/dg32-2dom-datasheet.pptx` (9 slides) | `public/media/dg32-2dom-datasheet.mp4` + `.vtt` | — | — |
-| DG32-LITE tape-in block diagram | `public/downloads/dg32-lite-tapein.pptx` (11 slides) | `public/media/dg32-lite-tapein.mp4` + `.vtt` | — | — |
+## Gates, and why each exists
 
-Slide images in `public/decks/` are PowerPoint's own 1920×1080 exports of the reviewed decks,
-resized to 1600 px. Film chapter and slide timing lives in `app/data/*-film.json`, written by the
-film assembler, so the deck viewer can follow the film. The builders, story packs, narration and
-QA records are committed under `source/dg32-architecture/` and `source/dg32-datasheets/`.
+Every check here was added after something shipped wrong, not in anticipation.
 
-To refresh a package: rebuild the deck there, export frames through PowerPoint, re-narrate
-(Kokoro, Holt profile), reassemble the film, then copy the reviewed `.pptx`, `slide-NN.webp`,
-`.mp4`, `.vtt`, poster and `*-film.json` here. `npm run build:pages` fails if any package's deck, film,
-captions, poster or slide image is missing.
+- **Route export.** `scripts/package-pages.mjs` fails when a route declared in `app/routes.ts`
+  produced no HTML. `vinext` reports an unprerendered route as "skipped" and still exits 0, so a
+  build went green having silently dropped `/applications` and `/evidence`.
+- **Base declaration.** Every exported page must carry `<meta name="site-base">` matching the
+  build's base. A page that lost it renders every nav link pointing at the domain root, which
+  looks like a working build and 404s on click.
+- **Route gate.** `scripts/verify-routes.mjs` opens all 12 routes at desktop, phone, and phone
+  with reduced motion forced, checking status, base, links escaping the base, broken images,
+  horizontal overflow, entrance animations that never finish, WCAG 2.5.8 tap targets, and console
+  errors. 36 checks.
+- **Threaded server.** `scripts/serve-dist.py` exists because `python3 -m http.server` is
+  single-threaded: once the home route began importing the scroll engine, one chunk request sat
+  pending forever and `networkidle` never fired, failing a page curl served in 2 ms.
 
-## Verify a deploy
+Two rules for reading a red gate, both learned the hard way. An animation sampled at a fixed
+moment measures the animation, not the outcome: the same unchanged page reported 7 blocks hidden
+at 250 ms and 0 at 800 ms. And a gate that goes green because the thing it measured moved is
+worse than no gate. When a check flips, find out what moved.
 
-`scripts/verify-site.mjs` is the site's browser gate: every view and architecture tab at 1440 and 390 px,
-reveals that actually finished, all five packages (film, captions, chapters, slides, downloads), the pinned
-fault trace and its phone and reduced-motion fallbacks, sticky architecture tabs and the diagram edge hint.
-It exits 1 on any failure and saves the fault-trace frames.
+## Claim hygiene
 
-```sh
-PLAYWRIGHT=/path/to/node_modules/playwright/index.mjs node scripts/verify-site.mjs https://shekerkamma.github.io/deepgrid-dr-silicon/
+The site's argument is that its numbers are checkable, so the numbers have to be.
+
+- No figure without the kind of evidence behind it. `/evidence` carries all five kinds and the
+  explicit list of what the site does not claim.
+- `PRE_SILICON` is one shared constant, not a sentence retyped per page.
+- Counters show real numbers only. The home route's budget readout derives every figure live from
+  `CLOCK_HZ` and `HW_FIXED_CYCLES` so a reader can redo the arithmetic on screen.
+- `CPU budget` (cycles available to firmware in a period) and `CPU headroom` (what is left after
+  the regulators run) are different quantities. Do not relabel one as the other.
+- No visible em dashes in site copy.
+
+## Layout
+
+```
+app/routes.ts          the URL map; nav, breadcrumbs, the pager and cross-links all read from it
+app/shell.tsx          shared chrome, base-aware links, query state
+app/home-surface.tsx   the live-surface home route
+app/scrollcraft/       vendored scroll engine, do not edit; see its README
+app/motion.tsx         the reveal/scroll system for the other 11 routes
+scripts/               build packaging, route gate, threaded dev server
+PLAN.md                the rebuild's reasoning and remaining phases
+docs/home-brief.md     the home route's brief: grammar, signature move, feeling curve
 ```
 
-## Sources
-
-All figures come from Deepgrid Semi's September 2026 documents:
-
-- `DG32-LITE_block_diagram_investor.pdf` — architecture, STM32G0 positioning, roadmap
-- `DG32-LITE_block_diagram.pdf` — tape-in block diagram
-- `DG32-LITE_Block_Architecture.pdf` — per-block rationale, loop budget, post-route fmax
-- `DG32-LITE_Datasheet-3.pdf` — preliminary datasheet
-- `DG32-2DOM_Datasheet-1.pdf` — preliminary datasheet, attention variant
-- `DG32-2DOM_Block_Architecture.pdf` — attention engine, clock bridges, analytic cost
-- `DG32-LITE_3D_Walkthrough_Script_2026-09-11.pdf` — claim control only (no tapeout-ready or LVS-clean claims)
-
-The full slide-by-source map is `source-map.md` in the run folder.
-
-The source documents are marked confidential and are **not** in this repository. The site
-publishes investor-level content only: no register maps, memory map, boot magic values,
-board-design guidance, internal names or open review items. Keep it that way when editing.
-
-DG32 is pre-silicon. Numbers are design values verified in simulation and static timing unless
-the page says otherwise; the site states this beside every figure group.
-
-### Where the sources disagree, and what the site uses
-
-| Item | Sources say | Site uses |
-| --- | --- | --- |
-| Instruction set | datasheets: rv32imc · block diagrams: RV32IM | RV32IM (newer, investor-facing) |
-| Accelerator clock | 2DOM datasheet: 114 MHz · investor sheet: 100 MHz | 114 MHz (silicon; 100 MHz is the FPGA build) |
-| CORDIC latency | architecture & datasheet: 53–58 cycles/op · block diagram: ~16–24 | 53–58 (stated as measured) |
-| Core clock pin | datasheet pin table: 48 MHz nominal · everywhere else: 50 MHz | 50 MHz |
-| Lockstep checker | architecture: private memory, cycle-by-cycle · 2026-09-10 diagram: 2 cycles behind, mirrors bus | 2 cycles behind (newer) |
-
-## Deployment
-
-`.github/workflows/pages.yml` type-checks, builds, verifies every entry asset and image, and
-deploys to GitHub Pages on each push to `main`. Pull requests build without deploying.
-
-Two workflow variables decide where the site is served:
-
-| Target | `PAGES_BASE` | `PAGES_DOMAIN` |
-| --- | --- | --- |
-| github.io project site (current) | `/deepgrid-dr-silicon/` | empty |
-| dr.deepgridsemi.com | `/` | `dr.deepgridsemi.com` |
-
-To move to the custom domain: add `CNAME dr → shekerkamma.github.io` (DNS only, no proxy) at the
-`deepgridsemi.com` DNS host, switch both variables, push, then set the custom domain and
-Enforce HTTPS under Settings → Pages. Switching before the DNS record resolves makes the
-github.io address redirect to a domain that does not exist.
+Two scroll systems coexist because they never run on the same document.
