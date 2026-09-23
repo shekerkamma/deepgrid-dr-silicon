@@ -50,12 +50,20 @@ npm run verify:url -- https://shekerkamma.github.io/deepgrid-dr-silicon-v2/   # 
 rewrite asset paths; the second is baked into the bundle so server-rendered HTML already carries
 correct hrefs. For a custom domain set both to `/` and set `PAGES_DOMAIN`.
 
+**Run `build:pages` before `verify`, never `build`.** `npm run build` refreshes `dist/client`;
+`npm run verify` reads `dist/pages`, which only `build:pages` rewrites. Run them in the wrong order
+and the gate measures whatever base the last `build:pages` used — which reports all 36 route checks
+failed, on a tree that is fine. Every line of that failure says
+`site-base "/x/" != "/y/"`; that string means the package is stale, not that the routes are broken.
+`package-pages.mjs` replaces `dist/pages` before it validates, so a *failed* `build:pages` also
+leaves a stale package on disk for the next `verify` to read.
+
 ## Deploying
 
 **v2 is the only source.** `deepgrid-dr-silicon` and `deepgrid-dr-silicon_new` are mirrors of it,
-serving the same commit at their own base paths. They are independent repositories, not forks, and
-nothing syncs them automatically unless `MIRROR_TOKEN` is set. Never commit to a mirror: the sync is
-a force-push and will discard it.
+serving the same commit at their own base paths. They are independent repositories, not forks.
+One push to v2 updates all three automatically — the `mirror` job below is configured and live.
+Never commit to a mirror: the sync is a force-push and will discard it silently.
 
 ```bash
 npm run sync        # push main to all three, then wait for and report all three deployments
