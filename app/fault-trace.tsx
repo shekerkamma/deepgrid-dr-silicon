@@ -41,8 +41,8 @@ export default function FaultTrace({steps,intro}:{steps:Step[];intro:React.React
     <ol className="dr-fault-steps" aria-label="How a CPU fault is stopped">{steps.map(([t,d],i)=><li key={t} className={i===step?'is-now':i<step?'is-done':'is-next'} aria-current={pinned&&i===step?'step':undefined}>
      {/* a jump control only while pinned: unpinned there is nothing to jump, and one button spanning the
          number and title lands in the 2.8rem number column and squeezes the title to a word per line */}
-     {pinned?<button type="button" className="dr-fault-jump" onClick={()=>jump(i)}><span className="dr-step-n">{String(i+1).padStart(2,'0')}</span><h4>{t}</h4></button>
-      :<><span className="dr-step-n">{String(i+1).padStart(2,'0')}</span><h4>{t}</h4></>}
+     {pinned?<button type="button" className="dr-fault-jump" onClick={()=>jump(i)}><span className="dr-step-n">{String(i+1).padStart(2,'0')}</span><h3>{t}</h3></button>
+      :<><span className="dr-step-n">{String(i+1).padStart(2,'0')}</span><h3>{t}</h3></>}
      <p>{d}</p></li>)}</ol>
    </div>
   </div>

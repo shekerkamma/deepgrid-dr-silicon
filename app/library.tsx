@@ -10,7 +10,7 @@ const groups:[string,'architecture'|'datasheet'][]=[['Architecture packages','ar
 export default function Library({pkgId,slide,onChange,go}:{pkgId:string;slide:number;onChange:Update;go?:(hash:string)=>void}){
  const pkg=packages.find(p=>p.id===pkgId)||packages[0];
  const count=pkg.slides.length, n=Math.max(1,Math.min(count,slide||1));
- const video=useRef<HTMLVideoElement>(null), strip=useRef<HTMLDivElement>(null);
+ const video=useRef<HTMLVideoElement>(null), strip=useRef<HTMLUListElement>(null);
  const [playingSlide,setPlayingSlide]=useState(0);
  const src=(i:number)=>`${pkg.slideDir}/slide-${String(i).padStart(2,'0')}.webp`;
  const setSlide=(i:number)=>onChange({pkg:pkg.id,slide:String(Math.max(1,Math.min(count,i)))});
@@ -33,10 +33,10 @@ export default function Library({pkgId,slide,onChange,go}:{pkgId:string;slide:nu
 
   <section className="dr-lib-deck" aria-label={`${pkg.name} ${pkg.doc} deck`}>
    <header><div><p className="dr-lib-kicker">{pkg.name} {pkg.doc.toUpperCase()} · CLIENT-READY DECK · EDITABLE POWERPOINT</p><h2>{pkg.headline}</h2></div><a className="primary" href={pkg.deck} download><Download size={17}/>Download the deck (.pptx)</a></header>
-   <figure className="dr-deck-stage"><img key={src(n)} src={src(n)} alt={`${pkg.name} ${pkg.doc} deck, slide ${n}: ${pkg.slides[n-1]}`} width={1600} height={900}/>
+   <figure className="dr-deck-stage"><img key={src(n)} src={src(n)} alt={`${pkg.name} ${pkg.doc} deck, slide ${n}: ${pkg.slides[n-1]}`} width={1600} height={900} loading="lazy" decoding="async"/>
     <figcaption><span className="mono">SLIDE {String(n).padStart(2,'0')} / {count}</span><strong>{pkg.slides[n-1]}</strong></figcaption></figure>
    <div className="dr-deck-controls"><button aria-label="Previous slide" disabled={n===1} onClick={()=>setSlide(n-1)}><ArrowLeft size={18}/></button><button className="text-link" onClick={()=>playSlide(n)}><Play size={15}/>Play this slide in the film</button><button aria-label="Next slide" disabled={n===count} onClick={()=>setSlide(n+1)}><ArrowRight size={18}/></button></div>
-   <div className="dr-thumbs" ref={strip} role="list" aria-label="All slides">{pkg.slides.map((t,i)=><button role="listitem" key={t} data-slide={i+1} className={(i+1===n?'active ':'')+(i+1===playingSlide?'playing':'')} onClick={()=>setSlide(i+1)} aria-label={`Slide ${i+1}: ${t}`} aria-current={i+1===n?'true':undefined}><img src={src(i+1)} alt="" loading="lazy" width={320} height={180}/><span>{String(i+1).padStart(2,'0')}</span></button>)}</div>
+   <ul className="dr-thumbs" ref={strip} aria-label="All slides">{pkg.slides.map((t,i)=><li key={t}><button data-slide={i+1} className={(i+1===n?'active ':'')+(i+1===playingSlide?'playing':'')} onClick={()=>setSlide(i+1)} aria-label={`Slide ${i+1}: ${t}`} aria-current={i+1===n?'true':undefined}><img src={src(i+1)} alt="" loading="lazy" width={320} height={180}/><span>{String(i+1).padStart(2,'0')}</span></button></li>)}</ul>
   </section>
 
   {pkg.diagram&&<section className="dr-lib-diagram" aria-label={`${pkg.name} architecture diagram`}>

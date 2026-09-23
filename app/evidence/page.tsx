@@ -32,6 +32,7 @@ export default function Page() {
           copy="DG32 is pre-silicon as of September 2026. Each number on this site carries the kind of evidence behind it. These are five different kinds of evidence, not five stages of a ladder, and none of them is a measurement on fabricated silicon."
         />
 
+        <h2 className="sr-only">The five kinds of evidence behind the specifications</h2>
         <div className="dr-evidence-ladder" role="list" aria-label="Evidence types behind the specifications">
           {evidenceLadder.map((e, idx) => (
             <article key={e.kind} className="dr-evidence-card" role="listitem" data-rv data-rv-delay={idx * 120 + 200}
