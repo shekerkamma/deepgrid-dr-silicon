@@ -6,6 +6,7 @@ import {SectionHead} from '../detail';
 import {blocks} from '../content';
 import {PRE_SILICON} from '../copy';
 import Architecture from '../architecture';
+import {FmaxChart} from '../fmax-chart';
 
 export default function Page() {
   const reduced = useReduced();
@@ -32,6 +33,7 @@ export default function Page() {
           update={update}
           go={go}
         />
+        <FmaxChart/>
         <p className="disclaimer">{PRE_SILICON}</p>
       </section>
     </Shell>
