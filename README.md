@@ -112,6 +112,17 @@ The site's argument is that its numbers are checkable, so the numbers have to be
 - `CPU budget` (cycles available to firmware in a period) and `CPU headroom` (what is left after
   the regulators run) are different quantities. Do not relabel one as the other.
 - No visible em dashes in site copy.
+- **Headings state a finding, not a question.** A page of questions reads as an FAQ while the rest
+  of the site states verdicts. Measured once across all routes: 12 question headings against 34
+  declarative, with 9 of the 12 on `/technology/control-loop` and `/technology`. The control page
+  is now 0 of 5. `/technology` still carries five, in `architecture.tsx`, and that is known debt
+  rather than an oversight.
+- **A page cites figures from `app/claims.ts`, never by retyping them.** Retyped provenance drifts
+  from `/evidence` the first time either changes. `/technology/control-loop` renders its plate from
+  seven claim ids.
+- Watch for non-breaking spaces when string-matching site copy. `~300 cycles` and `50 MHz` both
+  carry one; it is invisible in a grep and fatal to an exact match. It defeated two heading
+  rewrites before being spotted.
 - **Derive from the documents, never from this repo's own derived data.** `sovereignSkuHorizon`
   was itself derived from the source markdown and had silently drifted: DG32-LITE numbered SKU-1
   when two independent sources call it SKU-4, D100 given a SKU number when it is Track B, wrong
@@ -134,6 +145,8 @@ docs/home-brief.md     a retired build, kept as a record of a grammar that did n
 docs/die-brief.md      the die page's brief: split stage, signature move, fingerprint gate
 docs/applications-brief.md  the catalogue's brief: gallery grammar, the plate that never moves
 app/claims.ts          the claim map: figure, what it measures, evidence kind, source document
+app/fmax-chart.tsx     post-route frequency per block, on /technology because it is an
+                       implementation result, not a control-loop one
 ```
 
 Two scroll systems coexist because they never run on the same document.
