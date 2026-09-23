@@ -24,8 +24,10 @@ const basePath = new URL(site).pathname;
 const fails = [];
 const browser = await chromium.launch();
 
-for (const width of [1440, 390]) {
-  const page = await browser.newPage({viewport: {width, height: 900}});
+// Third pass at phone width with reduced motion forced. A scroll-driven page that only
+// reveals content through animation shows nothing at all to a reader who has motion off.
+for (const [width, reduced] of [[1440, false], [390, false], [390, true]]) {
+  const page = await browser.newPage({viewport: {width, height: 900}, reducedMotion: reduced ? 'reduce' : 'no-preference'});
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text().slice(0, 140)); });
@@ -71,6 +73,26 @@ for (const width of [1440, 390]) {
       overflowX: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       title: document.title,
       nav: document.querySelectorAll('.main-nav a').length,
+      // WCAG 2.5.8: interactive targets need 24x24 CSS px. Checked at phone width, where
+      // a control tuned for a pointer is most likely to be too small for a thumb.
+      smallTargets: [...document.querySelectorAll('a, button, input, summary, [role="button"]')]
+        .filter(e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && (r.width < 24 || r.height < 24); })
+        // 2.5.8 exempts a target "in a sentence or block of text". The test is whether the
+        // parent has prose of its own AROUND the link, which means its own direct text nodes --
+        // not merely a longer textContent, since a footer row of sibling <span>s would pass that
+        // and a footer link is a standalone target, not a word in a sentence.
+        .filter(e => {
+          if (e.tagName !== 'A') return true;
+          const p = e.parentElement;
+          if (!p) return true;
+          const ownProse = [...p.childNodes]
+            .filter(n => n.nodeType === 3)
+            .map(n => n.textContent.trim())
+            .join('');
+          return ownProse.length === 0;
+        })
+        .map(e => (e.tagName.toLowerCase() + '.' + String(e.className || '').split(' ')[0]).slice(0, 44))
+        .slice(0, 6),
     }), basePath);
 
     const problems = [];
@@ -82,15 +104,16 @@ for (const width of [1440, 390]) {
     if (d.stillHidden) problems.push(`${d.stillHidden} block(s) still transparent after settling`);
     if (d.overflowX) problems.push('horizontal overflow');
     if (!d.nav) problems.push('no primary nav');
+    if (width === 390 && d.smallTargets.length) problems.push('tap targets under 24px: ' + d.smallTargets.join(', '));
     if (errors.length > before) problems.push(errors.slice(before, before + 2).join(' | '));
 
-    const tag = `${width === 390 ? 'phone ' : 'desktop'} ${route}`;
+    const tag = `${width === 390 ? (reduced ? 'reduced' : 'phone  ') : 'desktop'} ${route}`;
     if (problems.length) { fails.push(`${tag}: ${problems.join('; ')}`); console.log(`FAIL ${tag}: ${problems.join('; ')}`); }
     else console.log(`ok   ${tag}  ${d.title.slice(0, 60)}`);
 
     if (shots) {
       fs.mkdirSync(shots, {recursive: true});
-      await page.screenshot({path: path.join(shots, `${width}-${(route === '/' ? 'home' : route.slice(1)).replace(/\//g, '-')}.png`), fullPage: width === 1440});
+      await page.screenshot({path: path.join(shots, `${width}${reduced ? '-rm' : ''}-${(route === '/' ? 'home' : route.slice(1)).replace(/\//g, '-')}.png`), fullPage: width === 1440});
     }
   }
   await page.close();
@@ -98,4 +121,4 @@ for (const width of [1440, 390]) {
 await browser.close();
 
 if (fails.length) { console.error(`\n${fails.length} check(s) failed.`); process.exit(1); }
-console.log(`\nALL ROUTES PASS (${declared.length} routes x 2 widths)`);
+console.log(`\nALL ROUTES PASS (${declared.length} routes x desktop, phone, phone+reduced-motion)`);

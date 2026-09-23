@@ -18,7 +18,7 @@ function budgetFor(khz: number) {
     period,
     budget,
     hwPct: (HW_FIXED_CYCLES / period) * 100,
-    freePct: (budget / period) * 100,
+    budgetPct: (budget / period) * 100,
     instructions: Math.floor(budget / CYCLES_PER_INSTRUCTION),
   };
 }
@@ -94,10 +94,12 @@ export function HomeSurface() {
                 <div><dt>Cycles per period</dt><dd className="dg-num">{opening.period.toLocaleString('en-US')}</dd></div>
                 <div><dt>Hardware, fixed</dt><dd className="dg-num">{HW_FIXED_CYCLES}</dd></div>
                 <div><dt>Left for firmware</dt><dd className="dg-num dg-num-key">{opening.budget.toLocaleString('en-US')}</dd></div>
-                <div><dt>Headroom</dt><dd className="dg-num dg-num-key">{opening.freePct.toFixed(0)}%</dd></div>
+                <div><dt>Share of period</dt><dd className="dg-num dg-num-key">{opening.budgetPct.toFixed(0)}%</dd></div>
               </dl>
               <p className="dg-panel-foot">
-                Derived from the core clock and the fixed hardware cost. Scroll to spend it.
+                Cycles the firmware can use, derived from the core clock and the fixed
+                hardware cost. What is left after the regulators run is a separate figure, on the
+                control-loop page.
               </p>
             </section>
           </div>
@@ -162,7 +164,7 @@ export function HomeSurface() {
             <div
               className="dg-stack"
               role="img"
-              aria-label={`At ${rate.khz} kHz the period is ${b.period} cycles. Hardware uses ${HW_FIXED_CYCLES}, leaving ${b.budget} for firmware, ${b.freePct.toFixed(0)} percent of the period.`}
+              aria-label={`At ${rate.khz} kHz the period is ${b.period} cycles. Hardware uses ${HW_FIXED_CYCLES}, leaving ${b.budget} for firmware, ${b.budgetPct.toFixed(0)} percent of the period.`}
             >
               <div className="dg-seg dg-seg-hw" style={{width: b.hwPct + '%'}}>
                 <span>{HW_FIXED_CYCLES} hardware</span>
@@ -176,7 +178,7 @@ export function HomeSurface() {
               <div><dt>Rate</dt><dd className="dg-num dg-num-key">{rate.khz}&nbsp;kHz</dd></div>
               <div><dt>Period</dt><dd className="dg-num">{b.period.toLocaleString('en-US')}&nbsp;cyc</dd></div>
               <div><dt>Left for firmware</dt><dd className="dg-num dg-num-key">{b.budget.toLocaleString('en-US')}&nbsp;cyc</dd></div>
-              <div><dt>Headroom</dt><dd className="dg-num dg-num-key">{b.freePct.toFixed(0)}%</dd></div>
+              <div><dt>Share of period</dt><dd className="dg-num dg-num-key">{b.budgetPct.toFixed(0)}%</dd></div>
               <div><dt>Instructions</dt><dd className="dg-num">~{b.instructions.toLocaleString('en-US')}</dd></div>
             </dl>
 
@@ -194,7 +196,8 @@ export function HomeSurface() {
         <div className="dg-block">
           <h2 className="dg-h2">What that buys</h2>
           <p className="dg-lede">
-            The headroom is what runs diagnostics on the control core itself, with no second processor.
+            That budget is what runs diagnostics on the control core itself, with no second
+            processor.
           </p>
         </div>
         <div className="dg-rail" data-sc-pan>

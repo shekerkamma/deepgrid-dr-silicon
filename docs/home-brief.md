@@ -66,11 +66,13 @@ budget  = period - HW_FIXED_CYCLES          HW_FIXED_CYCLES = 300
 10 kHz leaves 4,700 cycles (94% free); 100 kHz leaves 200 (40% free). The reader watches the
 headroom collapse as the rate climbs, and every figure on screen is arithmetic they can redo.
 
-**A number that is not shown.** The corpus repeats "82% CPU headroom" in nine places, and the site's
-own formula does not produce it at any published rate: 10 kHz gives 94%, 20 kHz gives 88%. The
-signature move derives the figure instead of quoting it, and the discrepancy is reported rather than
-silently resolved. A page whose whole argument is "the number is checkable" cannot open with one that
-is not.
+**Two figures that measure different things.** `period - HW_FIXED_CYCLES` is what the site's
+control-loop page calls the **CPU budget**: cycles available to firmware inside one period, 4,700
+of 5,000 at 10 kHz. The corpus's **82% CPU headroom** is what remains after the regulators and
+diagnostics have actually run, sourced to the 12.5 MMAC/s integer budget at 10 kHz FOC. They are
+not in conflict, and an earlier draft of this brief wrongly said the formula contradicted the
+published figure. The page shows the budget, labels it "share of period", and leaves headroom to
+the control-loop page that owns it.
 
 ## Feeling curve
 

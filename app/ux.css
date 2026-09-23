@@ -25,3 +25,12 @@
 
 .mobile-picker{display:none}.ux-select-menu{background:#1a2a20!important;color:#efe9d8!important;border:1px solid #758b60!important;z-index:80;font-size:1rem}.ux-select-menu [data-slot=select-item]{padding:.7rem;min-height:44px}.ux-select-menu [data-highlighted]{background:#354c2e}
 @media(max-width:650px){.mobile-picker{display:block}.mobile-picker [data-slot=select-trigger]{width:100%;min-height:3rem;background:#1c2b21;border:1px solid #6b8058;border-radius:3px;font-size:1rem;padding:.7rem .8rem}.view-portfolio .filters{display:none!important}.deck-chapters{display:none}.deck-picker{margin-bottom:1rem}.filter-line{gap:.65rem}.view-portfolio .results-line>span:last-child{font-family:Arial,Helvetica,sans-serif;letter-spacing:0;font-size:.75rem}.page-wrap>.section-head>p{font-size:1rem}}
+
+/* WCAG 2.5.8 target size. The footer's standalone link sat at 22px tall, and the breadcrumb
+   links under it are the same shape. Links inline in a sentence are exempt and untouched. */
+.footer-bottom a,
+.breadcrumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+}
