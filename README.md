@@ -17,13 +17,13 @@ stack and the same design system.
 | Route | Register | What it carries |
 |---|---|---|
 | `/` | live surface | The control loop running, and its cycle budget spent by scrolling |
-| `/products` | showcase | DG32-LITE against DG32-2DOM, one footprint |
+| `/products` | showcase | DG32-LITE against DG32-2DOM, and the ten-chip portfolio DG32 is SKU-4 of |
 | `/technology` | reference | Block-by-block architecture, per chip |
 | `/technology/safety` | reference | Lockstep, and the 39-cycle path from a wrong value to a safe bridge |
 | `/technology/control-loop` | reference | Loop timing and the cycle budget at four rates |
 | `/technology/die` | showcase | Split stage: scroll walks the six block groups on the live die, and collapses onto the one that is frozen |
 | `/technology/package` | reference | QFN-64 pinout, supplies, electrical limits |
-| `/applications` | showcase | Four domains, their tasks and latency envelopes |
+| `/applications` | showcase | A filterable catalogue of diagnostic tasks, each under one label schema |
 | `/evidence` | reference | Five kinds of evidence, and what the site does not claim |
 | `/procurement` | reference | Position against the STM32G0, scorecard, roadmap |
 | `/resources` | reference | 45 documents, 43 downloads, five narrated films |
@@ -74,13 +74,19 @@ Every check here was added after something shipped wrong, not in anticipation.
   horizontal overflow, entrance animations that never finish, WCAG 2.5.8 tap targets, and console
   errors. 36 checks.
 - **Class names.** `scripts/check-classes.mjs` fails the build when a static `className` in
-  `app/` has no CSS rule behind it. This shipped twice: 31 invented names on a rebuilt overview
+  `app/` has no CSS rule behind it, scanning every stylesheet it discovers under `app/` rather
+  than a hardcoded list, because a hardcoded list made it report 20 false failures the first time
+  a new stylesheet appeared. This shipped twice: 31 invented names on a rebuilt overview
   that rendered unstyled, then `view-pager`, `mobile-sheet` and `mobile-sheet-close` in the shell,
   which left the prev/next control and the entire phone navigation unstyled on all 12 routes. An
   unstyled element typechecks, builds, and passes a browser gate measuring status, links, images
   and overflow, because it is present and correct by every one of those measures. The 13
   pre-existing cases live in `scripts/unstyled-classes-baseline.json` as a ratchet, not a waiver:
   the debt stays listed and cannot grow.
+- **Claims.** `scripts/check-claims.mjs` fails the build when a source document stops carrying a
+  figure that `app/claims.ts` says it carries. The claim map records 16 load-bearing figures with
+  what each measures, its evidence kind, and the document behind it. It checks the *link*, not the
+  truth: a matching probe means the document still says the number, not that the number is right.
 - **Threaded server.** `scripts/serve-dist.py` exists because `python3 -m http.server` is
   single-threaded: once the home route began importing the scroll engine, one chunk request sat
   pending forever and `networkidle` never fired, failing a page curl served in 2 ms.
@@ -106,6 +112,13 @@ The site's argument is that its numbers are checkable, so the numbers have to be
 - `CPU budget` (cycles available to firmware in a period) and `CPU headroom` (what is left after
   the regulators run) are different quantities. Do not relabel one as the other.
 - No visible em dashes in site copy.
+- **Derive from the documents, never from this repo's own derived data.** `sovereignSkuHorizon`
+  was itself derived from the source markdown and had silently drifted: DG32-LITE numbered SKU-1
+  when two independent sources call it SKU-4, D100 given a SKU number when it is Track B, wrong
+  nodes on two entries, and "Phase" meaning calendar years when the sources use it for foundries.
+  A derived layer cannot be used to check itself, so `app/claims.ts` reads `public/downloads`.
+- Claims the sources carry that this site does not repeat are listed in `claims.ts` with their
+  reasons, so the reason travels with the decision rather than living in a commit message.
 
 ## Layout
 
@@ -119,6 +132,8 @@ scripts/               build packaging, route gate, threaded dev server
 PLAN.md                the rebuild's reasoning and remaining phases
 docs/home-brief.md     a retired build, kept as a record of a grammar that did not fit
 docs/die-brief.md      the die page's brief: split stage, signature move, fingerprint gate
+docs/applications-brief.md  the catalogue's brief: gallery grammar, the plate that never moves
+app/claims.ts          the claim map: figure, what it measures, evidence kind, source document
 ```
 
 Two scroll systems coexist because they never run on the same document.
