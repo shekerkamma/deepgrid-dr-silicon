@@ -4,6 +4,7 @@ import {ArrowUpRight, Download} from 'lucide-react';
 import {Shell, useNav} from '../shell';
 import {SectionHead} from '../detail';
 import {evidenceLadder, notClaimed} from '../detail-content';
+import {claims, withheld} from '../claims';
 
 const colors: Record<string, string> = {
   Simulated: '#bf7f3b', 'Post-route': '#2f9e8c', Analytic: '#8f9d6b',
@@ -52,6 +53,51 @@ export default function Page() {
         <div className="dr-evidence-disclaimer" data-rv data-rv-delay="700">
           <p className="dr-kicker">WHAT THIS SITE DOES NOT CLAIM</p>
           <ul className="dr-notclaimed">{notClaimed.map((n, i) => <li key={i}>{n}</li>)}</ul>
+        </div>
+
+        {/* The register. /evidence defined five kinds of evidence and no page applied them to an
+            actual figure, so the vocabulary existed and nothing spoke it. Every row here was
+            located in its source document; scripts/check-claims.mjs re-runs that search. */}
+        <div className="dr-sec-gap">
+          <p className="dr-kicker">WHAT EACH FIGURE RESTS ON</p>
+          <div className="table-scroll">
+            <table className="dr-table dr-table-wide">
+              <caption>Load-bearing figures, the evidence behind them, and the document that carries them</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Figure</th>
+                  <th scope="col">What it measures</th>
+                  <th scope="col">Evidence</th>
+                  <th scope="col">Source</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(claims).map(([id, c]) => (
+                  <tr key={id}>
+                    <th scope="row">{c.figure}</th>
+                    <td>{c.measures}</td>
+                    <td>{c.kind ?? <span className="mono">design constant</span>}</td>
+                    <td>{c.sourceTitle}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="disclaimer">
+            Derived from the markdown sources in the document library, not from this site&rsquo;s own
+            data files. That order is deliberate: the SKU list was derived from those same documents
+            and had drifted from them, so a derived layer cannot be used to check itself. A build
+            gate re-runs the search and fails when a source stops carrying a figure.
+          </p>
+        </div>
+
+        <div className="dr-sec-gap">
+          <p className="dr-kicker">WHAT THE SOURCES SAY THAT THIS SITE DOES NOT</p>
+          <ul className="dr-notclaimed">
+            {withheld.map(w => (
+              <li key={w.claim}><strong>{w.claim}.</strong> {w.why}</li>
+            ))}
+          </ul>
         </div>
 
         <div className="dr-links dr-sec-gap">
