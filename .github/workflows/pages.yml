@@ -15,10 +15,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # github.io project site for now. For dr.deepgridsemi.com set PAGES_BASE: / and PAGES_DOMAIN: dr.deepgridsemi.com
-      PAGES_BASE: /deepgrid-dr-silicon-v2/
+      # Derived from the repository name, so one source tree builds correctly in every repo that
+      # hosts it. The same commit serves /deepgrid-dr-silicon/, /deepgrid-dr-silicon_new/ and
+      # /deepgrid-dr-silicon-v2/; hardcoding one of them 404s every asset and link in the other two.
+      # For a custom domain set PAGES_BASE and NEXT_PUBLIC_PAGES_BASE to / and PAGES_DOMAIN to the host.
+      PAGES_BASE: /${{ github.event.repository.name }}/
       # Baked into the bundle so server-rendered HTML carries correct hrefs, not just hydrated HTML.
-      NEXT_PUBLIC_PAGES_BASE: /deepgrid-dr-silicon-v2/
+      NEXT_PUBLIC_PAGES_BASE: /${{ github.event.repository.name }}/
       PAGES_DOMAIN: ''
       # Zero-API-cost static build: no external model keys or endpoints are inlined.
       # Ask DeepGrid runs fully in-browser over the 280-node knowledge graph and deterministic council.
@@ -37,12 +40,12 @@ jobs:
       - name: Serve the build
         run: |
           mkdir -p "$RUNNER_TEMP/srv"
-          ln -s "$PWD/dist/pages" "$RUNNER_TEMP/srv/deepgrid-dr-silicon-v2"
+          ln -s "$PWD/dist/pages" "$RUNNER_TEMP/srv/${{ github.event.repository.name }}"
           # Threaded: the stock http.server is single-threaded and stalls one chunk request
           # per page load once the home route imports the scroll engine.
           python3 scripts/serve-dist.py 8768 "$RUNNER_TEMP/srv" >/dev/null 2>&1 &
-          until curl -sf http://127.0.0.1:8768/deepgrid-dr-silicon-v2/ >/dev/null; do sleep 1; done
-      - run: node scripts/verify-routes.mjs http://127.0.0.1:8768/deepgrid-dr-silicon-v2/ verify-shots
+          until curl -sf http://127.0.0.1:8768/${{ github.event.repository.name }}/ >/dev/null; do sleep 1; done
+      - run: node scripts/verify-routes.mjs http://127.0.0.1:8768/${{ github.event.repository.name }}/ verify-shots
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -71,7 +74,7 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     env:
-      SITE: https://shekerkamma.github.io/deepgrid-dr-silicon-v2/
+      SITE: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v4
