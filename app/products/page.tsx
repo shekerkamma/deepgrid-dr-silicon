@@ -4,7 +4,7 @@ import {Shell, useNav} from '../shell';
 import {PRE_SILICON} from '../copy';
 import {ArrowRight,ArrowUpRight,Check} from 'lucide-react';
 import {DataTable,ExplainedGrid,Sec,SectionHead} from '../detail';
-import {familyCompare} from '../detail-content';
+import {familyCompare, sovereignSkuHorizon} from '../detail-content';
 import {parts} from '../content';
 import Architecture from '../architecture';
 
@@ -36,6 +36,50 @@ export default function Page() {
      <button className="text-link" onClick={()=>navigate('pinout')}>QFN-64 package & electrical limits <ArrowUpRight size={16}/></button>
      <button className="text-link" onClick={()=>go('library')}>Official datasheets & publication PDFs <ArrowUpRight size={16}/></button>
      <button className="text-link" onClick={()=>go('ask')}>Query DG32-2DOM in Ask DeepGrid <ArrowUpRight size={16}/></button>
+   </div>
+  </Sec>
+
+  {/* Where DG32 sits. The mature-node thesis is the organising argument of the SKU Architecture
+      Compendium and it appeared nowhere on this site: without it 130 nm reads as a limitation
+      rather than the choice the portfolio is built on. */}
+  <Sec
+    kicker="WHERE DG32 SITS"
+    title="Mature-node silicon,"
+    em="around the sub-10 nm core."
+    copy="Sub-10 nm silicon cannot withstand 28 V to 120 V transient rails, carries no 24-bit high-dynamic-range analog front end, and does not survive automotive and military screening from −55 °C to +125 °C without external support. DeepGrid anchors those physical interfaces on 130 nm and 180 nm, taking the satellite sockets around the sub-10 nm central compute rather than competing with it. DG32 is SKU-4 of that portfolio, the lockstep safety MCU."
+  >
+   <div className="table-scroll">
+    <table className="dr-table dr-table-wide">
+     <caption>The ten-chip portfolio, and where DG32 sits in it</caption>
+     <thead>
+      <tr>
+       <th scope="col">SKU</th><th scope="col">Part</th><th scope="col">Node</th>
+       <th scope="col">Foundry</th><th scope="col">What it does</th>
+      </tr>
+     </thead>
+     <tbody>
+      {sovereignSkuHorizon.map(k => (
+       <tr key={k.sku + k.name}>
+        <th scope="row">{k.sku}</th>
+        <td>{k.isDg32 ? <strong>{k.name}</strong> : k.name}</td>
+        <td>{k.node}</td>
+        <td>{k.phase}</td>
+        <td>{k.targetApp}</td>
+       </tr>
+      ))}
+     </tbody>
+    </table>
+   </div>
+   <p className="disclaimer">
+    Portfolio, numbering and nodes reconciled on 23 September 2026 against the SKU Architecture
+    Compendium (Technical Annex v3) and the Mature-Node Silicon System Architecture, which agree
+    chip for chip. Phase names the sovereignty foundry, not a date: Phase 1 SkyWater, Phase 2 IHP,
+    Phase 3 SCL Mohali. Anchor customers and contract values are held off this table pending
+    verification.
+   </p>
+   <div className="dr-links dr-sec-gap">
+     <button className="text-link" onClick={()=>go('library')}>Read the SKU Architecture Compendium <ArrowUpRight size={16}/></button>
+     <button className="text-link" onClick={()=>go('ask')}>Ask how the portfolio fits together <ArrowUpRight size={16}/></button>
    </div>
   </Sec>
  </section>
