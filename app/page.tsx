@@ -1,12 +1,14 @@
 'use client';
 
-import {Shell} from './shell';
-import {HomeSurface} from './home-surface';
+import {Shell, useReduced, useNav} from './shell';
+import {Overview} from './overview';
 
 export default function Home() {
+  const reduced = useReduced();
+  const {navigate, go} = useNav();
   return (
     <Shell route="home">
-      <HomeSurface/>
+      <Overview reduced={reduced} navigate={navigate} go={go}/>
     </Shell>
   );
 }

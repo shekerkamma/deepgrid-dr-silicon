@@ -1,3 +1,8 @@
+> **RETIRED, unshipped (2026-09-23).** The live-surface grammar was wrong for a home page:
+> it banned the hero claim and the positioning copy a first-time visitor needs, so the page
+> opened on a cycle readout and never said what DG32 is. `/` is the six-section overview.
+> Kept as a record of what was tried and why it failed.
+
 # BRIEF: DG32 home route, live surface
 
 **Interviewed 2026-09-23.** Four questions asked and answered (scope, signature move, engine
