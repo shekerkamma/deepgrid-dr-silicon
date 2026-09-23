@@ -48,6 +48,16 @@ for (const [width, reduced] of [[1440, false], [390, false], [390, true]]) {
     const sweep = async () => {
       const h = await page.evaluate(() => document.body.scrollHeight);
       for (let y = 0; y < h; y += 700) { await page.evaluate(v => scrollTo({top: v, behavior: 'instant'}), y); await page.waitForTimeout(60); }
+      // End on the true bottom and let two frames run before leaving. The reveal sweep runs in a
+      // requestAnimationFrame after the scroll event; under load (42 checks back to back) that frame
+      // can land after a fixed 60ms wait, so the sweep sampled the page already back at y=0 and the
+      // blocks revealable only from the last position never got rv-in. Measured on /company: leave
+      // the bottom in the same frame and its two closing blocks stick 2/2; hold two frames, 0/2. A
+      // reader at the bottom always stays longer than two frames, so this measures the reader.
+      await page.evaluate(async () => {
+        scrollTo({top: document.documentElement.scrollHeight, behavior: 'instant'});
+        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      });
       await page.evaluate(() => scrollTo({top: 0, behavior: 'instant'}));
     };
     await sweep();
