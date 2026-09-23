@@ -9,6 +9,7 @@ import {
   CONTACT_EMAIL, enquiryRoles, motorTypes, powers, timelines, volumes, voltages,
 } from '../company-content';
 import '../contact.css';
+import Related from '../related';
 
 type Field = {
   id: string; label: string; type: 'text' | 'email' | 'textarea' | 'select';
@@ -204,6 +205,7 @@ export default function Page() {
           <button className="text-link" onClick={() => go('evidence')}>How every figure is evidenced <ArrowUpRight size={16} aria-hidden="true"/></button>
           <button className="text-link" onClick={() => go('procurement')}>Procurement information <ArrowUpRight size={16} aria-hidden="true"/></button>
         </div>
+      <Related route="contact"/>
       </section>
     </Shell>
   );

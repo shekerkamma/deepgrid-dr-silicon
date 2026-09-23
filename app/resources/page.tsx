@@ -3,6 +3,7 @@
 import {Shell, useQuery, useNav} from '../shell';
 import {SectionHead} from '../detail';
 import Library from '../library';
+import Related from '../related';
 
 export default function Page() {
   const {go} = useNav();
@@ -21,6 +22,7 @@ export default function Page() {
           onChange={update}
           go={go}
         />
+      <Related route="resources"/>
       </section>
     </Shell>
   );

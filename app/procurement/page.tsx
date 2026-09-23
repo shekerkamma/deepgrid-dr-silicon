@@ -5,6 +5,7 @@ import {ArrowUpRight,Check,Download} from 'lucide-react';
 import {DataTable,ExplainedGrid,Eyebrow,Sec,SectionHead} from '../detail';
 import {notClaimed,positionNotes,procurementScorecard,roadmapDetail} from '../detail-content';
 import {comparison,gaps,leads} from '../content';
+import Related from '../related';
 
 export default function Page() {
   const {navigate, go} = useNav();
@@ -33,6 +34,7 @@ export default function Page() {
     <button className="text-link" onClick={()=>navigate('control')}>Inspect 100 kHz control loop budget <ArrowUpRight size={16}/></button>
     <button className="text-link" onClick={()=>go('ask')}>Audit 10-SKU roadmap in Ask DeepGrid <ArrowUpRight size={16}/></button>
   </div>
+ <Related route="procurement"/>
  </section>
     </Shell>
   );

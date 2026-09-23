@@ -504,7 +504,7 @@ export interface UseCaseDomain {
   businessBenefit: string;
 }
 
-export const useCaseDomains: UseCaseDomain[] = [
+export const diagnosticDomains: UseCaseDomain[] = [
   {
     id: 'rotating',
     title: 'Rotating Machinery & Bearings',

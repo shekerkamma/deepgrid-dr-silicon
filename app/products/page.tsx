@@ -7,6 +7,7 @@ import {DataTable,ExplainedGrid,Sec,SectionHead} from '../detail';
 import {familyCompare, sovereignSkuHorizon} from '../detail-content';
 import {parts} from '../content';
 import Architecture from '../architecture';
+import Related from '../related';
 
 // The two architecture posters already exist in public/media. The comparison page had no imagery
 // at all, which made two chips that share a footprint read as two spec lists.
@@ -82,6 +83,7 @@ export default function Page() {
      <button className="text-link" onClick={()=>go('ask')}>Ask how the portfolio fits together <ArrowUpRight size={16}/></button>
    </div>
   </Sec>
+ <Related route="products"/>
  </section>
     </Shell>
   );

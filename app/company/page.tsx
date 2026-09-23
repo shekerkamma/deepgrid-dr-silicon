@@ -5,6 +5,7 @@ import {ArrowUpRight} from 'lucide-react';
 import {DataTable, ExplainedGrid, Sec, SectionHead, Stats} from '../detail';
 import {PRE_SILICON} from '../copy';
 import CompanyStress from '../company-stress';
+import Related from '../related';
 import {
   companyNotClaimed, companyStats, milestones, moats, pillars, revenueBuild,
   stopRules, team, unitEconomics, fundsAllocation,
@@ -121,6 +122,7 @@ export default function Page() {
           </div>
         </Sec>
         <p className="disclaimer">{PRE_SILICON} Evidence for every figure on this site, and the claims withdrawn after verification, are on the Evidence page.</p>
+      <Related route="company"/>
       </section>
     </Shell>
   );

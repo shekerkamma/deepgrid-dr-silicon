@@ -4,6 +4,7 @@ import {Shell} from '../shell';
 import {SectionHead} from '../detail';
 import {ApplicationsCatalog} from '../applications-catalog';
 import {PRE_SILICON} from '../copy';
+import Related from '../related';
 
 export default function Page() {
   return (
@@ -16,6 +17,7 @@ export default function Page() {
         />
         <ApplicationsCatalog/>
         <p className="disclaimer">{PRE_SILICON}</p>
+      <Related route="applications"/>
       </section>
     </Shell>
   );

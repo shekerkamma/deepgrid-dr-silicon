@@ -7,6 +7,7 @@ import {blocks} from '../content';
 import {PRE_SILICON} from '../copy';
 import Architecture from '../architecture';
 import {FmaxChart} from '../fmax-chart';
+import Related from '../related';
 
 export default function Page() {
   const reduced = useReduced();
@@ -35,6 +36,7 @@ export default function Page() {
         />
         <FmaxChart/>
         <p className="disclaimer">{PRE_SILICON}</p>
+      <Related route="technology"/>
       </section>
     </Shell>
   );

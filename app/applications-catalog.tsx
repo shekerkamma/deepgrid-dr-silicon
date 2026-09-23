@@ -3,8 +3,9 @@
 import {useMemo, useState} from 'react';
 import {ArrowUpRight, Check} from 'lucide-react';
 import {useNav} from './shell';
-import {useCaseDomains as domains} from './detail-content';
+import {diagnosticDomains as domains} from './detail-content';
 import {claims} from './claims';
+import {diagnosticTasks, USE_CASE_TOTAL} from './diagnostic-tasks';
 import './applications-catalog.css';
 
 /** Gallery / catalog. Objects in a walkable collection, every one carrying the identical label
@@ -27,33 +28,46 @@ const domainShort: Record<string, string> = {
   degradation: 'Degradation and RUL',
 };
 
-type Task = {id: string; name: string; domain: string; domainShort: string; standards: string; timing: string; photo: string};
+type Task = {
+  id: string; name: string; domain: string; domainShort: string; standards: string; photo: string;
+  detects: string; sensing: string; features: string; model: string; memory: string; latency: string; rate: string;
+};
 
 export function ApplicationsCatalog() {
   const {href} = useNav();
   const [filter, setFilter] = useState<string>('all');
 
-  // Every task the data actually carries. The site declares 30 across the four domains and
-  // enumerates 16; the collection holds the 16 and says so rather than inventing the rest.
+  // All thirty tasks, read off the playbook's own tables rather than the four-per-domain sample
+  // the page used to show while claiming thirty. app/use-cases.ts carries one row per task.
   const tasks: Task[] = useMemo(
-    () => domains.flatMap(d =>
-      d.examples.map((name, i) => ({
-        id: `${d.id}-${i}`,
-        name,
-        domain: d.id,
-        domainShort: domainShort[d.id] ?? d.title,
-        standards: d.standards,
-        timing: d.timing,
-        photo: domainPhoto[d.id],
-      })),
-    ),
+    () => diagnosticTasks.map((u, i) => {
+      const d = domains.find(x => x.id === u.domain);
+      return {
+        id: `${u.domain}-${i}`,
+        name: u.name,
+        domain: u.domain,
+        domainShort: domainShort[u.domain] ?? d?.title ?? u.domain,
+        standards: d?.standards ?? '',
+        photo: domainPhoto[u.domain],
+        detects: u.detects, sensing: u.sensing, features: u.features,
+        model: u.model, memory: u.memory, latency: u.latency, rate: u.rate,
+      };
+    }),
     [],
   );
-  const declared = domains.reduce((n, d) => n + (Number((d.tasksCount || '').match(/\d+/)?.[0]) || 0), 0);
 
   const shown = filter === 'all' ? tasks : tasks.filter(t => t.domain === filter);
-  const standards = [...new Set(shown.map(t => t.standards))];
-  const envelope = [...new Set(shown.map(t => t.timing))];
+  const standards = [...new Set(shown.map(t => t.standards))].filter(Boolean);
+  // Derived from the selection rather than stated: the fastest and slowest inference in view. The
+  // "<" on a row the document writes as "<0.01 ms" is carried through, because printing a bare 0.01
+  // would claim a precision the source does not.
+  const lat = shown
+    .map(t => ({n: Number(t.latency.replace(/[^\d.]/g, '')), lt: t.latency.includes('<')}))
+    .filter(x => Number.isFinite(x.n));
+  const lo = lat.length ? lat.reduce((a, b) => (b.n < a.n ? b : a)) : null;
+  const hi = lat.length ? lat.reduce((a, b) => (b.n > a.n ? b : a)) : null;
+  const envelope = lo && hi ? `${lo.lt ? '<' : ''}${lo.n}\u2013${hi.n}\u00a0ms` : '\u2014';
+  const models = [...new Set(shown.map(t => t.model.split(',')[0].trim()))];
 
   return (
     <div className="dg-cat">
@@ -84,9 +98,14 @@ export function ApplicationsCatalog() {
                   half-visible, so each field is on its own line rather than run together. */}
               <dl className="dg-obj-label">
                 <div><dt>Task</dt><dd>{t.name}</dd></div>
-                <div><dt>Domain</dt><dd>{t.domainShort}</dd></div>
+                <div><dt>Detects</dt><dd>{t.detects}</dd></div>
+                <div><dt>Sensing</dt><dd>{t.sensing}</dd></div>
+                <div><dt>Features</dt><dd>{t.features}</dd></div>
+                <div><dt>Model</dt><dd>{t.model}</dd></div>
+                <div><dt>Memory</dt><dd>{t.memory}</dd></div>
+                <div><dt>Latency</dt><dd>{t.latency}</dd></div>
+                <div><dt>Max rate</dt><dd>{t.rate}</dd></div>
                 <div><dt>Standard</dt><dd>{t.standards}</dd></div>
-                <div><dt>Timing</dt><dd>{t.timing}</dd></div>
                 <div><dt>Runs on</dt><dd>DG32-LITE · DG32-2DOM</dd></div>
               </dl>
             </article>
@@ -99,7 +118,8 @@ export function ApplicationsCatalog() {
           <dl>
             <div><dt>Tasks in view</dt><dd className="dg-plate-n">{shown.length}</dd></div>
             <div><dt>Standards</dt><dd className="dg-plate-n">{standards.length}</dd></div>
-            <div><dt>Timing basis</dt><dd className="dg-plate-sm">{envelope.join(' · ')}</dd></div>
+            <div><dt>Model families</dt><dd className="dg-plate-n">{models.length}</dd></div>
+            <div><dt>Inference range</dt><dd className="dg-plate-sm">{envelope}</dd></div>
             <div className="dg-plate-fixed">
               <dt>External processors required</dt>
               <dd className="dg-plate-n">0</dd>
@@ -133,10 +153,10 @@ export function ApplicationsCatalog() {
         </p>
         <p className="dg-cat-gap">
           <Check size={14} aria-hidden="true"/>
-          This catalogue lists <strong>{tasks.length}</strong> tasks. The site&rsquo;s domain data
-          declares <strong>{declared}</strong>. The remaining {declared - tasks.length} are counted in
-          the corpus but not enumerated in any source held here, so they are not invented into this
-          list.
+          All <strong>{tasks.length}</strong> of the {USE_CASE_TOTAL} tasks the playbook counts are
+          listed here, each with the sensing, model, memory, latency and maximum rate that document
+          states for it. Earlier this page showed four per domain and cited the total, so fourteen
+          of them existed only as a number.
         </p>
       </section>
 

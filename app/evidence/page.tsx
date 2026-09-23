@@ -5,6 +5,7 @@ import {Shell, useNav} from '../shell';
 import {SectionHead} from '../detail';
 import {evidenceLadder, notClaimed} from '../detail-content';
 import {claims, withheld} from '../claims';
+import Related from '../related';
 
 const colors: Record<string, string> = {
   Simulated: '#bf7f3b', 'Post-route': '#2f9e8c', Analytic: '#8f9d6b',
@@ -105,6 +106,7 @@ export default function Page() {
           <a className="text-link" href={href('library?pkg=lite')}>Download the specification suite <Download size={16} aria-hidden="true"/></a>
           <a className="text-link" href={href('ask')}>Audit a specification in Ask DeepGrid <ArrowUpRight size={16} aria-hidden="true"/></a>
         </div>
+      <Related route="evidence"/>
       </section>
     </Shell>
   );

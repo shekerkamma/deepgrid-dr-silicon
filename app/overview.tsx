@@ -4,7 +4,7 @@ import {ArrowUpRight, ArrowRight, Check, Download} from 'lucide-react';
 import Silicon from './silicon';
 import FaultTrace from './fault-trace';
 import {Eyebrow, DataTable, Callout} from './detail';
-import {evidenceLadder, faultPath, notClaimed, useCaseDomains as domains} from './detail-content';
+import {evidenceLadder, faultPath, notClaimed, diagnosticDomains as domains} from './detail-content';
 import {headline} from './content';
 import './overview.css';
 
@@ -52,7 +52,7 @@ const evidenceIcons: Record<string, React.ReactNode> = {
   ),
 };
 
-// One representative task per domain, taken verbatim from useCaseDomains.
+// One representative task per domain, taken verbatim from diagnosticDomains.
 // The full task inventory belongs on the domain's own material, not the overview.
 const domainImages: Record<string, string> = {
   rotating: '/media/deepgrid_truck.jpg',

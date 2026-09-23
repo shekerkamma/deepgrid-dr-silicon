@@ -6,6 +6,7 @@ import {ArrowUpRight,Download} from 'lucide-react';
 import {DataTable,ExplainedGrid,Sec,SectionHead,Stats} from '../../detail';
 import {absoluteMax,fixedVsPreliminary,operating,powerNotes} from '../../detail-content';
 import {parts,pinGroups} from '../../content';
+import Related from '../../related';
 
 export default function Page() {
   const {navigate, go} = useNav();
@@ -33,6 +34,7 @@ export default function Page() {
    </div>
   </Sec>
   <p className="disclaimer">Preliminary pin map. Register maps, the memory map and board-level design rules are in the engineering datasheet, not on this site.</p>
+ <Related route="package"/>
  </section>
     </Shell>
   );

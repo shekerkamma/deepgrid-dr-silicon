@@ -6,6 +6,7 @@ import {SectionHead} from '../../detail';
 import {faultPath} from '../../detail-content';
 import {PRE_SILICON} from '../../copy';
 import FaultTrace from '../../fault-trace';
+import Related from '../../related';
 
 export default function Page() {
   const {href, go} = useNav();
@@ -30,6 +31,7 @@ export default function Page() {
           </>
         }/>
         <p className="disclaimer">{PRE_SILICON}</p>
+      <Related route="safety"/>
       </section>
     </Shell>
   );

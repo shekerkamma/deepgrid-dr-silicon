@@ -1,0 +1,146 @@
+// Cross-references, declared once per route.
+//
+// Before this file every page ended in a hand-written list of links, so the set drifted: the home
+// page linked to nothing at all, /products reached two routes, and no page outside /resources and
+// /ask linked to a single source document even though the site ships nine of them. A reader who
+// wanted the document behind a figure had to go and look for it.
+//
+// Two rules hold here, and scripts/check-crossrefs.mjs enforces both:
+//   1. Every route declares at least two sibling sections and, where one exists, the document that
+//      backs its claims. A route with nothing to point at is a route that has not been finished.
+//   2. `why` says what the reader gets by following the link, in the reader's terms. "Learn more"
+//      and "Read the documentation" are not reasons; "the cycle budget those tasks are spending" is.
+import type {RouteId} from './routes';
+
+export type DocId = 'doc1' | 'doc2' | 'doc3' | 'doc4' | 'doc5' | 'doc6';
+export type SectionRef = {id: RouteId; why: string; query?: string};
+export type Related = {sections: SectionRef[]; docs: DocId[]};
+
+export const related: Record<RouteId, Related> = {
+  home: {
+    sections: [
+      {id: 'products', why: 'The two chips, what is identical between them and what DG32-2DOM adds.'},
+      {id: 'technology', why: 'How the lockstep pair, the control loop and the attention engine actually work.'},
+      {id: 'evidence', why: 'Where every figure on this site comes from, and which claims were withdrawn.'},
+      {id: 'procurement', why: 'Measured against the incumbent, including where it still wins.'},
+    ],
+    docs: ['doc5', 'doc2'],
+  },
+  products: {
+    sections: [
+      {id: 'technology', why: 'The architecture behind both parts, one tab each.'},
+      {id: 'package', why: 'The 44-signal QFN-64 pinout both chips share, pin for pin.'},
+      {id: 'procurement', why: 'How DG32 compares with the STM32G0, gaps included.'},
+      {id: 'applications', why: 'What the spare cycles are for once the loop is running.'},
+    ],
+    docs: ['doc6', 'doc2'],
+  },
+  technology: {
+    sections: [
+      {id: 'safety', why: 'The lockstep pair and the fault path, in detail.'},
+      {id: 'control', why: 'Where the 300 hardware cycles go, and what is left over.'},
+      {id: 'die', why: 'The six block groups on the die itself.'},
+      {id: 'package', why: 'How the die reaches its 44 signal pads.'},
+    ],
+    docs: ['doc4', 'doc6', 'doc3'],
+  },
+  safety: {
+    sections: [
+      {id: 'control', why: 'The loop the fault path has to interrupt, cycle by cycle.'},
+      {id: 'die', why: 'Where the safety core sits, and why it is the one frozen block.'},
+      {id: 'evidence', why: 'The 39-cycle trip is simulated, not measured. This says what that means.'},
+      {id: 'technology', why: 'The rest of the architecture the safety core is embedded in.'},
+    ],
+    docs: ['doc4'],
+  },
+  control: {
+    sections: [
+      {id: 'applications', why: 'The 30 diagnostic tasks that spend the headroom this page measures.'},
+      {id: 'safety', why: 'What happens to the loop when the two cores disagree.'},
+      {id: 'die', why: 'The CORDIC and ADC blocks the loop runs through.'},
+      {id: 'evidence', why: 'How the cycle counts were derived, and at which evidence grade.'},
+    ],
+    docs: ['doc1', 'doc4'],
+  },
+  die: {
+    sections: [
+      {id: 'package', why: 'How the die is bonded out to the QFN-64.'},
+      {id: 'safety', why: 'Why the safety core is frozen until first-silicon test.'},
+      {id: 'technology', why: 'The block-by-block architecture behind the 3D model.'},
+      {id: 'products', why: 'Which of the two chips each die belongs to.'},
+    ],
+    docs: ['doc4', 'doc6'],
+  },
+  package: {
+    sections: [
+      {id: 'die', why: 'The die behind the pad ring, group by group.'},
+      {id: 'products', why: 'Why a DG32-LITE board takes DG32-2DOM without a layout change.'},
+      {id: 'technology', why: 'The architecture the pinout serves.'},
+      {id: 'procurement', why: 'Package and footprint against the incumbent.'},
+    ],
+    docs: ['doc6', 'doc3'],
+  },
+  applications: {
+    sections: [
+      {id: 'control', why: 'The cycle budget every task on this page is spending.'},
+      {id: 'evidence', why: 'How a task moves from a paper claim to a measured one.'},
+      {id: 'technology', why: 'The hardware that makes the spare cycles predictable.'},
+      {id: 'ask', why: 'Put a specific task to the knowledge graph and get a cited answer.'},
+    ],
+    docs: ['doc1', 'doc2'],
+  },
+  evidence: {
+    sections: [
+      {id: 'procurement', why: 'Where the design still loses to the incumbent, stated plainly.'},
+      {id: 'control', why: 'The largest analytic claim on the site, with its derivation.'},
+      {id: 'safety', why: 'The simulated fault path, and what simulation does and does not show.'},
+      {id: 'applications', why: 'The task catalogue, each entry carrying its own evidence grade.'},
+    ],
+    docs: ['doc1', 'doc4', 'doc6'],
+  },
+  procurement: {
+    sections: [
+      {id: 'evidence', why: 'The grade behind every DG32 figure in the comparison.'},
+      {id: 'products', why: 'The parts being procured, and which fits which drive.'},
+      {id: 'package', why: 'Footprint, pinout and supply sequencing for a board team.'},
+      {id: 'company', why: 'The roadmap, the funding behind it and the stop rules.'},
+    ],
+    docs: ['doc2', 'doc5'],
+  },
+  resources: {
+    sections: [
+      {id: 'ask', why: 'Query the same documents instead of reading them end to end.'},
+      {id: 'technology', why: 'The architecture the decks and films walk through.'},
+      {id: 'evidence', why: 'How the figures in these documents are graded.'},
+      {id: 'products', why: 'Which document belongs to which chip.'},
+    ],
+    docs: ['doc5', 'doc2', 'doc1'],
+  },
+  ask: {
+    sections: [
+      {id: 'resources', why: 'The documents behind every answer, in full.'},
+      {id: 'evidence', why: 'What each evidence grade in an answer actually means.'},
+      {id: 'technology', why: 'The architecture most questions are about.'},
+      {id: 'applications', why: 'The task catalogue the graph draws on.'},
+    ],
+    docs: ['doc1', 'doc2', 'doc4'],
+  },
+  company: {
+    sections: [
+      {id: 'procurement', why: 'The competitive position behind the revenue plan.'},
+      {id: 'evidence', why: 'Every figure on this site, graded, including the withdrawn ones.'},
+      {id: 'resources', why: 'The whitepaper the plan and the stress test come from.'},
+      {id: 'contact', why: 'Start an evaluation, or ask for the data room.'},
+    ],
+    docs: ['doc5', 'doc2'],
+  },
+  contact: {
+    sections: [
+      {id: 'company', why: 'Who you would be talking to, and the plan they are working to.'},
+      {id: 'products', why: 'Which variant to name in your enquiry.'},
+      {id: 'resources', why: 'Datasheets and decks to read before the call.'},
+      {id: 'ask', why: 'Answer a technical question now, without waiting for a reply.'},
+    ],
+    docs: ['doc6', 'doc5'],
+  },
+};
