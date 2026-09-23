@@ -21,7 +21,7 @@ stack and the same design system.
 | `/technology` | reference | Block-by-block architecture, per chip |
 | `/technology/safety` | reference | Lockstep, and the 39-cycle path from a wrong value to a safe bridge |
 | `/technology/control-loop` | reference | Loop timing and the cycle budget at four rates |
-| `/technology/die` | showcase | The interactive die, six functional block groups |
+| `/technology/die` | showcase | Split stage: scroll walks the six block groups on the live die, and collapses onto the one that is frozen |
 | `/technology/package` | reference | QFN-64 pinout, supplies, electrical limits |
 | `/applications` | showcase | Four domains, their tasks and latency envelopes |
 | `/evidence` | reference | Five kinds of evidence, and what the site does not claim |
@@ -73,9 +73,21 @@ Every check here was added after something shipped wrong, not in anticipation.
   with reduced motion forced, checking status, base, links escaping the base, broken images,
   horizontal overflow, entrance animations that never finish, WCAG 2.5.8 tap targets, and console
   errors. 36 checks.
+- **Class names.** `scripts/check-classes.mjs` fails the build when a static `className` in
+  `app/` has no CSS rule behind it. This shipped twice: 31 invented names on a rebuilt overview
+  that rendered unstyled, then `view-pager`, `mobile-sheet` and `mobile-sheet-close` in the shell,
+  which left the prev/next control and the entire phone navigation unstyled on all 12 routes. An
+  unstyled element typechecks, builds, and passes a browser gate measuring status, links, images
+  and overflow, because it is present and correct by every one of those measures. The 13
+  pre-existing cases live in `scripts/unstyled-classes-baseline.json` as a ratchet, not a waiver:
+  the debt stays listed and cannot grow.
 - **Threaded server.** `scripts/serve-dist.py` exists because `python3 -m http.server` is
   single-threaded: once the home route began importing the scroll engine, one chunk request sat
   pending forever and `networkidle` never fired, failing a page curl served in 2 ms.
+
+The route gate captures the viewport, never `fullPage`. A full-page shot of a reveal-on-scroll
+page renders unreached blocks blank and its counters at zero, so it shows a broken page that is not
+broken, and it times out on `/ask`. To read a page as a visitor sees it, scroll it first.
 
 Two rules for reading a red gate, both learned the hard way. An animation sampled at a fixed
 moment measures the animation, not the outcome: the same unchanged page reported 7 blocks hidden
@@ -105,7 +117,8 @@ app/scrollcraft/       vendored scroll engine, do not edit; see its README
 app/motion.tsx         the reveal/scroll system for the other 11 routes
 scripts/               build packaging, route gate, threaded dev server
 PLAN.md                the rebuild's reasoning and remaining phases
-docs/home-brief.md     the home route's brief: grammar, signature move, feeling curve
+docs/home-brief.md     a retired build, kept as a record of a grammar that did not fit
+docs/die-brief.md      the die page's brief: split stage, signature move, fingerprint gate
 ```
 
 Two scroll systems coexist because they never run on the same document.
