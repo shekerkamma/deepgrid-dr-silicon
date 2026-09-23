@@ -59,3 +59,10 @@
    which lands the control at 23px high — one pixel under the 24px floor, which the route gate
    catches at phone width. .dr-hub-footer is used only by this page, so the fix is scoped here. */
 .dr-hub-footer .text-link { min-height: 24px; }
+
+/* Inline validation: errors render next to their field and are announced through
+   aria-describedby; the first invalid field takes focus on submit. */
+.dr-enq-error { margin: 0; color: #e8a08a; font-size: var(--text-meta); line-height: 1.45; }
+.dr-enq-field [aria-invalid="true"] { border-color: #e8a08a; }
+.dr-enq-field input::placeholder,
+.dr-enq-field textarea::placeholder { color: var(--muted-foreground); opacity: 1; }

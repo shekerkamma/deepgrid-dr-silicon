@@ -14,9 +14,20 @@ import {fileURLToPath} from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const src = fs.readFileSync(path.join(root, 'app/claims.ts'), 'utf8');
 
-const entries = [...src.matchAll(
-  /'([\w-]+)':\s*\{[\s\S]*?source:\s*'([^']+)'[\s\S]*?probe:\s*'([^']+)'/g,
-)].map(m => ({id: m[1], source: m[2], probe: m[3]}));
+const ENTRY = /'([\w-]+)':\s*\{[\s\S]*?source:\s*'([^']+)'[\s\S]*?probe:\s*'([^']+)'/g;
+const parse = text => [...text.matchAll(ENTRY)].map(m => ({id: m[1], source: m[2], probe: m[3]}));
+const entries = parse(src);
+
+// /company's figures, registered in app/company-content.ts. Parsed from its companySources block only,
+// so no other object literal in that file can be mistaken for a claim.
+const company = fs.readFileSync(path.join(root, 'app/company-content.ts'), 'utf8');
+const start = company.indexOf('export const companySources');
+const companyEntries = start < 0 ? [] : parse(company.slice(start, company.indexOf('\n};', start)));
+if (companyEntries.length < 30) {
+  console.error(`Only ${companyEntries.length} /company sources parsed from app/company-content.ts; the map or this parser is wrong.`);
+  process.exit(1);
+}
+entries.push(...companyEntries);
 
 if (entries.length < 10) {
   console.error(`Only ${entries.length} claims parsed from app/claims.ts; the map or this parser is wrong.`);
@@ -37,4 +48,4 @@ if (problems.length) {
   console.error('\nRe-derive the claim from the document, or remove it. Do not edit the probe to make this pass.');
   process.exit(1);
 }
-console.log(`Claim check: ${entries.length} claims, all still carried by their source documents.`);
+console.log(`Claim check: ${entries.length - companyEntries.length} claims and ${companyEntries.length} /company figures, all still carried by their source documents.`);

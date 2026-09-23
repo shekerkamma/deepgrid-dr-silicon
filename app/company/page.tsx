@@ -4,6 +4,7 @@ import {Shell, useNav} from '../shell';
 import {ArrowUpRight} from 'lucide-react';
 import {DataTable, ExplainedGrid, Sec, SectionHead, Stats} from '../detail';
 import {PRE_SILICON} from '../copy';
+import CompanyStress from '../company-stress';
 import {
   companyNotClaimed, companyStats, milestones, moats, pillars, revenueBuild,
   stopRules, team, unitEconomics, fundsAllocation,
@@ -18,7 +19,7 @@ export default function Page() {
         <SectionHead
           tag="08 / COMPANY"
           title="A silicon team in Hyderabad building for a market that is already obliged to buy domestic"
-          copy="DeepGrid Semi Pvt Ltd designs motor control, condition monitoring and zonal compute on mature nodes. The bet is not that we can beat a 40 nm part on performance — it is that a ≥130 nm part designed in India can be bought where an imported one cannot."
+          copy="DeepGrid Semi Pvt Ltd designs motor control, condition monitoring and zonal compute on mature nodes. The bet is not that we can beat a 40 nm part on performance. It is that a ≥130 nm part designed in India can be bought where an imported one cannot."
         />
         <Stats items={companyStats}/>
 
@@ -26,7 +27,7 @@ export default function Page() {
           kicker="THE MARKET"
           title="About $9B of India’s annual IC imports are mature node,"
           em="and an open-source flow is what makes 10k-unit volumes worth serving."
-          copy="India imports roughly $23.4B of integrated circuits a year. The mature-node share is the part a 130 nm design centre can actually address, and it is the part where per-seat EDA licensing and mask costs, not transistor density, decide whether a 10,000-unit defence order is profitable."
+          copy="India imports roughly $23.4B of integrated circuits a year. The mature-node share is the part a 130 nm design centre can actually address, and it is the part where per-seat EDA licensing and mask costs, not transistor density, decide whether a 10,000-unit defence order is profitable."
         >
           <DataTable caption="Unit economics of a mature-node spin" head={['Line', 'Where it lands']} rows={unitEconomics} wide/>
         </Sec>
@@ -60,21 +61,21 @@ export default function Page() {
 
         <Sec
           kicker="TEAM"
-          title="The team has taped out together before,"
-          em="which is the only thing that helps on a shuttle with no respin."
-          copy="RTL, verification, physical design, analog and software under one roof in Hyderabad."
+          title="The flow has already taped out once,"
+          em="so first silicon is not also the first test of the tools."
+          copy="What the team is built on, and how large the seed round makes it."
         >
           <ExplainedGrid items={team} cols={3}/>
         </Sec>
 
         <Sec
           kicker="INVESTORS"
-          title="The plan is concentrated by design,"
-          em="and every figure below is a target, not a result."
-          copy="DeepGrid is a private company and this page carries only material cleared for publication. Nothing here is audited, and nothing here is contracted revenue."
+          title="The plan reaches ₹1,000 Cr by FY31,"
+          em="and the company’s own whitepaper tries to break it."
+          copy="Every figure here is a target, not a result: nothing is audited and nothing is contracted revenue. The build below is the plan as written. Under it are the two tests the whitepaper runs on its own number, handed to you."
         >
-          <DataTable caption="Revenue build and addressable market (company plan)" head={['Year or line', 'Plan figure']} rows={revenueBuild} wide/>
-          <p className="disclaimer">Plan targets prepared by the company. Not audited, not reviewed by a third party, and not contracted revenue. Market sizes apply our own segment definition to published import statistics.</p>
+          <DataTable caption="Revenue build (company plan)" head={['Year or line', 'Plan figure']} rows={revenueBuild} wide/>
+          <CompanyStress/>
         </Sec>
 
         <Sec
@@ -97,25 +98,29 @@ export default function Page() {
 
         <Sec
           kicker="USE OF FUNDS"
-          title="60% of a ₹10 Cr raise goes to silicon and the people who make it,"
+          title="60% of a ₹10 Cr raise goes to silicon and the people who make it,"
           em="and 10% to going to market."
           copy="Factory runs, mask sets and engineering staff are the two largest lines, in that order."
         >
-          <DataTable caption="Use of funds (₹10 Cr)" head={['Line', 'Amount', 'What it buys']} rows={fundsAllocation} wide/>
+          <DataTable caption="Use of funds (₹10 Cr)" head={['Line', 'Amount', 'What it buys']} rows={fundsAllocation} wide/>
         </Sec>
 
         <div className="dr-notclaimed">
           <p className="dr-kicker">WHAT THIS PAGE DOES NOT CLAIM</p>
           <ul>{companyNotClaimed.map(n => <li key={n}>{n}</li>)}</ul>
         </div>
-        <p className="disclaimer">{PRE_SILICON}</p>
 
-        <div className="dr-links dr-sec-gap">
-          <button className="primary" onClick={() => go('contact')}>Discuss your application <ArrowUpRight size={17}/></button>
-          <button className="text-link" onClick={() => go('evidence')}>How every figure on this site is evidenced <ArrowUpRight size={16}/></button>
-          <button className="text-link" onClick={() => go('procurement')}>Procurement position and roadmap <ArrowUpRight size={16}/></button>
-          <button className="text-link" onClick={() => go('resources')}>Whitepapers, datasheets and films <ArrowUpRight size={16}/></button>
-        </div>
+        <Sec
+          kicker="NEXT"
+          title="If the stress test did not scare you off,"
+          em="the next conversation is about your application."
+          copy="Tell us the motor, the control requirement and the sensing constraint, and we will route you to the right variant, reference design and engineer."
+        >
+          <div className="dr-links">
+            <button className="primary" onClick={() => go('contact')}>Discuss your application <ArrowUpRight size={17} aria-hidden="true"/></button>
+          </div>
+        </Sec>
+        <p className="disclaimer">{PRE_SILICON} Evidence for every figure on this site, and the claims withdrawn after verification, are on the Evidence page.</p>
       </section>
     </Shell>
   );
