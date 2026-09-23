@@ -67,10 +67,22 @@ jobs:
       id-token: write
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment_retry.outputs.page_url }}
     steps:
+      # Pages runs its own deployment queue, separate from Actions concurrency. Two pushes close
+      # together make the second deploy fail with HTTP 400 "due to in progress deployment" even
+      # though the Actions runs queued correctly -- so a mirror silently stays a commit behind
+      # while every other job is green. Wait the earlier deployment out and try once more.
       - name: Deploy
         id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      - name: Wait out the in-progress deployment
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 120
+      - name: Deploy (retry)
+        id: deployment_retry
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v4
   # The same gate against the live site, once Pages serves this commit (build-info.json carries the SHA).
   verify-live:
