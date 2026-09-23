@@ -42,11 +42,19 @@ for (const f of files) {
   }
 }
 
-const css = ['dr.css', 'globals.css', 'ux.css', 'overview.css', 'die-stage.css']
-  .map(f => path.join(appDir, f))
-  .filter(f => fs.existsSync(f))
-  .map(f => fs.readFileSync(f, 'utf8'))
-  .join('\n');
+// Every stylesheet under app/, discovered rather than listed. A hardcoded list meant that adding
+// applications-catalog.css reported 20 false failures on classes that were styled all along, and
+// the obvious fix for that is to edit the gate, which is exactly the habit a gate should not teach.
+const cssFiles = [];
+(function scanCss(dir) {
+  for (const e of fs.readdirSync(dir, {withFileTypes: true})) {
+    const f = path.join(dir, e.name);
+    if (e.isDirectory()) scanCss(f);
+    else if (e.name.endsWith('.css')) cssFiles.push(f);
+  }
+})(appDir);
+if (cssFiles.length < 3) { console.error(`Only ${cssFiles.length} stylesheets found under app/; the scan is wrong.`); process.exit(1); }
+const css = cssFiles.map(f => fs.readFileSync(f, 'utf8')).join('\n');
 
 const defined = new Set([...css.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map(m => m[1]));
 
@@ -65,4 +73,4 @@ if (missing.length) {
   process.exit(1);
 }
 if (stale.length) console.log(`Class check: ${stale.length} baseline entr(ies) now styled or gone, safe to delete: ${stale.join(', ')}`);
-console.log(`Class check: ${used.size} static class names, ${baseline.size} baselined, no new unstyled.`);
+console.log(`Class check: ${used.size} static class names across ${cssFiles.length} stylesheets, ${baseline.size} baselined, no new unstyled.`);

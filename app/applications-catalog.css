@@ -1,0 +1,81 @@
+/* Gallery / catalog for /applications. Museum labels, not marketing copy: every object carries the
+   same schema, and the schema is what makes it a collection rather than a grid. */
+
+.dg-cat {
+  --dg-line: #ffffff1c;
+  --dg-accent: #c6a379;
+  --dg-ink-soft: #9a9186;
+  --dg-mono: 'Courier New', ui-monospace, monospace;
+}
+
+/* The nav is an index of objects and it jumps. */
+.dg-cat-index {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding-bottom: 18px; border-bottom: 1px solid var(--dg-line); margin-bottom: clamp(20px, 3vw, 34px);
+}
+.dg-cat-index button {
+  display: inline-flex; align-items: center; gap: 9px; min-height: 40px; padding: 0 14px;
+  border: 1px solid var(--dg-line); border-radius: 3px; color: var(--dg-ink-soft);
+  font-size: 0.86rem; transition: color .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.dg-cat-index button:hover { color: #efe7db; border-color: color-mix(in srgb, var(--dg-accent) 40%, transparent); }
+.dg-cat-index button.is-on { background: var(--dg-accent); color: #15110f; border-color: var(--dg-accent); }
+.dg-cat-n { font: 400 0.68rem/1 var(--dg-mono); font-variant-numeric: tabular-nums; opacity: .75; }
+
+.dg-cat-body { display: grid; grid-template-columns: 1fr 300px; gap: clamp(20px, 3vw, 40px); align-items: start; }
+
+/* Objects enter and leave at their own pace as the collection is walked. */
+.dg-cat-objects { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.dg-obj { border: 1px solid var(--dg-line); border-radius: 3px; background: #15110d; overflow: hidden; display: grid; align-content: start; }
+.dg-obj-media { margin: 0; }
+.dg-obj-media img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; display: block; opacity: .82; }
+
+/* The label. One field per line, because a label is read cropped for most of its life and a
+   schema that only parses when fully visible is not a schema. */
+.dg-obj-label { margin: 0; padding: 14px 15px; display: grid; gap: 9px; }
+.dg-obj-label > div { display: grid; grid-template-columns: 74px 1fr; gap: 12px; align-items: baseline; }
+.dg-obj-label dt {
+  font: 400 0.6rem/1.4 var(--dg-mono); letter-spacing: 0.11em; text-transform: uppercase;
+  color: var(--dg-ink-soft);
+}
+.dg-obj-label dd { margin: 0; font-size: 0.86rem; line-height: 1.55; }
+
+/* The plate. Sticky, so the numbers stay beside the collection while it is walked. */
+.dg-plate {
+  position: sticky; top: calc(var(--nav-h, 56px) + 18px);
+  border: 1px solid color-mix(in srgb, var(--dg-accent) 30%, transparent);
+  border-radius: 3px; background: #16120e; padding: 18px;
+}
+.dg-plate-kicker { margin: 0 0 14px; font: 400 0.62rem/1 var(--dg-mono); letter-spacing: 0.13em; color: var(--dg-accent); }
+.dg-plate dl { margin: 0; display: grid; gap: 12px; }
+.dg-plate dl > div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--dg-line); padding-bottom: 9px; }
+.dg-plate dt { font: 400 0.64rem/1.4 var(--dg-mono); letter-spacing: 0.09em; text-transform: uppercase; color: var(--dg-ink-soft); }
+.dg-plate dd { margin: 0; text-align: right; }
+.dg-plate-n { font: 400 1.5rem/1 var(--dg-mono); font-variant-numeric: tabular-nums; color: var(--dg-accent); }
+.dg-plate-sm { font: 400 0.7rem/1.5 var(--dg-mono); color: #efe7db; }
+/* The one that does not move. */
+.dg-plate-fixed { border-bottom: 0 !important; }
+.dg-plate-fixed dt { color: #efe7db; }
+.dg-plate-fixed .dg-plate-n { font-size: 2.1rem; }
+.dg-plate-foot { margin: 14px 0 0; font-size: 0.78rem; line-height: 1.65; color: var(--dg-ink-soft); text-wrap: pretty; }
+.dg-plate-cite { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--dg-line); font-size: 0.66rem; line-height: 1.6; color: var(--dg-ink-soft); }
+.dg-plate-cite .mono { color: var(--dg-accent); letter-spacing: 0.08em; }
+
+.dg-cat-envelope { margin-top: clamp(34px, 5vw, 60px); padding-top: clamp(24px, 3vw, 36px); border-top: 1px solid var(--dg-line); max-width: 74ch; }
+.dg-cat-envelope h2 { font: 400 clamp(1.4rem, 2.4vw, 1.9rem)/1.2 var(--serif, Georgia, serif); letter-spacing: -0.02em; margin: 0 0 12px; text-wrap: balance; }
+.dg-cat-envelope p { color: var(--dg-ink-soft); font-size: 0.94rem; line-height: 1.75; margin: 0 0 14px; text-wrap: pretty; }
+.dg-cat-gap { display: flex; gap: 10px; align-items: start; border-left: 2px solid var(--dg-accent); padding: 10px 0 10px 14px; color: #efe7db !important; }
+.dg-cat-gap strong { font-family: var(--dg-mono); font-variant-numeric: tabular-nums; color: var(--dg-accent); font-weight: 400; }
+
+/* The close, typeset exactly like a label. */
+.dg-inquiry { margin-top: clamp(30px, 4vw, 48px); max-width: 520px; border-color: color-mix(in srgb, var(--dg-accent) 34%, transparent); }
+.dg-cat-link { display: inline-flex; align-items: center; gap: 7px; min-height: 24px; color: #efe7db; border-bottom: 1px solid color-mix(in srgb, var(--dg-accent) 55%, transparent); }
+.dg-cat-link:hover { color: var(--dg-accent); }
+.dg-cat-foot { display: flex; flex-wrap: wrap; gap: 14px 26px; margin-top: clamp(28px, 4vw, 44px); padding-top: 18px; border-top: 1px solid var(--dg-line); }
+
+@media (max-width: 900px) {
+  .dg-cat-body { grid-template-columns: 1fr; }
+  .dg-plate { position: static; }
+  .dg-obj-label > div { grid-template-columns: 66px 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .dg-cat-index button { transition: none; } }
