@@ -1,8 +1,8 @@
 'use client';
 
 import {useEffect, useState} from 'react';
-import {ArrowUpRight, ArrowRight, Menu, X} from 'lucide-react';
-import {navRoutes, byId, nextRoute, resolveTarget, url, type RouteId} from './routes';
+import {ArrowUpRight, ArrowRight, ArrowLeft, Menu, X} from 'lucide-react';
+import {navRoutes, byId, nextRoute, prevRoute, resolveTarget, url, type RouteId} from './routes';
 import {useReveal, useScrollVars} from './motion';
 import {useCount, useDraw, useRail} from './devices';
 
@@ -28,6 +28,7 @@ export function Shell({
   const here = byId[route];
   const parent = here.parent ? byId[here.parent] : undefined;
   const next = nextRoute(route);
+  const prev = prevRoute(route);
   const href = url;
 
   useScrollVars();
@@ -67,8 +68,8 @@ export function Shell({
       <nav className="main-nav" aria-label="Primary navigation">{links}</nav>
 
       {menu && (
-        <div className="mobile-sheet" role="dialog" aria-label="Navigation">
-          <button className="mobile-sheet-close" aria-label="Close navigation" onClick={() => setMenu(false)}><X/></button>
+        <div className="navigation-sheet mobile-sheet" role="dialog" aria-modal="true" aria-label="Navigation">
+          <button className="mobile-sheet-close" aria-label="Close navigation" onClick={() => setMenu(false)}><X aria-hidden="true"/></button>
           <nav aria-label="Primary">{links}</nav>
         </div>
       )}
@@ -85,13 +86,20 @@ export function Shell({
 
         {children}
 
-        {next && (
-          <nav className="view-pager" aria-label="Next section">
-            <a href={href(next.href)}>
-              <span>Next section</span>
-              <strong>{next.label}</strong>
-              <ArrowRight size={20}/>
-            </a>
+        {(prev || next) && (
+          <nav className="section-pagination" aria-label="Section navigation">
+            {prev ? (
+              <a href={href(prev.href)}>
+                <ArrowLeft size={19} aria-hidden="true"/>
+                <span><small>Previous section</small>{prev.label}</span>
+              </a>
+            ) : <span/>}
+            {next && (
+              <a href={href(next.href)}>
+                <span><small>Next section</small>{next.label}</span>
+                <ArrowRight size={19} aria-hidden="true"/>
+              </a>
+            )}
           </nav>
         )}
       </main>

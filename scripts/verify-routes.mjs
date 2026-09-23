@@ -113,7 +113,13 @@ for (const [width, reduced] of [[1440, false], [390, false], [390, true]]) {
 
     if (shots) {
       fs.mkdirSync(shots, {recursive: true});
-      await page.screenshot({path: path.join(shots, `${width}${reduced ? '-rm' : ''}-${(route === '/' ? 'home' : route.slice(1)).replace(/\//g, '-')}.png`), fullPage: width === 1440});
+      // Viewport, not fullPage. A full-page capture of a reveal-on-scroll page renders the
+      // blocks that have not been scrolled to yet as blank and the counters at zero, so it shows
+      // a broken page that is not broken. It also times out on /ask, which carries a 1.5 MB graph.
+      await page.screenshot({
+        path: path.join(shots, `${width}${reduced ? '-rm' : ''}-${(route === '/' ? 'home' : route.slice(1)).replace(/\//g, '-')}.png`),
+        timeout: 15000,
+      }).catch(err => console.log(`     (screenshot skipped for ${route}: ${err.message.split('\n')[0]})`));
     }
   }
   await page.close();

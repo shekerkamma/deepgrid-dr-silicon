@@ -42,6 +42,11 @@ export function nextRoute(id: RouteId): Route | undefined {
   return i >= 0 ? orderedRoutes[i + 1] : undefined;
 }
 
+export function prevRoute(id: RouteId): Route | undefined {
+  const i = orderedRoutes.findIndex(r => r.id === id);
+  return i > 0 ? orderedRoutes[i - 1] : undefined;
+}
+
 /** Navigation targets, accepted under two vocabularies: the current route ids, and the
  *  hash-router's old view ids that ported page bodies still pass. Built from `routes` so a
  *  new route is addressable the moment it is declared — a hand-kept second list is how

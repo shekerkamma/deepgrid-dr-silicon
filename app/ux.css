@@ -34,3 +34,30 @@
   align-items: center;
   min-height: 24px;
 }
+
+/* /products carried no imagery, so two chips that share a footprint read as two spec lists.
+   The architecture posters already exist; this gives them a frame inside the part card. */
+.dr-part-media { margin: 0 0 18px; border: 1px solid #ffffff1c; border-radius: 3px; overflow: hidden; background: #15110d; }
+.dr-part-media img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+.dr-part-media figcaption { padding: 8px 12px; border-top: 1px solid #ffffff14; font-size: 0.62rem; letter-spacing: 0.12em; color: #9a9186; }
+
+/* The mobile navigation panel. .navigation-sheet carries the styling; these few rules position it,
+   because the original opened it through a Sheet component this shell does not use. */
+.mobile-sheet {
+  position: fixed; inset: 0 0 0 auto; width: min(360px, 100vw); z-index: 60;
+  overflow-y: auto; box-shadow: -24px 0 60px #00000080;
+}
+.mobile-sheet nav { display: grid; }
+.mobile-sheet nav a {
+  display: flex; align-items: center; min-height: 48px; padding: 14px 0;
+  border-bottom: 1px solid #61754b66; font-size: var(--text-control);
+}
+.mobile-sheet-close {
+  position: absolute; top: 14px; right: 16px; display: inline-flex;
+  align-items: center; justify-content: center; min-width: 40px; min-height: 40px;
+  border: 1px solid #ffffff22; border-radius: 3px; color: inherit;
+}
+
+/* The collapse on /technology/die is a scroll target under a sticky nav. Without this its
+   heading sits behind the bar and the act reads as starting mid-sentence. */
+.dg-collapse { scroll-margin-top: calc(var(--nav-h, 56px) + 24px); }
