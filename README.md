@@ -61,16 +61,24 @@ a force-push and will discard it.
 npm run sync        # push main to all three, then wait for and report all three deployments
 ```
 
-The workflow also has a `mirror` job that does this in CI after `verify-live` passes, so one push to
-v2 updates all three. It needs a PAT with `repo` scope on the two mirrors, because `GITHUB_TOKEN` is
-scoped to the repository running the workflow and cannot push anywhere else:
+The workflow also has a `mirror` job that does this in CI after `verify-live` passes, so one push
+to v2 updates all three. It is already configured.
 
-```bash
-gh secret set MIRROR_TOKEN --repo shekerkamma/deepgrid-dr-silicon-v2
-```
+It authenticates with **one SSH deploy key per mirror**, not a personal access token.
+`GITHUB_TOKEN` is scoped to the repository running the workflow and cannot push elsewhere, but the
+obvious alternative, an account PAT, carries `repo` across every repository the owner has. A deploy
+key is write access to exactly one repo, which is all this job needs, and revoking one is deleting
+one key from one repo.
 
-Without that secret the job prints a notice and exits clean, so a missing credential never fails a
-green build. Until it is set, `npm run sync` is the way to propagate.
+| Secret on v2 | Grants write to |
+|---|---|
+| `MIRROR_KEY_DEEPGRID_DR_SILICON` | `deepgrid-dr-silicon` only |
+| `MIRROR_KEY_DEEPGRID_DR_SILICON_NEW` | `deepgrid-dr-silicon_new` only |
+
+To rotate or revoke: delete the key from that repo's Settings → Deploy keys, generate a new
+`ed25519` pair, add the public half there, and set the private half as the matching secret on v2.
+If a secret is missing the job prints a notice and exits clean, so a missing credential never fails
+a green build; `npm run sync` still works without any of this.
 
 Push to `main`. `.github/workflows/pages.yml` runs typecheck, builds, gates the build in a
 browser, deploys through `actions/deploy-pages`, then re-runs the same gate against the live URL
