@@ -20,7 +20,7 @@ export default function Page() {
     <DataTable caption="Executive Procurement Scorecard: DeepGrid vs Incumbents" head={['Strategic Dimension', 'DeepGrid Semi', 'Western Incumbents', 'Executive Takeaway']} rows={procurementScorecard} wide/>
   </Sec>
   <div className="dr-leadgap"><div><Eyebrow>WHERE DG32 LEADS</Eyebrow><ul>{leads.map(l=><li key={l}><Check size={15}/>{l}</li>)}</ul></div><div><Eyebrow>WHERE THE G0 LEADS TODAY</Eyebrow><ul>{gaps.map(l=><li key={l}><span className="dr-dash" aria-hidden="true"/>{l}</li>)}</ul></div></div>
-  <Sec kicker="WHY THE DIFFERENCE?" title="Why does each gap exist," em="and why does it close in this order?">
+  <Sec kicker="WHY THE DIFFERENCE" title="Every gap is a deliberate sequencing choice," em="and each one closes in the order that first silicon makes possible.">
    <ExplainedGrid items={positionNotes} cols={2}/>
   </Sec>
   <Sec kicker="THE MULTI-SPIN ROADMAP" title="Closing the gaps" em="in deliberate order." copy="Each step has a job: first silicon proves the architecture, the second spin closes the largest gaps, and connectivity follows.">

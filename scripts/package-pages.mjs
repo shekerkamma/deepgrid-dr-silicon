@@ -4,13 +4,16 @@ import {fileURLToPath} from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const source=path.join(root,'dist/client'), output=path.join(root,'dist/pages');
 // PAGES_BASE is the URL path the site is served under; PAGES_DOMAIN writes a CNAME when set.
-// github.io project site: PAGES_BASE=/deepgrid-dr-silicon/ PAGES_DOMAIN=
+// github.io project site: PAGES_BASE=/deepgrid-dr-silicon-v2/ PAGES_DOMAIN=
+// CI sets PAGES_BASE from the repo name, so all three Pages sites build from this one source.
+// The default below is only for local runs; it must name the canonical repo, because a default
+// naming a mirror silently packages the site for a base it is not served under.
 // custom domain:          PAGES_BASE=/                     PAGES_DOMAIN=dr.deepgridsemi.com
 // Content assets are authored root-absolute ("/media/x.jpg") so they resolve from any route depth;
 // a relative "./media/x.jpg" breaks the moment a page lives at /technology/safety. The export leaves
 // them at the site root, so they need the same base prefix /_next/ gets.
 const CONTENT_ROOTS=['images','decks','media','downloads','diagrams'];
-const base=(process.env.PAGES_BASE||'/deepgrid-dr-silicon/').replace(/\/?$/,'/').replace(/^\/?/,'/');
+const base=(process.env.PAGES_BASE||'/deepgrid-dr-silicon-v2/').replace(/\/?$/,'/').replace(/^\/?/,'/');
 const domain=(process.env.PAGES_DOMAIN||'').trim();
 fs.rmSync(output,{recursive:true,force:true});
 fs.cpSync(source,output,{recursive:true});
