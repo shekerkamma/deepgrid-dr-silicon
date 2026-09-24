@@ -1,6 +1,6 @@
 'use client';
 
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Play} from 'lucide-react';
 import {url} from './routes';
 import './evidence-clip.css';
@@ -30,9 +30,14 @@ export type Clip = {
   saying: string;        // the narration over that segment, verbatim from the .vtt
 };
 
-const mmss = (s: number) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
+// Round the whole time first, then split it. Rounding only the seconds printed 239.68 s as "3:60".
+const mmss = (s: number) => { const r = Math.round(s); return `${Math.floor(r / 60)}:${String(r % 60).padStart(2, '0')}`; };
 
-export default function EvidenceClip({clip, label}: {clip: Clip; label: string}) {
+// `audible`: /evidence plays its clips muted with captions on, beside the argument they illustrate.
+// /applications plays them with sound, because there the narration is the explanation.
+// `autoStart`: FilmMoment mounts the player only when the reader presses play, so the player starts
+// itself on mount rather than asking for a second press.
+export default function EvidenceClip({clip, label, audible = false, autoStart = false}: {clip: Clip; label: string; audible?: boolean; autoStart?: boolean}) {
   const v = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
 
@@ -47,6 +52,9 @@ export default function EvidenceClip({clip, label}: {clip: Clip; label: string})
     else { el.addEventListener('loadedmetadata', seek, {once: true}); el.load(); }
     setPlaying(true);
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { if (autoStart) start(); }, []);
 
   // Loop inside the segment. Without this the clip runs on into the next slide's narration, which
   // would put the wrong words under the wrong evidence.
@@ -65,7 +73,7 @@ export default function EvidenceClip({clip, label}: {clip: Clip; label: string})
           className="dr-ev-clip-video"
           poster={url(clip.poster)}
           preload="none"
-          muted
+          muted={!audible}
           playsInline
           controls={playing}
           onTimeUpdate={onTime}
@@ -100,5 +108,39 @@ export function EvidenceSaid({clip}: {clip: Clip}) {
       <p>{clip.saying}</p>
       <cite>Narration, {clip.deck} film, {mmss(clip.start)}&ndash;{mmss(clip.start + clip.duration)}</cite>
     </blockquote>
+  );
+}
+
+/** A film moment inside an argument, not a spotlight beside it.
+ *
+ *  At rest it is a small frame of the slide on screen, the narration quoted beside it, and where it
+ *  comes from. The full-width slide screenshot with a play button over it read as a gallery of
+ *  screenshots rather than as part of the page's story (user, 2026-09-24). Pressing play swaps the
+ *  frame for the player in place, with sound and captions, playing only that slide's segment. */
+export function FilmMoment({clip, label}: {clip: Clip; label: string}) {
+  const [open, setOpen] = useState(false);
+  const range = `${mmss(clip.start)}\u2013${mmss(clip.start + clip.duration)}`;
+  return (
+    <figure className={'dr-moment' + (open ? ' is-open' : '')}>
+      {open ? (
+        <EvidenceClip clip={clip} label={label} audible autoStart/>
+      ) : (
+        <button
+          type="button"
+          className="dr-moment-thumb"
+          onClick={() => setOpen(true)}
+          aria-label={`Play ${mmss(clip.duration)} of the ${clip.deck} film: ${clip.shows}`}
+        >
+          <img src={url(clip.poster)} alt="" width={1600} height={900} loading="lazy" decoding="async"/>
+          <span className="dr-moment-play" aria-hidden="true">
+            <Play size={14} fill="currentColor"/> {mmss(clip.duration)}
+          </span>
+        </button>
+      )}
+      <figcaption className="dr-moment-said">
+        <p>&ldquo;{clip.saying}&rdquo;</p>
+        <cite>{clip.deck} film · slide {clip.slide} · {range}</cite>
+      </figcaption>
+    </figure>
   );
 }

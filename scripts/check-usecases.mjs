@@ -28,8 +28,15 @@ const rows = [...src.matchAll(/\{domain: '(\w+)',([^\n]*?)\},$/gm)].map(m => {
 const problems = [];
 if (rows.length !== total) problems.push(`the table holds ${rows.length} tasks; the playbook counts ${total}`);
 
+// The last row of each playbook page once came through with the page footer spliced into its cells
+// ("Shaft misalignment and looseness EEPGRID SEMI · DG32-LITE BASE V", rate ">1 kHz 07"). Every
+// field was present and the latency parsed, so nothing above caught it. Footer text, and a page
+// number trailing a rate, fail here.
+const FOOTER = /DEEPGRID SEMI|EEPGRID|BASE VARI|back-solved|not measured on|\bsilicon\.$|kHz \d\d$|Hz \d\d$/;
+
 for (const [i, r] of rows.entries()) {
   for (const f of FIELDS) if (!String(r[f]).trim()) problems.push(`task ${i + 1} (${r.name || 'unnamed'}): "${f}" is empty`);
+  for (const f of FIELDS) if (FOOTER.test(String(r[f]))) problems.push(`task ${i + 1} (${r.name}): "${f}" carries the PDF page footer: "${r[f]}"`);
   if (r.latency && !/^<?\d+(\.\d+)? ?ms$/.test(r.latency)) problems.push(`task ${i + 1} (${r.name}): latency "${r.latency}" is not a time`);
 }
 

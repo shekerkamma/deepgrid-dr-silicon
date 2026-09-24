@@ -17,22 +17,31 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const src = fs.readFileSync(path.join(root, 'app/evidence/page.tsx'), 'utf8');
-
-const block = src.slice(src.indexOf('const clips'), src.indexOf('\n};', src.indexOf('const clips')));
+// Two pages quote film moments: /evidence (one per kind of evidence) and /applications (the
+// story's beats, in app/applications-story-data.ts). Both keep them in a `const clips` map of the same
+// shape, and each file has a floor so a parser that silently matches nothing fails instead of passing.
+const SOURCES = [
+  {file: 'app/evidence/page.tsx', min: 5},
+  {file: 'app/applications-story-data.ts', min: 7},
+];
 const field = (body, name) => body.match(new RegExp(`${name}: '((?:[^'\\\\]|\\\\.)*)'`))?.[1];
 const num = (body, name) => Number(body.match(new RegExp(`${name}: ([\\d.]+)`))?.[1]);
 
-const clips = [...block.matchAll(/^  '?([\w\s-]+?)'?: \{\n([\s\S]*?)\n  \},$/gm)].map(m => ({
-  kind: m[1],
-  film: field(m[2], 'film'), captions: field(m[2], 'captions'), poster: field(m[2], 'poster'),
-  start: num(m[2], 'start'), duration: num(m[2], 'duration'),
-  saying: field(m[2], 'saying')?.replace(/\\'/g, "'"),
-}));
-
-if (clips.length < 5) {
-  console.error(`Only ${clips.length} evidence clips parsed from app/evidence/page.tsx; the map or this parser is wrong.`);
-  process.exit(1);
+const clips = [];
+for (const {file, min} of SOURCES) {
+  const src = fs.readFileSync(path.join(root, file), 'utf8');
+  const block = src.slice(src.indexOf('const clips'), src.indexOf('\n};', src.indexOf('const clips')));
+  const found = [...block.matchAll(/^  '?([\w\s-]+?)'?: \{\n([\s\S]*?)\n  \},$/gm)].map(m => ({
+    kind: `${file.split('/').slice(-2).join('/')} ${m[1]}`,
+    film: field(m[2], 'film'), captions: field(m[2], 'captions'), poster: field(m[2], 'poster'),
+    start: num(m[2], 'start'), duration: num(m[2], 'duration'),
+    saying: field(m[2], 'saying')?.replace(/\\'/g, "'"),
+  }));
+  if (found.length < min) {
+    console.error(`Only ${found.length} clips parsed from ${file}, expected at least ${min}; the map or this parser is wrong.`);
+    process.exit(1);
+  }
+  clips.push(...found);
 }
 
 const secs = t => {

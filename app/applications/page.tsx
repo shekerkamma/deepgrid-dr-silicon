@@ -2,7 +2,7 @@
 
 import {Shell} from '../shell';
 import {SectionHead} from '../detail';
-import {ApplicationsCatalog} from '../applications-catalog';
+import ApplicationsStory from '../applications-story';
 import {PRE_SILICON} from '../copy';
 import Related from '../related';
 
@@ -12,10 +12,10 @@ export default function Page() {
       <section className="page-wrap">
         <SectionHead
           tag="03 / APPLICATIONS"
-          title="The diagnostic catalogue"
-          copy="Condition-monitoring tasks that run on the motor-control core itself, with no external coprocessor. Filter the collection by domain; every task carries the same label."
+          title="What the drive can diagnose on its own controller"
+          copy="Thirty condition-monitoring tasks, told from what they catch to what they cost, with the narrated films at the moments that explain them. Every figure is from the DG32-AI use-case playbook and is derived, not measured."
         />
-        <ApplicationsCatalog/>
+        <ApplicationsStory/>
         <p className="disclaimer">{PRE_SILICON}</p>
       <Related route="applications"/>
       </section>

@@ -8,7 +8,13 @@
 export const BASE = (process.env.NEXT_PUBLIC_PAGES_BASE || '/').replace(/\/?$/, '/');
 
 /** Base-aware href for a root-absolute site path. */
+// Idempotent on purpose. scripts/package-pages.mjs prefixes every quoted "/media/…", "/decks/…" (and
+// the other content roots) inside the JS bundle, so by the time a client render calls url() on one of
+// those literals it already carries the base. Prefixing again produced
+// /deepgrid-dr-silicon-v2/deepgrid-dr-silicon-v2/media/…, a 404 that only a client-mounted element
+// shows: the server-rendered HTML was correct and hydration keeps its attributes.
 export function url(path: string): string {
+  if (BASE !== '/' && path.startsWith(BASE)) return path;
   return path === '/' ? BASE : BASE.replace(/\/$/, '') + path;
 }
 

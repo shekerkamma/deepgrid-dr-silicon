@@ -104,3 +104,84 @@
 @media (max-width: 900px) {
   .dr-evidence-card { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ---------- FilmMoment: a film moment inside an argument ----------
+   At rest: a small slide frame and the narration beside it, on one hairline row. Open: the player
+   takes the full width of the text column and the narration sits under it. */
+.dr-moment {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  margin: 22px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+}
+.dr-moment.is-open {
+  grid-template-columns: minmax(0, 1fr);
+}
+.dr-moment-thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--sc-radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .15s ease;
+}
+.dr-moment-thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+.dr-moment-play {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: var(--sc-radius-sm);
+  background: color-mix(in srgb, var(--background) 90%, transparent);
+  color: var(--copper);
+  font: var(--text-meta) / 1.3 'Courier New', monospace;
+  letter-spacing: var(--sc-track-meta);
+}
+.dr-moment-thumb:hover {
+  border-color: var(--copper);
+}
+.dr-moment-thumb:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.dr-moment-said p {
+  margin: 0;
+  font-size: var(--text-control);
+  line-height: 1.6;
+  color: var(--foreground);
+  text-wrap: pretty;
+}
+.dr-moment-said cite {
+  display: block;
+  margin-top: 8px;
+  font: var(--text-meta) / 1.4 'Courier New', monospace;
+  font-style: normal;
+  letter-spacing: var(--sc-track-meta);
+  color: var(--ink-2);
+}
+@media (max-width: 560px) {
+  .dr-moment {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dr-moment-thumb {
+    max-width: 320px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dr-moment-thumb { transition: none; }
+}
