@@ -1,5 +1,5 @@
 'use client';
-import {useEffect,useRef,useState} from 'react';
+import {useCallback,useEffect,useRef,useState} from 'react';
 import type {Step} from './detail-content';
 
 // The site's signature move. On a desktop viewport the "how a fault is stopped" stage pins, and
@@ -16,7 +16,9 @@ export default function FaultTrace({steps,intro}:{steps:Step[];intro:React.React
  const last=steps.length-1;
  const [pinned,setPinned]=useState(false);
  const [step,setStep]=useState(last);
- const geometry=()=>{const el=wrap.current!;const navH=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'))||59;const r=el.getBoundingClientRect();return {navH,top:r.top+scrollY,travel:Math.max(1,r.height-(innerHeight-navH)),r};};
+ // Stable: it reads a ref and the DOM, nothing reactive. As a plain arrow it was a new function
+ // each render, which is the only reason the effect needed a dependency suppression.
+ const geometry=useCallback(()=>{const el=wrap.current!;const navH=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'))||59;const r=el.getBoundingClientRect();return {navH,top:r.top+scrollY,travel:Math.max(1,r.height-(innerHeight-navH)),r};},[]);
  useEffect(()=>{
   const mq=matchMedia(PIN);let raf=0;
   const tick=()=>{raf=0;if(!wrap.current)return;const {navH,travel,r}=geometry();const p=Math.min(1,Math.max(0,(navH-r.top)/travel));setStep(Math.min(last,Math.floor(p*steps.length*0.999)));};
@@ -24,8 +26,7 @@ export default function FaultTrace({steps,intro}:{steps:Step[];intro:React.React
   const apply=()=>{removeEventListener('scroll',onScroll);setPinned(mq.matches);if(mq.matches){addEventListener('scroll',onScroll,{passive:true});requestAnimationFrame(tick);}else setStep(last);};
   apply();mq.addEventListener('change',apply);
   return ()=>{mq.removeEventListener('change',apply);removeEventListener('scroll',onScroll);cancelAnimationFrame(raf);};
- // eslint-disable-next-line react-hooks/exhaustive-deps
- },[last]);
+ },[last,steps.length,geometry]);
  const jump=(i:number)=>{
   setStep(i);
   if(pinned){

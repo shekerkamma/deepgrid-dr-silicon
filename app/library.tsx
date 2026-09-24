@@ -11,12 +11,15 @@ export default function Library({pkgId,slide,onChange,go}:{pkgId:string;slide:nu
  const pkg=packages.find(p=>p.id===pkgId)||packages[0];
  const count=pkg.slides.length, n=Math.max(1,Math.min(count,slide||1));
  const video=useRef<HTMLVideoElement>(null), strip=useRef<HTMLUListElement>(null);
- const [playingSlide,setPlayingSlide]=useState(0);
+ // Which slide the film is on, tagged with the package it belongs to. Tagging it means switching
+ // package derives back to 0 during render instead of needing an effect to reset it: a setState
+ // inside an effect renders the old package's slide once, then immediately renders again.
+ const [playing,setPlaying]=useState({pkg:pkgId,slide:0});
+ const playingSlide=playing.pkg===pkg.id?playing.slide:0;
  const src=(i:number)=>`${pkg.slideDir}/slide-${String(i).padStart(2,'0')}.webp`;
  const setSlide=(i:number)=>onChange({pkg:pkg.id,slide:String(Math.max(1,Math.min(count,i)))});
  // the film and the deck share slide numbers: follow the film while it plays
- useEffect(()=>{const v=video.current;if(!v)return;const tick=()=>{const t=v.currentTime;let cur=0;for(const s of pkg.segments)if(t>=s.start)cur=s.slide;setPlayingSlide(v.paused?0:cur);};v.addEventListener('timeupdate',tick);v.addEventListener('pause',tick);return()=>{v.removeEventListener('timeupdate',tick);v.removeEventListener('pause',tick);};},[pkg]);
- useEffect(()=>{setPlayingSlide(0);},[pkg.id]);
+ useEffect(()=>{const v=video.current;if(!v)return;const tick=()=>{const t=v.currentTime;let cur=0;for(const s of pkg.segments)if(t>=s.start)cur=s.slide;setPlaying({pkg:pkg.id,slide:v.paused?0:cur});};v.addEventListener('timeupdate',tick);v.addEventListener('pause',tick);return()=>{v.removeEventListener('timeupdate',tick);v.removeEventListener('pause',tick);};},[pkg]);
  useEffect(()=>{strip.current?.querySelector<HTMLElement>(`[data-slide="${n}"]`)?.scrollIntoView({block:'nearest',inline:'nearest'});},[n,pkg.id]);
  const seek=(t:number)=>{const v=video.current;if(!v)return;v.currentTime=t+0.01;v.play().catch(()=>{});v.scrollIntoView({block:'nearest'});};
  const playSlide=(i:number)=>{const s=pkg.segments.find(x=>x.slide===i);if(s)seek(s.start);};
