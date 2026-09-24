@@ -5,7 +5,8 @@ import {useNav} from './shell';
 import {url} from './routes';
 import {FilmMoment, type Clip} from './evidence-clip';
 import {diagnosticTasks, type UseCase} from './diagnostic-tasks';
-import {clips, families, models, needsResolution} from './applications-story-data';
+import {clips, families, models, needsResolution, sockets, SOCKET_SOURCE} from './applications-story-data';
+import ApplicationsPortfolio from './applications-portfolio';
 import './story.css';
 
 /** /applications told as a story: docs/applications-story.md is the storyboard, and the playbook
@@ -22,6 +23,8 @@ const PLAYBOOK = '/downloads/docs/deepgrid-dg32-ai-30-use-cases.pdf';
 // A task below 1 kHz is marked where it sits. The playbook names six; the page counts them from the
 // data rather than restating the number, so a corrected row cannot leave the prose behind.
 const slow = (t: UseCase) => !t.rate.startsWith('>');
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const socketsFor = (name: string) => sockets.filter(k => k.tasks.includes(name));
 
 function Source({children}: {children: React.ReactNode}) {
   return <p className="st-source">{children}</p>;
@@ -51,10 +54,17 @@ function Beat({id, title, films, wide, children}: {
 function Task({t}: {t: UseCase}) {
   const features = t.features === 'None' ? '' : ` · ${t.features}`;
   return (
-    <li className="st-task">
+    <li className="st-task" id={'task-' + slug(t.name)}>
       <div className="st-task-problem">
         <h4>{t.name}</h4>
         <p>{t.detects}</p>
+        {socketsFor(t.name).length > 0 && (
+          <p className="st-task-where">
+            Goes into: {socketsFor(t.name).map((k, i) => (
+              <span key={k.id}>{i > 0 && ', '}<a href={'#socket-' + k.id}>{k.short}</a></span>
+            ))}
+          </p>
+        )}
         {needsResolution.has(t.name) && (
           <p className="st-task-note"><a href="#st-sensors">Needs a 12 to 16-bit converter, or analog gain ahead of it</a></p>
         )}
@@ -86,22 +96,32 @@ export default function ApplicationsStory() {
 
   return (
     <div className="st-story">
-      {/* 1. The answer, before any argument. */}
+      {/* 0. The portfolio, by where it goes: structured like the showcase's Product lines page. */}
+      <ApplicationsPortfolio/>
+
+      {/* 1. DG32 in depth: the answer for the one part on silicon. */}
       <section className="st-beat st-answer" id="st-answer" aria-labelledby="st-answer-h">
         <div className="st-beat-text">
-          <h2 id="st-answer-h">Thirty diagnostic tasks run on the motor controller the drive already has.</h2>
+          <p className="st-fam-kicker">Motors and drives, in depth</p>
+          <h2 id="st-answer-h">DG32-LITE is a safety microcontroller for motors and batteries, and it can watch the machine it controls.</h2>
           <p>
-            A motor drive already carries a processor to run the motor. DG32-LITE lets that same
-            processor watch the motor for faults: a wearing bearing, a broken rotor bar, a pump running
-            dry, a winding getting hot. Every task on this page fits in the cycles its single 50&nbsp;MHz
-            core has left after motor control, with no accelerator and no second chip on the board.
+            In DeepGrid&rsquo;s portfolio it is SKU-4, the safety MCU. It is built to take the socket a
+            Microchip or Renesas functional-safety microcontroller holds today: the independent processor
+            in a battery pack, a motor drive, a braking or steering controller, a robot joint or a
+            drone&rsquo;s redundant flight path, whose job is to catch a fault and shut the system down.
+          </p>
+          <p>
+            Because it already sits beside the motor, it can do a second job in its spare cycles: watch
+            that motor for faults before they trip anything. A wearing bearing, a broken rotor bar, a
+            pump running dry, a winding getting hot. That is what the thirty tasks on this page are, and
+            every one fits on its single 50&nbsp;MHz core with no accelerator and no second chip.
           </p>
           <p>
             {diagnosticTasks.length - slowCount} of the {diagnosticTasks.length} run faster than
             1&nbsp;kHz. The slowest takes 10.3&nbsp;ms and the largest needs 20&nbsp;KB. The limit that
             actually binds is the sensor on the motor, not the chip, and this page says where.
           </p>
-          <Source>DG32-AI use-case playbook, pages 1 and 3</Source>
+          <Source>{SOCKET_SOURCE} · DG32-AI use-case playbook, pages 1 and 3</Source>
         </div>
         <nav className="st-families st-cols-4" aria-label="The four families of tasks">
           {families.map(f => (
@@ -112,6 +132,39 @@ export default function ApplicationsStory() {
             </a>
           ))}
         </nav>
+      </section>
+
+      {/* 1b. Where it goes: the Annex's sockets, each with the tasks that fit it. */}
+      <section className="st-beat" id="st-sockets" aria-labelledby="st-sockets-h">
+        <div className="st-beat-text">
+          <h2 id="st-sockets-h">It goes into five places, and each one has its own faults worth watching.</h2>
+          <p>
+            The sockets below are DeepGrid&rsquo;s own, from the portfolio annex. Beside each are the
+            tasks from this page that fit it. That pairing is ours: the annex names the sockets and the
+            playbook costs the tasks, but neither document matches them up.
+          </p>
+          <Source>{SOCKET_SOURCE}: &ldquo;replaces Microchip/Renesas functional-safety MCU sockets&rdquo;</Source>
+        </div>
+        <div className="st-beat-wide">
+          <ol className="st-sockets">
+            {sockets.map(k => (
+              <li key={k.id} id={'socket-' + k.id}>
+                <div>
+                  <h3>{k.name}</h3>
+                  <p>{k.what}</p>
+                  {k.limit && <p className="st-socket-limit">{k.limit}</p>}
+                </div>
+                <ul aria-label={'Tasks that fit: ' + k.name}>
+                  {k.tasks.map(n => <li key={n}><a href={'#task-' + slug(n)}>{n}</a></li>)}
+                </ul>
+              </li>
+            ))}
+          </ol>
+          <p className="st-aside st-sockets-foot">
+            The annex describes the lockstep safety MCU as on an ISO&nbsp;26262 ASIL-D path. That is a
+            direction, not a certification: no functional-safety certification is claimed for DG32.
+          </p>
+        </div>
       </section>
 
       {/* 2. Context: control comes first. */}

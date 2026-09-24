@@ -125,3 +125,141 @@ export const families: {
 
 /** Tasks the playbook (page 11) names as needing more than the part's 8-bit converter. */
 export const needsResolution = new Set(['Broken rotor bar detection', 'Air-gap eccentricity', 'Stator inter-turn short']);
+
+/** Where DG32-LITE goes: SKU-4, the Safety MCU, in the SKU Architecture Compendium (Technical
+ *  Annex v3, sheet 5, public/downloads/docs/deepgrid-sku-compendium-technical-annex-v3.pdf). The
+ *  sockets are the Annex's own words. The `tasks` on each are OUR pairing of the playbook's tasks
+ *  with those sockets; neither document makes it, and the page says so. Every name must match a row
+ *  in app/diagnostic-tasks.ts exactly (scripts/check-usecases.mjs checks).
+ *
+ *  Deliberately not used from the Annex: its SKU-4 specification (200 MHz, ECC, 1 MB flash) describes
+ *  the product line, not the DG32-LITE open-PDK part; "ASIL-D" is stated only as a path, since the
+ *  site claims no certification; and "MCEME ₹1.01 Cr" is a withheld claim that failed verification. */
+export const SOCKET_SOURCE = 'SKU Architecture Compendium, Technical Annex v3, sheet 5';
+export const sockets: {id: string; name: string; short: string; what: string; limit?: string; tasks: string[]}[] = [
+  {
+    id: 'bms', short: 'Battery and motor supervision', name: 'EV battery management and motor-safety supervision',
+    what: 'The independent processor that watches a battery pack or a drive and can shut it down. Lockstep cores and the FAULT_N pin are the supervision; the diagnostics add warning before a trip.',
+    tasks: ['Battery state-of-health', 'Winding thermal estimation', 'Phase loss and current unbalance', 'Stator inter-turn short', 'Multivariate anomaly scoring'],
+  },
+  {
+    id: 'brake-steer', short: 'Braking and steering', name: 'Braking and steering controllers',
+    what: 'Drives where a wrong output is a safety event, so a silent CPU fault has to trip in hardware.',
+    limit: 'These need the CAN-FD vehicle bus, which is on the roadmap and not on DG32-LITE.',
+    tasks: ['Learned sensor plausibility', 'Sensorless rotor position', 'Kickback and stall detection', 'Load estimation and torque ripple'],
+  },
+  {
+    id: 'joints', short: 'Robot joints', name: 'Robot joints',
+    what: 'One controller per joint, running the motor loop and watching the gearbox and load behind it.',
+    tasks: ['Adaptive friction compensation', 'Gearbox and gear-mesh faults', 'Kickback and stall detection', 'Operating-mode classification', 'Duty-cycle and state tracking'],
+  },
+  {
+    id: 'bldc', short: 'BLDC motor control', name: 'The motor-control processor beside a BLDC driver',
+    what: 'The field-oriented-control processor next to SKU-1, DeepGrid’s BLDC motor controller for fans, appliances, EV two- and three-wheelers, robotics and actuator joints.',
+    tasks: ['Bearing fault classification', 'Fan and blower imbalance', 'Pump cavitation and dry-run', 'Compressor valve faults', 'Broken rotor bar detection', 'Belt slip and misalignment'],
+  },
+  {
+    id: 'flight', short: 'Drone flight redundancy', name: 'Flight-critical redundancy for the D100 drone programme',
+    what: 'A second, independent safety processor beside the flight computer. DG32-LITE drives drone speed controllers directly through its four hardware DShot channels.',
+    tasks: ['Learned sensor plausibility', 'Multivariate anomaly scoring', 'Kickback and stall detection'],
+  },
+];
+
+/** The portfolio, by where it ends up. Source: the SKU Architecture Compendium (Technical Annex v3,
+ *  public/downloads/docs/deepgrid-sku-compendium-technical-annex-v3.pdf), one sheet per product;
+ *  its markdown matrix (deepgrid-sku-compendium-architecture.md) and the mature-silicon architecture
+ *  section 7 agree on every product. `replaces`, `goes` and `status` restate each sheet's own
+ *  "Replaces", "Socket" and "Status & node path" panels in plain words.
+ *
+ *  Left out on purpose, per the site's own rules: anchor customers (the only one verified, MCEME,
+ *  failed), market sizes and prices (the Annex flags them as internal estimates), and specifications
+ *  for any part without silicon. D100's node is the Annex matrix's own "130nm + 28nm SiP": sheet 11
+ *  names the 130 nm die and app/detail-content.ts the TSMC 28 nm one, and both are in the package. */
+export type ProductId = 'sku1' | 'sku2' | 'sku3' | 'sku4' | 'sku5' | 'sku6' | 'sku7' | 'sku8' | 'sku9' | 'd100';
+export const products: Record<ProductId, {name: string; tag: string; sheet: number; replaces?: string; status?: string}> = {
+  sku1: {name: 'BLDC motor controller', tag: 'SKU-1', sheet: 2,
+    replaces: 'A motor-driver chip plus a separate microcontroller, collapsed into one die.',
+    status: 'First multi-project wafer run, cycle 1.'},
+  sku2: {name: 'Smart-meter SoC', tag: 'SKU-2', sheet: 3,
+    replaces: 'A metrology front end plus a separate meter microcontroller.',
+    status: 'Cycle-1 wafer run, alongside SKU-1.'},
+  sku3: {name: 'High-reliability power IC', tag: 'SKU-3', sheet: 4,
+    replaces: 'Imported qualified power parts in avionics and military-vehicle electronics.',
+    status: 'Prototyped on 130 nm, produced at SCL 180 nm in India.'},
+  sku4: {name: 'DG32-LITE safety microcontroller', tag: 'SKU-4', sheet: 5,
+    replaces: 'Imported functional-safety microcontrollers of the Microchip and Renesas class.',
+    status: 'On first silicon: the September 2026 multi-project shuttle.'},
+  sku5: {name: 'RS-485 and CAN-FD transceiver', tag: 'SKU-5', sheet: 6,
+    replaces: 'TI, ADI and Renesas interface parts facing obsolescence.',
+    status: 'Cycle-2 wafer run.'},
+  sku6: {name: 'Voltage supervisor', tag: 'SKU-6', sheet: 7,
+    replaces: 'TI and Maxim supervisor chips.',
+    status: 'Cycle-1 or cycle-2 wafer run; the first chip planned through MIL-883 qualification.'},
+  sku7: {name: '77 GHz 4D radar', tag: 'SKU-7', sheet: 8,
+    replaces: 'Radar front ends under US export control: this one is fabricated at IHP in Germany.',
+    status: 'IHP wafer run, FY28. The sheet states the SiGe front end is proven on silicon or not at all.'},
+  sku8: {name: 'Rugged display driver', tag: 'SKU-8', sheet: 9,
+    replaces: 'Imported display timing controllers and source drivers.',
+    status: 'Cycle-3 wafer run.'},
+  sku9: {name: 'Zonal gateway', tag: 'SKU-9', sheet: 10,
+    replaces: 'Relay boxes and point-to-point wiring harnesses.'},
+  d100: {name: 'D100 drone SoC', tag: 'D100', sheet: 11,
+    replaces: 'Nothing made in India: no indigenous flight-control and navigation SoC exists, and the sheet states that gap with references.',
+    status: 'FPGA prototype. Track B: scoped and funded separately from the nine SKUs.'},
+};
+
+export const areas: {
+  id: string; name: string; headline: string; lede: string;
+  items: {product: ProductId; role: string; primary?: boolean}[];
+}[] = [
+  {
+    id: 'motors', name: 'Motors and drives',
+    headline: 'In a motor drive, one chip runs the motor and another can stop it safely.',
+    lede: 'SKU-1 replaces the driver-plus-microcontroller pair in fans, appliances, EV two- and three-wheelers, robots and actuators. SKU-4, DG32-LITE, is the safety processor that supervises a motor and can shut it down.',
+    items: [
+      {product: 'sku1', primary: true, role: 'Runs the motor: fans, appliances, EV two- and three-wheelers, robotics and actuator joints.'},
+      {product: 'sku4', primary: true, role: 'Supervises the motor: motor-safety supervision, robot joints, and the field-oriented-control processor beside SKU-1.'},
+    ],
+  },
+  {
+    id: 'vehicles', name: 'Vehicles',
+    headline: 'In a vehicle, the chips sit at the edges: the battery, the brakes, the radar, the bus and the wiring zones.',
+    lede: 'The central computer of a software-defined vehicle is a sub-10 nm problem and is explicitly not claimed. What mature nodes own is everything around it.',
+    items: [
+      {product: 'sku9', primary: true, role: 'The zonal layer of a software-defined vehicle: gateway, smart inputs and outputs, and the safety and security edge.'},
+      {product: 'sku4', role: 'EV battery management, and braking and steering controllers. Braking and steering need CAN-FD, which is on the DG32 roadmap and not on DG32-LITE.'},
+      {product: 'sku7', primary: true, role: 'DeepGrid’s own truck mirror-tower radar, and automotive emergency braking.'},
+      {product: 'sku5', primary: true, role: 'The CAN-FD and RS-485 link at every node on the vehicle bus.'},
+    ],
+  },
+  {
+    id: 'defence', name: 'Defence, avionics and drones',
+    headline: 'Defence, avionics and drones need screened parts, and a failsafe that does not depend on software.',
+    lede: 'The drone SoC keeps a hardware failsafe island wired straight to the motor controllers, so a crashed or jammed mission stack can still land the airframe.',
+    items: [
+      {product: 'd100', primary: true, role: 'Flight control and visual-inertial navigation for drones, with a hardware failsafe to the speed controllers. Navigation is geometric, so it survives GPS jamming.'},
+      {product: 'sku3', primary: true, role: 'The sequenced 28 V power rails of avionics and military-vehicle electronics.'},
+      {product: 'sku8', primary: true, role: 'Rugged cockpit displays.'},
+      {product: 'sku7', role: 'Defence perimeter and counter-drone radar.'},
+      {product: 'sku4', role: 'Flight-critical redundancy feeding the D100 roadmap.'},
+    ],
+  },
+  {
+    id: 'grid', name: 'Grid and metering',
+    headline: 'For the national smart-meter rollout, one chip measures the power and records tampering.',
+    lede: 'Tamper detection is a tender requirement, so the chip keeps an always-on clock domain that logs a magnet or an opened case while mains power is cut.',
+    items: [
+      {product: 'sku2', primary: true, role: 'Class 0.5S metrology for electricity meters, with tamper logging on backup power.'},
+    ],
+  },
+  {
+    id: 'boards', name: 'On nearly every board',
+    headline: 'Some parts go on nearly every circuit board, which is where the volume is.',
+    lede: 'A supervisor watches a board’s power rails and a transceiver connects it to its bus. Neither is glamorous, and both ship with almost everything.',
+    items: [
+      {product: 'sku6', primary: true, role: 'Watches up to four power rails and latches a fault, on nearly every circuit board.'},
+      {product: 'sku5', role: 'Ships with every node on every industrial bus, including harsh wiring harnesses.'},
+      {product: 'sku8', role: 'Industrial control panels, rail passenger displays and automotive instrument clusters.'},
+    ],
+  },
+];

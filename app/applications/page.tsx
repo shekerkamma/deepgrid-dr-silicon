@@ -12,8 +12,8 @@ export default function Page() {
       <section className="page-wrap">
         <SectionHead
           tag="03 / APPLICATIONS"
-          title="What the drive can diagnose on its own controller"
-          copy="Thirty condition-monitoring tasks, told from what they catch to what they cost, with the narrated films at the moments that explain them. Every figure is from the DG32-AI use-case playbook and is derived, not measured."
+          title="Ten chips, five kinds of system"
+          copy="DeepGrid's portfolio by the systems it goes into. Open a chip for what it replaces and its annex sheet; DG32-LITE, the part on first silicon, opens into its diagnostic story and films."
         />
         <ApplicationsStory/>
         <p className="disclaimer">{PRE_SILICON}</p>

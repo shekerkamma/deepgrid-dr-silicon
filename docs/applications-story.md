@@ -10,6 +10,43 @@ video spotlight."
 (12 pages; section numbers below are its own). The films sit inside the beats they explain. There is
 no separate player. Every film moment below was checked against its `.vtt` caption file.
 
+## Revision, 2026-09-24: where the chip goes
+
+User: "what exactly are these applications", pointing at the playbook and the SKU Architecture
+Compendium (Technical Annex v3). The first build told what the chip can *compute* and never where it
+is *used*. The Annex answers that: DG32-LITE is **SKU-4, the Safety MCU** (sheet 5). It replaces
+"Microchip/Renesas functional-safety MCU sockets — 3–10M/yr India, $4–12 ASP", in "EV BMS and
+motor-safety supervision, braking/steering controllers, robot joints — plus the FOC brain beside
+SKU-1 and flight-critical redundancy feeding the D100 roadmap."
+
+New beat 1b, straight after the answer: **the five sockets**, each with what the chip does there and
+the playbook tasks that fit it. The socket-to-task pairing is our synthesis; neither document makes
+it, and the page says so. Three limits hold: ASIL-D is a *path* (no certification is claimed);
+braking and steering need CAN-FD, which is on the roadmap and not on this part; the Annex's SKU-4
+specifications (200 MHz, ECC, 1 MB flash) describe the product line, not DG32-LITE, so only its
+sockets are used. MCEME ₹1.01 Cr is withheld (failed verification) and never appears.
+
+## Revision 2, 2026-09-24: the whole portfolio, not SKU-4 alone
+
+User: "there are several SKUs, why you are choosing SKU 4 alone". Revision 1 answered where *DG32*
+goes. The site covers nine SKUs plus D100 and the SDV platform, so /applications now opens on where
+DeepGrid's silicon goes, organised by where it ends up (a reader thinks in machines and markets, not
+SKU numbers), and the DG32 story becomes the deep dive under "Motors and drives".
+
+Sources, in order of authority: the Technical Annex v3 PDF (primary; the only source for the
+"replaces / socket" text of SKU-3, 5, 6, 8, 9), its markdown matrix, the mature-silicon architecture
+section 7, and the D100 and SDV markdown. No graphify pass was needed: the text extracts cleanly and
+the existing graph holds two SKU nodes.
+
+Five application areas: motors and drives (SKU-1, SKU-4 + 2DOM); vehicles (SKU-9, SKU-4, SKU-7,
+SKU-5); defence, avionics and drones (D100, SKU-3, SKU-8, SKU-7, SKU-4); grid and metering (SKU-2);
+on every board (SKU-5, SKU-6, SKU-8).
+
+Kept out, per the site's own rules: anchor customers (section 7 names one per chip; the only one
+verified, MCEME, failed), market sizes and ASPs (the Annex flags them as internal estimates), and
+specifications for any part without silicon. Only DG32-LITE is on first silicon; the rest are
+architecture sheets, and the page says so.
+
 ## 1. BLUF
 
 The motor controller a drive already has can watch its own motor: thirty condition-monitoring tasks

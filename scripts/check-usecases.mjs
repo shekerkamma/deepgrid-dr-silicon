@@ -53,6 +53,14 @@ for (const m of block.matchAll(/id: '([\w-]+)',[\s\S]{0,400}?tasksCount: '(\d+)/
   if (have !== Number(declared)) problems.push(`domain "${id}": ${have} task(s) in the table, ${declared} declared in diagnosticDomains`);
 }
 
+// /applications pairs tasks with the sockets DG32-LITE goes into (app/applications-story-data.ts).
+// Each name there must match a task row exactly, or the page would link to a task that is not listed.
+const story = fs.readFileSync(path.join(root, 'app/applications-story-data.ts'), 'utf8');
+const socketBlock = story.slice(story.indexOf('export const sockets'));
+const paired = [...socketBlock.matchAll(/tasks: \[([^\]]*)\]/g)].flatMap(m => [...m[1].matchAll(/'([^']+)'/g)].map(x => x[1]));
+if (!paired.length) problems.push('no socket task pairings parsed from app/applications-story-data.ts');
+for (const n of paired) if (!names.includes(n)) problems.push(`socket pairing names "${n}", which is not a task in app/diagnostic-tasks.ts`);
+
 if (problems.length) {
   console.error(`${problems.length} task-catalogue problem(s):\n`);
   for (const p of problems) console.error('  ' + p);

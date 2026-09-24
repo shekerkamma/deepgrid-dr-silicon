@@ -439,3 +439,101 @@
     transition: none;
   }
 }
+
+/* ---------- where it goes: the sockets, each with the tasks that fit ---------- */
+.st-sockets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+.st-sockets > li {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 32px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule);
+  scroll-margin-top: 80px;
+}
+.st-sockets h3 {
+  margin: 0 0 6px;
+  font: 1.3rem / 1.25 var(--serif);
+  letter-spacing: var(--sc-track-card);
+  color: var(--foreground);
+}
+.st-sockets p {
+  margin: 0;
+  font-size: var(--text-control);
+  line-height: 1.6;
+  color: var(--muted-foreground);
+  max-width: 60ch;
+}
+.st-socket-limit {
+  margin-top: 8px !important;
+  color: var(--copper) !important;
+}
+.st-sockets ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  gap: 8px;
+}
+.st-sockets ul a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--sc-radius-sm);
+  font-size: var(--text-control);
+  color: var(--foreground);
+  transition: border-color .15s ease, color .15s ease;
+}
+.st-sockets ul a:hover {
+  border-color: var(--copper);
+  color: var(--copper);
+}
+.st-sockets ul a:focus-visible,
+.st-task-where a:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.st-sockets-foot {
+  margin-top: 14px;
+}
+.st-task {
+  scroll-margin-top: 80px;
+}
+.st-task-where {
+  margin-top: 6px !important;
+  font-size: var(--text-meta) !important;
+  color: var(--ink-2) !important;
+}
+.st-task-where a {
+  /* a link in running meta text still needs a 24px target (WCAG 2.5.8); the route gate checks it */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  color: var(--copper);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--copper) 40%, transparent);
+}
+@media (max-width: 760px) {
+  .st-sockets > li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .st-sockets ul a { transition: none; }
+}
+
+/* the answer beat opens the page; the DG32 answer below it is a chapter, so it gets the rule back */
+#st-answer {
+  border-top: 1px solid var(--rule);
+  padding-top: 56px;
+}
