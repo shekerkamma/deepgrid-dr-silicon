@@ -324,7 +324,7 @@ export default function AskDeepGrid({go}: {go: (hash: string) => void}) {
         </div>
 
         <span className="dr-ask-badge-verified">
-          <ShieldCheck size={14} /> 100% SPEC-VERIFIED
+          <ShieldCheck size={14} /> SOURCES CITED
         </span>
       </div>
 

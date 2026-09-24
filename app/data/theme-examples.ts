@@ -64,7 +64,7 @@ export const THEME_EXAMPLES: Record<string, string[]> = {
     'Could DG32 be clocked higher?',
     'What is the fmax of the lockstep core?',
   ],
-  'DG32 vs. STM32G0: Hardware Lockstep, BOM Cost & Latency Benchmark': [
+  'DG32 vs. STM32G0: Where Each Leads, and Why': [
     'How is DG32 different from an STM32G0?',
     'Why choose DG32 over an existing ST microcontroller?',
     'What does DG32 cost compared with incumbent motor-control MCUs?',
@@ -92,7 +92,7 @@ export const THEME_EXAMPLES: Record<string, string[]> = {
     'How are the supply and ground pins arranged on the QFN?',
     'What does the exposed thermal pad connect to?',
   ],
-  'Sovereign Supply Chain Immunity: The Three-Factory & 100% Domestic Architecture': [
+  'Three Factories, Three Countries: How the Supply Chain Is Sequenced': [
     'What happens to supply if one foundry becomes unavailable?',
     'Is DeepGrid dependent on Taiwanese fabs?',
     'How resilient is DeepGrid’s manufacturing to export controls?',

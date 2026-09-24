@@ -7,7 +7,8 @@ import {useEffect} from 'react';
 //
 //   draw   the Fmax bars and the loop-budget stack grow from their own baseline instead of being
 //          present at full length, which is what makes a chart read as measured rather than drawn.
-//   rail   the roadmap travels sideways under a held heading. Chronology reads as lateral travel;
+//   rail   the roadmap travels sideways while its stage is held mid-screen (the section heading scrolls
+//          past first; it sits outside the sticky stage). Chronology reads as lateral travel;
 //          stacking it vertically reads as an argument, which a roadmap is not.
 
 const idle = (fn: () => void) => requestAnimationFrame(() => requestAnimationFrame(fn));

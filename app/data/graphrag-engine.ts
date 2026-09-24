@@ -386,7 +386,7 @@ export const executiveThemes: ExecutiveTheme[] = [
     pdfSize: '5.4 MB',
     specPath: '/downloads/docs/deepgrid-mature-silicon-architecture.md',
     refLinks: [
-      { label: 'Executive Procurement Scorecard', hash: 'overview', description: 'Review commercial comparisons across BOM cost, turnaround agility, and export risks.' },
+      { label: 'Where DG32 leads, and where it does not', hash: 'procurement', description: 'The comparison with the STM32G0, gaps included, and the roadmap that closes them.' },
       { label: 'Dual-Foundry Manufacturing Strategy', hash: 'roadmap', description: 'Examine SkyWater 130 nm and SCL Mohali 180 nm qualification milestones.' }
     ]
   },
@@ -454,30 +454,35 @@ export const executiveThemes: ExecutiveTheme[] = [
   // 9. DG32 vs STM32G0 Benchmark
   {
     keywords: ['compare dg32', 'stm32g0', 'stm32', 'dg32 vs stm32', 'procurement benchmark', 'scorecard'],
-    title: 'DG32 vs. STM32G0: Hardware Lockstep, BOM Cost & Latency Benchmark',
-    tag: 'EXECUTIVE PROCUREMENT SCORECARD & BENCHMARK',
-    lead: 'DG32 replaces STM32G0 and external supervisory ICs by integrating cycle-accurate dual-core hardware lockstep, dedicated CORDIC vector math, and hardware DShot decoding into a single $3.10 QFN-64 package, delivering 40 ns fault shutoff vs. 15–50 µs firmware watchdogs.',
+    // Rewritten 2026-09-24 (docs/brainstorm-visual-audit.md, V2b). The previous answer priced DG32 at
+    // "$3.10" against "$6.50-$9.00" drive BOMs, claimed "<40 ns" fault shutoff and "guaranteed sovereign
+    // supply", and cited an Annex "Section 4: Competitive Benchmarks" that does not exist. None of those
+    // figures is in a source, and the site claims no price against any competitor. Every line below is
+    // from the DG32-LITE Architecture Guide, "Position against the incumbent" and "Component: Safety core".
+    title: 'DG32 vs. STM32G0: Where Each Leads, and Why',
+    tag: 'COMPETITIVE POSITION · STM32G0',
+    lead: 'Against the STM32G0 series, the entry-level motor-control incumbent, DG32-LITE leads on hardware lockstep, native DShot, hardware CORDIC, the on-chip AI variant and an open RISC-V instruction set with no core licence. The STM32G0 leads on a 12-bit 2.5 MSa/s multi-channel ADC, embedded flash, USB and CAN-FD, package range and production maturity. DG32 figures are simulated, not measured on silicon.',
     explanation: [
-      'Fault Response Latency: STM32G0 relies on firmware interrupt service routines (ISRs) and software watchdogs that require 15 to 50 microseconds to react to shoot-through or short circuits—frequently acting after power MOSFETs have already exploded. DG32 integrates a cycle-by-cycle hardware comparator that latches power bridges into a safe state within 2 clock cycles (<40 ns), completely bypassing firmware.',
-      'Inner-Loop Math Offload: Executing Park/Clarke vector transforms and CORDIC rotation in software on STM32G0 consumes 40%–60% of CPU cycles at 20 kHz PWM. DG32 hardwires all vector trigonometry directly into silicon gates, completing the full inner loop in 300 cycles (6.0 µs) and freeing 88% of CPU headroom for diagnostics.',
-      'BOM Integration & Price Parity: Conventional drives require an external supervisory IC, external watchdog, and external gate driver monitoring circuits, raising total drive BOM to $6.50–$9.00. DG32 integrates these functions directly on mature 130 nm silicon, pricing at sub-$3.10 while guaranteeing sovereign multi-year supply.'
+      'Fault response: MAIN runs the application while CHECKER runs the same instructions two cycles later, and every committed store is compared. A mismatch sets a sticky bit and asserts FAULT_N, which turns the bridge off in hardware without waiting for firmware: 39 cycles from injection to latch, in simulation. Entry-level parts catch faults with watchdogs and periodic software self-test.',
+      'Control loop: the expensive steps of motor control run in dedicated hardware, so one current loop costs about 300 hardware cycles at any loop rate, and the rest of each period is left for firmware.',
+      'Where the G0 leads, and the plan: its 12-bit multi-channel ADC, embedded flash, USB and CAN-FD are real advantages today. The second spin adds a 12-bit multi-channel ADC and embedded flash; CAN-FD and interactive CPU debug follow, with DG32-2DOM in parallel.'
     ],
     facts: [
-      'Trip Latency: <40 ns autonomous hardware trip vs. 15–50 µs firmware watchdogs on STM32G0.',
-      'Control Headroom: 88% free CPU cycles at 20 kHz PWM vs. <40% on software-bound MCUs.',
-      'System BOM: Eliminates external supervisory ICs, reducing drive electronics cost by $3.50+ per inverter.',
-      'Sovereignty: Manufactured on mature nodes with zero export control or single-source fab risk.'
+      'Fault path: 39 cycles from injection to latch, simulated.',
+      'Loop cost: about 300 hardware cycles per current loop, the same at every rate.',
+      'The G0 leads on a 12-bit 2.5 MSa/s ADC, embedded flash, USB, CAN-FD and production maturity.',
+      'No price comparison: this site makes no cost claim against any competitor.'
     ],
-    docNum: '02',
-    docTitle: 'Technical Annex v3 (10 SKUs, D100 & SDV)',
-    section: 'Section 4: Competitive Benchmarks & Procurement Scorecard',
-    page: 'p. 8',
-    pdfPath: '/downloads/docs/deepgrid-sku-compendium-technical-annex-v3.pdf',
-    pdfSize: '4.8 MB',
-    specPath: '/downloads/docs/deepgrid-sku-compendium-architecture.md',
+    docNum: '06',
+    docTitle: 'DG32-LITE Architecture Guide',
+    section: 'Position against the incumbent',
+    page: 'Markdown guide; also the architecture film, slide 14',
+    pdfPath: '/downloads/dg32-lite-architecture-guide.md',
+    pdfSize: '11 KB',
+    specPath: '/downloads/dg32-lite-architecture-guide.md',
     refLinks: [
-      { label: 'Executive Procurement Scorecard', hash: 'overview', description: 'Review commercial comparisons across BOM cost, turnaround agility, and export risks.' },
-      { label: 'Compare Product Family SKUs', hash: 'family', description: 'Review head-to-head silicon specifications across the catalogue.' }
+      { label: 'Where DG32 leads, and where it does not', hash: 'procurement', description: 'The full comparison with the STM32G0, gaps included, and the roadmap that closes them.' },
+      { label: 'The control-loop budget', hash: 'control', description: 'What one current loop costs in hardware cycles, and what is left for firmware.' }
     ]
   },
 
@@ -579,9 +584,9 @@ export const executiveThemes: ExecutiveTheme[] = [
       'import substitution', 'foundry roadmap', 'skywater', 'ihp', 'scl mohali',
       'domestic supply', 'geopolitical'
     ],
-    title: 'Sovereign Supply Chain Immunity: The Three-Factory & 100% Domestic Architecture',
+    title: 'Three Factories, Three Countries: How the Supply Chain Is Sequenced',
     tag: 'SOVEREIGN SUPPLY CHAIN IMMUNITY · THREE-FACTORY ROADMAP',
-    lead: 'DeepGrid silicon achieves complete immunity from global semiconductor disruptions through a sovereign Three-Factory manufacturing strategy: dual-sourcing across SkyWater (130 nm CMOS) and SCL Mohali (180 nm BCD), utilizing open-source EDA tooling free of Western export controls, and packaging in standard wirebond QFNs available entirely within India.',
+    lead: 'DeepGrid designs for three foundries in sequence rather than one: SkyWater in the USA (130 nm) for first silicon, IHP in Germany (130 nm SiGe) for the radar front end, and SCL Mohali in India (180 nm) for production. That spreads the risk of any single fab. It does not make the supply chain domestic: only SCL is in India, and first silicon is made in the USA.',
     explanation: [
       'The Three-Factory Redundancy Architecture: Unlike foreign microcontrollers tied to single geographic fabs (e.g. TSMC or UMC in Taiwan), DeepGrid designs its silicon masks to be process-portable across three independent foundries: (1) SkyWater Technology (USA) for commercial 130 nm CMOS tape-outs; (2) IHP Microelectronics (Germany) for 130 nm / 250 nm SiGe BiCMOS radar front-ends; and (3) SCL Mohali (India) for sovereign 180 nm BCD fabrication. If any single fab or trade route faces geopolitical embargo or disruption, production shifts across qualified masks without architectural redesign.',
       'Open-Source EDA & Export Control Immunity: DeepGrid completely eliminates dependency on proprietary, ITAR-restricted EDA tools (Synopsys, Cadence) that require recurring foreign licenses. By pioneering full RTL-to-GDSII tape-outs using the open-source OpenLane/OpenROAD flow and open SkyWater PDKs, DeepGrid owns 100% of its intellectual property and mask tooling, ensuring that foreign sanctions or software revoking can never halt domestic silicon delivery.',
@@ -589,9 +594,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     ],
     facts: [
       'Three-Factory Foundry Redundancy: Portable GDSII masks qualified across SkyWater 130 nm, IHP SiGe, and SCL Mohali 180 nm.',
-      'Open-Source EDA Independence: 100% open-source RTL-to-GDSII toolchain eliminates Western software licensing chokeholds.',
+      'Open-Source EDA: an open-source RTL-to-GDSII toolchain removes per-seat EDA licence costs and dependence.',
       'Domestic Wirebond Packaging: Standard 64-pin QFN packaging eliminates reliance on foreign advanced packaging foundries.',
-      'Statutory Procurement Immunity: Qualifies for DAP-2020 Make-II and PIL-5 statutory protection against foreign price wars.'
+      'Statutory Procurement Preference: Indian-designed parts are preferred under DAP-2020 Make-II, and PIL-5 lists import bans with deadlines.'
     ],
     docNum: '05',
     docTitle: 'Master Whitepaper v3 (Mature-Node Silicon)',

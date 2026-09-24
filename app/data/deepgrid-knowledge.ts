@@ -118,7 +118,7 @@ export const quickPrompts: QuickPrompt[] = [
   { id: 'dsp-pipeline', label: 'DSP Feature Pipeline', query: 'How does the fixed-point DSP pipeline extract Kurtosis and FFT features in <100 µs?', category: 'ai', docId: 'doc1', docBadge: 'Doc #1', docName: 'Thirty Use Cases' },
 
   // --- Document #2: Technical Annex v3 (10 SKUs & Roadmap) ---
-  { id: 'sku-compare', label: 'DG32 vs STM32G0', query: 'Compare DG32 with STM32G0 in pinout, cost, and latency', category: 'sku', docId: 'doc2', docBadge: 'Doc #2', docName: 'Technical Annex v3' },
+  { id: 'sku-compare', label: 'DG32 vs STM32G0', query: 'Compare DG32 with the STM32G0: where does each lead?', category: 'sku', docId: 'doc6', docBadge: 'Guide', docName: 'Technical Annex v3' },
   { id: 'sku-roadmap', label: '3-Phase SKU Roadmap', query: 'What is the 3-phase node roadmap and arithmetic check?', category: 'strategy', docId: 'doc2', docBadge: 'Doc #2', docName: 'Technical Annex v3' },
   { id: 'd100-failsafe', label: 'D100 Failsafe Island', query: 'How does the D100 drone hardware failsafe island work?', category: 'sku', docId: 'doc2', docBadge: 'Doc #2', docName: 'Technical Annex v3' },
   { id: 'bel-display', label: 'SKU-8 BEL 17" Display', query: 'What is the PIL-5 mandate for the SKU-8 BEL display driver?', category: 'sku', docId: 'doc2', docBadge: 'Doc #2', docName: 'Technical Annex v3' },
@@ -553,7 +553,7 @@ export const deepGridCatalog: DeepGridItem[] = [
     tagline: 'Geopolitical supply-chain insulation spanning USA, Germany, and India',
     nodeFoundry: 'Phase 1: SkyWater 130nm → Phase 2: IHP SG13G2 → Phase 3: SCL Mohali',
     voltageRail: 'Sovereign Multi-Fab Portability',
-    standards: 'DAP-2020 Buy Indian-IDDM (100% Domestic Silicon)',
+    standards: 'DAP-2020 Buy Indian-IDDM (Indian-designed silicon)',
     summary: 'A phased de-risking roadmap that starts with commercially accessible commercial fabs in friendly nations, then systematically ports hardened IP to India’s domestic Semi-Conductor Laboratory (SCL).',
     keyFacts: [
       'Phase 1 (SkyWater 130nm, USA): Rapid prototyping, open PDK, and MPW tapein verification in months.',
@@ -1202,7 +1202,7 @@ export const graphEdges: GraphEdge[] = [
   // Foundry Sovereignty Chain
   { from: 'fab-skywater', to: 'fab-ihp', label: 'Phase 1 → Phase 2' },
   { from: 'fab-ihp', to: 'fab-scl', label: 'Phase 2 → Phase 3' },
-  { from: 'fab-scl', to: 'moat-dap2020', label: '100% Domestic' },
+  { from: 'fab-scl', to: 'moat-dap2020', label: 'Indian-designed preference' },
 
   // Methodology & Governance
   { from: 'arch-198loop', to: 'fab-skywater', label: '$14.3K MPW Runs' },

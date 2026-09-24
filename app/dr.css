@@ -1487,11 +1487,12 @@ html{scrollbar-color:#46504a var(--background);caret-color:var(--copper)}
 .will-draw.dr-stack .dr-seg-cpu{transform-origin:right center}
 
 .dr-rail{position:relative}
-.dr-rail.is-railed{height:260vh}
-.dr-rail.is-railed>.dr-rail-stage{position:sticky;top:calc(var(--nav-h,59px) + 8px)}
+.dr-rail.is-railed{height:200vh}
+/* held mid-screen, not under the nav: pinned under the nav it left the lower half of the viewport blank */
+.dr-rail.is-railed>.dr-rail-stage{position:sticky;top:max(calc(var(--nav-h,59px) + 8px),calc(50vh - 160px))}
 .dr-rail.is-railed .dr-roadmap{grid-template-columns:repeat(4,minmax(320px,1fr));width:max-content;max-width:none;
   transform:translate3d(var(--rail-x,0px),0,0);will-change:transform}
-.dr-rail.is-railed .dr-roadmap li{min-height:clamp(320px,42vh,440px)}
+.dr-rail.is-railed .dr-roadmap li{min-height:0}
 .dr-rail-track{overflow:hidden}
 .dr-rail-progress{height:2px;background:var(--rule);margin-top:18px;display:none}
 .dr-rail.is-railed .dr-rail-progress{display:block}
@@ -2968,6 +2969,13 @@ input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-sea
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+/* The badge is styled to overlay a card image. In a card header with no image it has no positioning
+   context and floated to the page's top-left corner over the logo (/contact, "NO SIGN-IN"). */
+.dr-hub-card-top > .dr-hub-badge {
+  position: static;
+  align-self: flex-start;
+  backdrop-filter: none;
 }
 
 .dr-hub-tag {

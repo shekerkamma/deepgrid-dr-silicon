@@ -164,14 +164,14 @@ export function getGroundedAnswer(rawQuery: string): GroundedAnswer {
     citationSection = 'Section 5.3: Sovereign Silicon Moats & Unit Economics';
     citationPage = 'p. 42–49';
     referenceLinks = [
-      { label: 'Executive Procurement Scorecard', hash: 'overview', description: 'Review commercial comparisons across BOM cost, turnaround agility, and export risks.' },
+      { label: 'Where DG32 leads, and where it does not', hash: 'procurement', description: 'The comparison with the STM32G0, gaps included, and the roadmap that closes them.' },
       { label: 'Sovereign 10-SKU Portfolio Horizon', hash: 'overview', description: 'Explore the 10-SKU roadmap addressing India’s $9B import deficit.' },
       { label: 'Dual-Foundry Manufacturing Strategy', hash: 'roadmap', description: 'Examine SkyWater 130 nm CMOS and SCL Mohali 180 nm BCD qualification milestones.' }
     ];
     deepLink = {
-      label: 'Compare Procurement Scorecard in Roadmap',
+      label: 'Compare with the STM32G0',
       hash: 'roadmap',
-      context: 'Review cost curves, wafer scaling, and replacement benchmarks against STM32G0.'
+      context: 'Where DG32 leads the STM32G0, where it trails, and the roadmap that closes the gaps.'
     };
   } else if (isLoop) {
     domainTag = 'DETERMINISTIC MOTION & HIGH-SPEED CONTROL';

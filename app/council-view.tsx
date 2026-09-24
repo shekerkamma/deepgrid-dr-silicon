@@ -131,10 +131,11 @@ export default function GroundedAnswerView({query, onSelectQuery, go}: GroundedA
                 href={result.citation.pdfPath}
                 download
                 className="dr-citation-btn primary"
-                title={`Download official whitepaper PDF (${result.citation.pdfSize})`}
+                title={`Download the source (${result.citation.pdfSize})`}
               >
                 <Download size={14} />
-                <span>Download PDF ({result.citation.pdfSize})</span>
+                {/* Not every source is a PDF: the STM32G0 comparison lives only in the Markdown guide. */}
+                <span>{result.citation.pdfPath.endsWith('.pdf') ? 'Download PDF' : 'Download guide'} ({result.citation.pdfSize})</span>
               </a>
               <a 
                 href={result.citation.specPath}
