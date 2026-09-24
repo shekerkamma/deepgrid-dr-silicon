@@ -2,6 +2,7 @@
 import {useEffect,useRef,useState} from 'react';
 import {ArrowLeft,ArrowRight,ArrowUpRight,Download,Play} from 'lucide-react';
 import {packages,fmtTime} from './library-data';
+import {tabIndexFor, tablistKeys} from './tablist';
 import GroundedDocumentsHub from './documents-hub';
 
 type Update=(changes:Record<string,string|undefined>)=>void;
@@ -26,7 +27,7 @@ export default function Library({pkgId,slide,onChange,go}:{pkgId:string;slide:nu
  const activeChapter=pkg.chapters.findIndex(c=>{const cur=playingSlide||n;return cur>=c.slides[0]&&cur<=c.slides[1];});
  return <div className="dr-library">
   {groups.map(([label,kind])=><div className="dr-lib-group" key={kind}><p className="dr-lib-kicker">{label.toUpperCase()}</p>
-   <div className={'dr-lib-tabs dr-lib-tabs-'+kind} role="tablist" aria-label={label}>{packages.filter(p=>p.kind===kind).map(p=><button key={p.id} role="tab" aria-selected={p.id===pkg.id} className={p.id===pkg.id?'active':''} onClick={()=>onChange({pkg:p.id,slide:undefined})}><span className="mono">{p.doc.toUpperCase()} · {p.slides.length} SLIDES · {fmtTime(p.duration)} FILM</span><strong>{p.name}</strong><span>{p.summary}</span></button>)}</div></div>)}
+   <div className={'dr-lib-tabs dr-lib-tabs-'+kind} role="tablist" aria-label={label}>{packages.filter(p=>p.kind===kind).map(p=><button key={p.id} role="tab" aria-selected={p.id===pkg.id} tabIndex={tabIndexFor(p.id===pkg.id)} onKeyDown={tablistKeys} className={p.id===pkg.id?'active':''} onClick={()=>onChange({pkg:p.id,slide:undefined})}><span className="mono">{p.doc.toUpperCase()} · {p.slides.length} SLIDES · {fmtTime(p.duration)} FILM</span><strong>{p.name}</strong><span>{p.summary}</span></button>)}</div></div>)}
 
   <section className="dr-lib-film" aria-label={`${pkg.name} ${pkg.doc} film`}>
    <div className="dr-film-frame"><video ref={video} key={pkg.film} controls preload="metadata" poster={pkg.poster} playsInline><source src={pkg.film} type="video/mp4"/><track kind="captions" src={pkg.captions} srcLang="en" label="English" default/></video></div>

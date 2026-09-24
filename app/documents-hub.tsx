@@ -1,6 +1,7 @@
 'use client';
 /* oxlint-disable jsx-a11y/no-noninteractive-element-interactions */
 import {useState, useEffect, useMemo} from 'react';
+import {tabIndexFor, tablistKeys} from './tablist';
 import {
   FileText, Download, ArrowUpRight, Search, X, Check,
   BookOpen, Sparkles, Compass,
@@ -131,6 +132,8 @@ export default function GroundedDocumentsHub({go}: {go?: (hash: string) => void}
           <button
             role="tab"
             aria-selected={filterGroup === 'all'}
+            tabIndex={tabIndexFor(filterGroup === 'all')}
+            onKeyDown={tablistKeys}
             className={filterGroup === 'all' ? 'active' : ''}
             onClick={() => setFilterGroup('all')}
           >
@@ -139,6 +142,8 @@ export default function GroundedDocumentsHub({go}: {go?: (hash: string) => void}
           <button
             role="tab"
             aria-selected={filterGroup === 'core'}
+            tabIndex={tabIndexFor(filterGroup === 'core')}
+            onKeyDown={tablistKeys}
             className={filterGroup === 'core' ? 'active' : ''}
             onClick={() => setFilterGroup('core')}
           >
@@ -147,6 +152,8 @@ export default function GroundedDocumentsHub({go}: {go?: (hash: string) => void}
           <button
             role="tab"
             aria-selected={filterGroup === 'platform'}
+            tabIndex={tabIndexFor(filterGroup === 'platform')}
+            onKeyDown={tablistKeys}
             className={filterGroup === 'platform' ? 'active' : ''}
             onClick={() => setFilterGroup('platform')}
           >

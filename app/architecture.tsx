@@ -3,6 +3,7 @@ import {useRef} from 'react';
 import {ArrowUpRight,Layers,ShieldCheck,Cpu,Gauge,Activity,Cable} from 'lucide-react';
 import Silicon from './silicon';
 import {blocks} from './content';
+import {tabIndexFor, tablistKeys} from './tablist';
 import {Eyebrow,Sec,ExplainedGrid,Steps,Flows,DataTable,Callout,Stats,Diagram} from './detail';
 import {litePremises,liteDecisions,groupMembers,liteFlows,faultPath,isolationInvariant,domPremises,enginePipeline,engineParts,engineCost,engineLimits,domFlows,domTiming,domDecisions,tapeinStats,tapeinSections,padPlan,signoffGates,whyConnectivityGate} from './detail-content';
 
@@ -18,7 +19,7 @@ export default function Architecture(props:Props){
  const choose=(id:string)=>{const m=mark.current;if(m){const navH=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'))||0;const top=m.getBoundingClientRect().top+scrollY-navH;if(scrollY>top)scrollTo({top,behavior:'instant' as ScrollBehavior});}props.update({chip:id==='lite'?undefined:id,block:undefined});};
  return <div className="dr-arch">
   <div ref={mark} className="dr-arch-mark" aria-hidden="true"/>
-  <div className="dr-arch-tabs" role="tablist" aria-label="Architecture to show">{chips.map(([id,name,sub])=><button key={id} role="tab" aria-selected={active===id} className={active===id?'active':''} onClick={()=>choose(id)}><strong>{name}</strong><span>{sub}</span></button>)}</div>
+  <div className="dr-arch-tabs" role="tablist" aria-label="Architecture to show">{chips.map(([id,name,sub])=><button key={id} role="tab" aria-selected={active===id} tabIndex={tabIndexFor(active===id)} onKeyDown={tablistKeys} className={active===id?'active':''} onClick={()=>choose(id)}><strong>{name}</strong><span>{sub}</span></button>)}</div>
   <div role="tabpanel" aria-label={chips.find(c=>c[0]===active)![1]}>
    {active==='lite'&&<Lite {...props}/>}
    {active==='2dom'&&<Dom {...props}/>}
