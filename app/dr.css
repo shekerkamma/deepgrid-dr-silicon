@@ -409,7 +409,7 @@ html{scrollbar-color:#46504a var(--background);caret-color:var(--copper)}
 .main-nav::before{content:'';position:absolute;left:0;top:0;width:100%;height:2px;background:var(--copper);opacity:.8;transform:scaleX(var(--page-p,0));transform-origin:0 50%;pointer-events:none}
 
 /* one restrained entrance per block: 14px rise and fade, once */
-.rv-on [data-rv]:not(.rv-in){opacity:0;transform:translateY(14px)}
+.rv-on [data-rv]:not(.rv-in){opacity:1;transform:translateY(8px)}
 .rv-on [data-rv]:not(.rv-done){transition:opacity .62s cubic-bezier(.23,1,.32,1) var(--rv-d,0ms),transform .62s cubic-bezier(.23,1,.32,1) var(--rv-d,0ms)}
 @media (prefers-reduced-motion:reduce){.rv-on [data-rv]:not(.rv-in){transform:none}.rv-on [data-rv]:not(.rv-done){transition:opacity .2s linear}}
 @media print{.rv-on [data-rv]{opacity:1!important;transform:none!important}}
