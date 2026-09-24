@@ -34,7 +34,7 @@ const ALL = 'All';
 type Row = {
   id: ProductId; area: string; areaName: string; name: string; tag: string; sheet: number;
   what: string; usedFor: string[]; inAreas: string[]; replaces?: string; status?: string;
-  node: string; made: string; onSilicon: boolean;
+  node: string; made: string; onSilicon: boolean; evidence: string; stage: string;
 };
 
 // One row per product. Its line is the first area where it is marked primary; every area it
@@ -53,6 +53,9 @@ const rows: Row[] = (Object.keys(products) as ProductId[]).map(id => {
     // D100: the Annex matrix gives the package as 130 nm + 28 nm SiP, which the site's TSMC 28 nm entry is one die of.
     node: id === 'd100' ? '130 nm + 28 nm, multi-die SiP' : sku.node, made: sku.phase.replace(/^Phase \d · /, ''),
     onSilicon: id === 'sku4',
+    evidence: p.evidence,
+    // the card's short status, from the same evidence field /evidence grades the portfolio with
+    stage: p.evidence.startsWith('First silicon') ? 'First silicon' : p.evidence.startsWith('FPGA') ? 'FPGA prototype' : 'Design only',
   };
 });
 
@@ -104,7 +107,7 @@ export default function ApplicationsPortfolio() {
             <thead>
               <tr>
                 <th scope="col">Chip</th><th scope="col">Where it goes</th><th scope="col">Replaces</th>
-                <th scope="col">Node</th><th scope="col">Made at</th><th scope="col">Status</th>
+                <th scope="col">Node</th><th scope="col">Made at</th><th scope="col">Evidence today</th><th scope="col">Next step</th>
               </tr>
             </thead>
             <tbody>
@@ -115,7 +118,8 @@ export default function ApplicationsPortfolio() {
                   <td>{r.replaces}</td>
                   <td>{r.node}</td>
                   <td>{r.made}</td>
-                  <td>{r.status ?? 'Planned'}</td>
+                  <td>{r.evidence}</td>
+                  <td>{r.onSilicon ? 'Bring-up' : r.status ?? 'Not stated on the sheet.'}</td>
                 </tr>
               ))}
             </tbody>
@@ -167,7 +171,7 @@ export default function ApplicationsPortfolio() {
                           <dl>
                             <div><dt>Node</dt><dd>{r.node}</dd></div>
                             <div><dt>Made at</dt><dd>{r.made}</dd></div>
-                            <div><dt>Status</dt><dd>{deep ? 'First silicon' : 'Planned'}</dd></div>
+                            <div><dt>Status</dt><dd>{r.stage}</dd></div>
                           </dl>
                           <span className="pf-open">
                             <span>

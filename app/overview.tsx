@@ -4,7 +4,10 @@ import {ArrowUpRight, ArrowRight, Check, Download} from 'lucide-react';
 import Silicon from './silicon';
 import FaultTrace from './fault-trace';
 import {Eyebrow, DataTable, Callout} from './detail';
-import {evidenceLadder, faultPath, notClaimed, diagnosticDomains as domains} from './detail-content';
+import {evidenceLadder, faultPath, notClaimed} from './detail-content';
+import {areas, products} from './applications-story-data';
+import {useNav} from './shell';
+import './story.css';
 import {headline} from './content';
 import './overview.css';
 
@@ -50,21 +53,6 @@ const evidenceIcons: Record<string, React.ReactNode> = {
       <path d="M3 9l4-4 4 4M3 15l4-4 4 4M3 21l4-4 4 4"/>
     </svg>
   ),
-};
-
-// One representative task per domain, taken verbatim from diagnosticDomains.
-// The full task inventory belongs on the domain's own material, not the overview.
-const domainImages: Record<string, string> = {
-  rotating: '/media/deepgrid_truck.jpg',
-  electrical: '/media/deepgrid_robotics.jpg',
-  motion: '/media/deepgrid_logistics.jpg',
-  degradation: '/media/deepgrid_defence.jpg',
-};
-const domainBadges: Record<string, string> = {
-  rotating: 'ROTATING MACHINERY',
-  electrical: 'MCSA',
-  motion: 'PRECISION MOTION',
-  degradation: 'RUL / PHM',
 };
 
 // Three outcomes, merged from the original Executive Impact and Product Essence
@@ -114,6 +102,7 @@ export function Overview({
   navigate: (v: string) => void;
   go: (v: string) => void;
 }) {
+  const {href} = useNav();
   return (
     <>
       {/* 1 — HERO. What this is, who it is for, and what to do next. */}
@@ -238,55 +227,41 @@ export function Overview({
         }/>
       </section>
 
-      {/* 4 — APPLICATIONS. Four domains, named and routed. The tasks, standards and latency
-          envelopes live on /applications, which is the page that exists to carry them. */}
+      {/* 4 — APPLICATIONS. Where DeepGrid's chips go, by the system they end up in: the same five
+          areas /applications opens on, from the same data, so the two cannot drift. This replaced four
+          DG32 task-family cards with stock photos and per-domain fields no source carried (an
+          AEC-Q100 label on motion tasks, "CWRU Audited", a "10 kHz – 100 kHz sample rate"). */}
       <section className="content-section" data-rv data-rv-delay="100">
         <div className="section-label">
           <Eyebrow>APPLICATIONS</Eyebrow>
-          <span>WHERE DOES IT FIT?</span>
+          <span>WHERE DOES IT GO?</span>
         </div>
         <div className="thesis-heading" data-rv data-rv-delay="200">
-          <h2>Four domains,<br/><em>one silicon envelope.</em></h2>
+          <h2>Ten chips,<br/><em>five kinds of system.</em></h2>
           <div>
             <p>
-              DG32 runs edge diagnostics on the motor-control SoC itself, with no external
-              coprocessor. Each domain carries its own tasks, the standards they work against and
-              the latency they were simulated at.
+              DG32-LITE is one of ten DeepGrid chips, each built to take a socket an imported part holds
+              today. It targets the safety-microcontroller socket in battery packs, motor drives, braking and
+              steering controllers, robot joints and drones, and it is the only one on first silicon. It can also watch the motor it controls for faults, in
+              the cycles left after control.
             </p>
           </div>
         </div>
-        {/* The card keeps its photograph and its head. The task list and the executive-value
-            paragraph are dropped: /applications carries those, and four full cards on the front
-            door is the inventory-on-the-overview problem this rebuild exists to fix. */}
-        <div className="dr-usecases-grid">
-          {domains.map((d, idx) => (
-            <article key={d.id} className="dr-usecase-card" data-rv data-rv-delay={idx * 120 + 300}>
-              <figure className="dr-usecase-media">
-                <img src={domainImages[d.id]} alt={d.title} loading="lazy" decoding="async" width={400} height={225}/>
-                <figcaption className="dr-usecase-badge">{domainBadges[d.id]}</figcaption>
-              </figure>
-              <div className="dr-usecase-card-head">
-                <div className="dr-usecase-header-meta">
-                  <span className="mono dr-usecase-tasks">{d.tasksCount}</span>
-                  <span className="dr-usecase-standards">{d.standards}</span>
-                </div>
-                <h3>{d.title}</h3>
-                <p className="dr-usecase-sub">{d.subtitle}</p>
-              </div>
-              <div className="dr-usecase-card-footer">
-                <div className="dr-usecase-timing">
-                  <span className="mono">LATENCY:</span><strong>{d.timing}</strong>
-                </div>
-              </div>
-            </article>
+        <nav className="st-families st-cols-5" aria-label="Where the chips go">
+          {areas.map(a => (
+            <a key={a.id} href={href('applications') + '#area-' + a.id}>
+              <span className="st-fam-n num">{a.items.length}</span>
+              <strong>{a.name}</strong>
+              <span className="st-fam-line">{a.items.map(i => products[i.product].tag).join(' · ')}</span>
+            </a>
           ))}
-        </div>
+        </nav>
         <div className="dr-links dr-sec-gap">
           <button className="text-link" onClick={() => navigate('applications')}>
-            All four domains and their tasks <ArrowUpRight size={16} aria-hidden="true"/>
+            Every chip, where it goes and what it replaces <ArrowUpRight size={16} aria-hidden="true"/>
           </button>
           <button className="text-link" onClick={() => navigate('control')}>
-            The control headroom they run in <ArrowUpRight size={16} aria-hidden="true"/>
+            The control headroom DG32&rsquo;s diagnostics run in <ArrowUpRight size={16} aria-hidden="true"/>
           </button>
         </div>
       </section>

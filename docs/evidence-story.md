@@ -13,6 +13,16 @@ and re-checked by `scripts/check-claims.mjs`), the evidence ladder and not-claim
 (`app/detail-content.ts`), and the withheld claims. Films are the five existing slide segments,
 already checked against their captions by `scripts/check-clips.mjs`.
 
+## Revision, 2026-09-24: the portfolio
+
+/applications now places ten chips. Nine of them carry claims (where they go, what they replace,
+node, foundry, planned wafer run) that no beat here graded. New beat after the design constants:
+**"The other nine chips rest on design documents and FPGA prototypes, not silicon"**, one row per
+chip with its strongest evidence today and next step, both restated from the chip's Annex "Status
+& node path" panel and read from the same record /applications uses, so the two pages cannot
+disagree. The answer beat and the index say so; the not-claimed list gains "no silicon result for
+any chip but DG32-LITE" and "no market size, price or revenue for the wider portfolio".
+
 ## BLUF
 
 Nothing on this site has been measured on silicon yet, so every figure states what it rests on

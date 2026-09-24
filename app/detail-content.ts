@@ -29,6 +29,8 @@ export const notClaimed = [
   'No functional-safety certification. Hardware lockstep is a mechanism, not a certificate.',
   'No sign-off result for the tape-in die: the four gates it must pass are listed, not reported as passed.',
   'No price or cost claims against any competitor.',
+  'No silicon result for any DeepGrid chip but DG32-LITE: the other nine rest on architecture sheets and FPGA prototypes.',
+  'No market size, price or revenue for the wider portfolio: the portfolio annex flags its market panels as internal estimates.',
 ];
 
 // ---------- Product family ----------

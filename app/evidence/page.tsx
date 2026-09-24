@@ -6,6 +6,8 @@ import {evidenceLadder, notClaimed} from '../detail-content';
 import {claims, withheld, type EvidenceKind} from '../claims';
 import Related from '../related';
 import {FilmMoment, type Clip} from '../evidence-clip';
+import {areas, products, type ProductId} from '../applications-story-data';
+import {url} from '../routes';
 import '../story.css';
 
 /** The moment in a narrated film where each kind of evidence is actually on screen, with the deck
@@ -53,6 +55,8 @@ const clips: Record<string, Clip> = {
  *  this site that rest on it (from the claim map, which scripts/check-claims.mjs re-verifies against
  *  the source documents), and the film moment where it is explained.
  */
+const ANNEX = '/downloads/docs/deepgrid-sku-compendium-technical-annex-v3.pdf';
+
 const beats: {kind: EvidenceKind; id: string; title: string; after: string}[] = [
   {kind: 'Simulated', id: 'ev-simulated',
     title: 'Simulation shows the design behaves as intended before any silicon exists.',
@@ -94,13 +98,14 @@ export default function Page() {
   const all = Object.entries(claims);
   const of = (k?: EvidenceKind) => all.filter(([, c]) => c.kind === k);
   const constants = all.filter(([, c]) => !c.kind);
+  const portfolio = (Object.entries(products) as [ProductId, typeof products[ProductId]][]).filter(([id]) => id !== 'sku4');
   return (
     <Shell route="evidence">
       <section className="page-wrap">
         <SectionHead
           tag="04 / EVIDENCE"
           title="Every figure says how it was obtained"
-          copy="DG32 is pre-silicon as of September 2026. This page takes each kind of evidence behind the site's numbers in turn: what it is, which figures rest on it, and the moment in the narrated films where it is explained."
+          copy="DG32 is pre-silicon as of September 2026, and it is the furthest along of DeepGrid's ten chips. This page takes each kind of evidence behind the site's numbers in turn, with the moment in the narrated films where it is explained, then says what the other nine chips rest on."
         />
         <div className="st-story">
           <section className="st-beat st-answer" id="ev-answer" aria-labelledby="ev-answer-h">
@@ -112,8 +117,12 @@ export default function Page() {
                 of evidence, or a design decision that measures nothing. They are different kinds, not
                 steps on a ladder, and each one below lists the figures that rest on it.
               </p>
+              <p>
+                The applications page places DG32 among ten chips. The other nine have no silicon at all
+                yet, so the last section says what each of them rests on instead.
+              </p>
             </div>
-            <nav className="st-families st-cols-3" aria-label="The kinds of evidence">
+            <nav className="st-families st-cols-4" aria-label="The kinds of evidence">
               {beats.map(b => (
                 <a key={b.kind} href={'#' + b.id}>
                   <span className="st-fam-n num">{of(b.kind).length}</span>
@@ -125,6 +134,11 @@ export default function Page() {
                 <span className="st-fam-n num">{constants.length}</span>
                 <strong>Design constant</strong>
                 <span className="st-fam-line">A decision in the design, not a measurement</span>
+              </a>
+              <a href="#ev-portfolio">
+                <span className="st-fam-n num">{portfolio.length}</span>
+                <strong>The other chips</strong>
+                <span className="st-fam-line">Architecture sheets and FPGA prototypes, no silicon yet</span>
               </a>
             </nav>
           </section>
@@ -175,6 +189,43 @@ export default function Page() {
             </div>
             <div className="st-beat-wide">
               <Figures rows={constants} caption={`${constants.length} design constants`}/>
+            </div>
+          </section>
+
+          {/* The portfolio. /applications now places ten chips; only one is on silicon. Each row's
+              evidence and next step come from the same product record /applications reads, which
+              restates that chip's Annex "Status & node path" panel. */}
+          <section className="st-beat" id="ev-portfolio" aria-labelledby="ev-portfolio-h">
+            <div className="st-beat-text">
+              <p className="st-fam-kicker">The rest of the portfolio</p>
+              <h2 id="ev-portfolio-h">The other nine chips rest on design documents and FPGA prototypes, not silicon.</h2>
+              <p>
+                Everything the applications page says about them, where they go, what they replace and
+                how they are built, comes from the portfolio annex. None has been fabricated. Three have
+                logic running on an FPGA, which the sheets themselves call validation of the design, not
+                the product; the rest are architecture sheets.
+              </p>
+            </div>
+            <div className="st-beat-wide">
+              <div className="st-table-scroll">
+                <table className="st-models">
+                  <caption>What each chip rests on today, from its sheet in the SKU Architecture Compendium (Technical Annex v3)</caption>
+                  <thead>
+                    <tr><th scope="col">Chip</th><th scope="col">Where it goes</th><th scope="col">Strongest evidence today</th><th scope="col">Next step</th><th scope="col">Source</th></tr>
+                  </thead>
+                  <tbody>
+                    {portfolio.map(([id, p]) => (
+                      <tr key={id}>
+                        <th scope="row">{p.name}<span className="st-claim-tag num">{p.tag}</span></th>
+                        <td>{areas.filter(a => a.items.some(i => i.product === id)).map(a => a.name).join(' · ')}</td>
+                        <td>{p.evidence}</td>
+                        <td>{p.status ?? 'Not stated on the sheet.'}</td>
+                        <td><a className="st-link" href={url(ANNEX) + '#page=' + p.sheet} target="_blank" rel="noreferrer">Sheet {p.sheet}</a></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </section>
 

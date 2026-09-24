@@ -31,7 +31,7 @@ export const related: Record<RouteId, Related> = {
       {id: 'technology', why: 'The architecture behind both parts, one tab each.'},
       {id: 'package', why: 'The 44-signal QFN-64 pinout both chips share, pin for pin.'},
       {id: 'procurement', why: 'How DG32 compares with the STM32G0, gaps included.'},
-      {id: 'applications', why: 'What the spare cycles are for once the loop is running.'},
+      {id: 'applications', why: 'Where each of the ten chips goes, and what DG32 watches in a motor.'},
     ],
     docs: ['doc6', 'doc2'],
   },
@@ -55,7 +55,7 @@ export const related: Record<RouteId, Related> = {
   },
   control: {
     sections: [
-      {id: 'applications', why: 'The 30 diagnostic tasks that spend the headroom this page measures.'},
+      {id: 'applications', why: 'The 30 diagnostic tasks that spend the headroom this page measures, and where the chip goes.'},
       {id: 'safety', why: 'What happens to the loop when the two cores disagree.'},
       {id: 'die', why: 'The CORDIC and ADC blocks the loop runs through.'},
       {id: 'evidence', why: 'How the cycle counts were derived, and at which evidence grade.'},
@@ -83,8 +83,8 @@ export const related: Record<RouteId, Related> = {
   applications: {
     sections: [
       {id: 'control', why: 'The cycle budget every task on this page is spending.'},
-      {id: 'evidence', why: 'How a task moves from a paper claim to a measured one.'},
-      {id: 'technology', why: 'The hardware that makes the spare cycles predictable.'},
+      {id: 'evidence', why: 'What each chip on this page rests on, from FPGA prototype to first silicon.'},
+      {id: 'products', why: 'The two DG32 parts in detail, and the portfolio table they sit in.'},
       {id: 'ask', why: 'Put a specific task to the knowledge graph and get a cited answer.'},
     ],
     docs: ['doc1', 'doc2'],
@@ -94,7 +94,7 @@ export const related: Record<RouteId, Related> = {
       {id: 'procurement', why: 'Where the design still loses to the incumbent, stated plainly.'},
       {id: 'control', why: 'The largest analytic claim on the site, with its derivation.'},
       {id: 'safety', why: 'The simulated fault path, and what simulation does and does not show.'},
-      {id: 'applications', why: 'The task catalogue, each entry carrying its own evidence grade.'},
+      {id: 'applications', why: 'The ten chips this page grades, by the systems they go into.'},
     ],
     docs: ['doc1', 'doc4', 'doc6'],
   },
@@ -121,7 +121,7 @@ export const related: Record<RouteId, Related> = {
       {id: 'resources', why: 'The documents behind every answer, in full.'},
       {id: 'evidence', why: 'What each evidence grade in an answer actually means.'},
       {id: 'technology', why: 'The architecture most questions are about.'},
-      {id: 'applications', why: 'The task catalogue the graph draws on.'},
+      {id: 'applications', why: 'The portfolio and the DG32 diagnostic tasks, to ask about by name.'},
     ],
     docs: ['doc1', 'doc2', 'doc4'],
   },
