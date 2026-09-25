@@ -555,3 +555,9 @@
 }
 /* a citation in a register table stays on one line */
 .st-cite { white-space: nowrap; }
+
+/* Section scene images (app/scene-figure.tsx): a wide, low banner that sets the subject, with a
+   caption that says it is an illustration. The frame is the site's card edge, not a new style. */
+.st-scene { position: relative; margin: 8px 0 40px; border: 1px solid var(--border); border-radius: var(--sc-radius-lg); overflow: hidden; background: var(--background); }
+.st-scene img { display: block; width: 100%; height: clamp(220px, 30vw, 420px); object-fit: cover; }
+.st-scene figcaption { padding: 10px 16px; border-top: 1px solid var(--rule); font-size: var(--text-meta); color: var(--ink-2); line-height: 1.5; }

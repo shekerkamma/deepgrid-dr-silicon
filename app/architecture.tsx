@@ -4,6 +4,7 @@ import {ArrowUpRight,Layers,ShieldCheck,Cpu,Gauge,Activity,Cable} from 'lucide-r
 import Silicon from './silicon';
 import {blocks} from './content';
 import {tabIndexFor, tablistKeys} from './tablist';
+import {SceneFigure} from './scene-figure';
 import {Eyebrow,Sec,ExplainedGrid,Steps,Flows,DataTable,Callout,Stats,Diagram} from './detail';
 import {litePremises,liteDecisions,groupMembers,liteFlows,faultPath,isolationInvariant,domPremises,enginePipeline,engineParts,engineCost,engineLimits,domFlows,domTiming,domDecisions,tapeinStats,tapeinSections,padPlan,signoffGates,whyConnectivityGate} from './detail-content';
 
@@ -40,6 +41,9 @@ function Lite({block,reduced,setReduced,exploded,setExploded,update,go}:Props){
    <p>Six block groups share one deterministic bus on a single 50 MHz clock. Below: the four constraints that shaped the chip, then the full diagram, every block and why it exists, and how a control loop, a boot and a fault move through it.</p>
    <div className="dr-links"><button className="text-link" onClick={()=>go('library?pkg=lite')}>Architecture deck and film <ArrowUpRight size={16}/></button><button className="text-link" onClick={()=>go('control')}>Control-loop budget <ArrowUpRight size={16}/></button></div>
   </Intro>
+  <SceneFigure name="technology-die"
+   alt="Illustration of a silicon die under a microscope with two identical core regions side by side"
+   caption="AI-generated illustration of a lockstep die: two identical cores side by side with a comparator between them. Not DG32's floorplan, which is in the diagram below."/>
   <Stats items={[['50 MHz','ONE CLOCK DOMAIN'],['2','BUS MASTERS'],['16','INTERRUPT SOURCES'],['64 KB','BOOT ROM'],['32 KB','DUAL-PORT SRAM'],['39 cycles','FAULT TO LATCH, SIMULATED']]}/>
   <Sec kicker="ARCHITECTURAL CONSTRAINTS" title="Four hardening findings set the shape of every block," em="starting with a lockstep core that tops out near 55–62 MHz." copy="Read across a row to see what each constraint means and what the design does about it.">
    <DataTable caption="Design premises and what they set" head={['Constraint','What it means','What the design does']} rows={litePremises} wide/>
