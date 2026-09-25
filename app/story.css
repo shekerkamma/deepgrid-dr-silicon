@@ -567,3 +567,13 @@
 .st-film video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: var(--background); }
 .st-film figcaption { padding: 10px 16px; border-top: 1px solid var(--rule); font-size: var(--text-meta); color: var(--ink-2); }
 .st-film { scroll-margin-top: 90px; }
+
+/* Overview motion loops (app/motion-loop.tsx). The frame is the card edge; the pause control is a
+   small square in the corner, 32px, on the surface colour with a visible focus ring. */
+.st-loop { position: relative; margin: 0 0 18px; border: 1px solid var(--border); border-radius: var(--sc-radius-md); overflow: hidden; background: var(--background); }
+.st-loop video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: var(--background); }
+.st-loop-wide { margin: 8px 0 24px; border-radius: var(--sc-radius-lg); }
+.st-loop-wide video { aspect-ratio: 3 / 1; }
+.st-loop-btn { position: absolute; right: 8px; bottom: 8px; width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid var(--border); border-radius: var(--sc-radius-sm); background: color-mix(in srgb, var(--background) 82%, transparent); color: var(--foreground); transition: border-color .15s ease; }
+.st-loop-btn:hover { border-color: var(--copper); }
+.st-loop-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }

@@ -6,6 +6,7 @@ import {DataTable,ExplainedGrid,Eyebrow,Sec,SectionHead} from '../detail';
 import {notClaimed,positionNotes,roadmapDetail} from '../detail-content';
 import {comparison,gaps,leads} from '../content';
 import Related from '../related';
+import {MotionLoop} from '../motion-loop';
 
 export default function Page() {
   const {navigate, go} = useNav();
@@ -25,6 +26,7 @@ export default function Page() {
    <ExplainedGrid items={positionNotes} cols={2}/>
   </Sec>
   <Sec kicker="THE MULTI-SPIN ROADMAP" title="Closing the gaps" em="in deliberate order." copy="Each step has a job: first silicon proves the architecture, the second spin closes the largest gaps, and connectivity follows.">
+   <MotionLoop wide name="roadmap-gaps" label="Animation: where the STM32G0 leads today, and the spin that closes each gap: the 12-bit ADC and embedded flash in the second spin, CAN-FD and interactive debug after; USB, package range and production maturity are not yet scheduled"/>
    <div className="dr-rail"><div className="dr-rail-stage"><div className="dr-rail-track"><ol className="dr-roadmap">{roadmapDetail.map(([when,t,what,proves])=><li key={t}><span className="mono">{when}</span><h3>{t}</h3><p>{what}</p><p className="dr-proves"><span className="mono">WHAT IT DELIVERS</span>{proves}</p></li>)}</ol></div><div className="dr-rail-progress" aria-hidden="true"><i/></div></div></div>
   </Sec>
   <div className="dr-notclaimed"><p className="dr-kicker">WHAT THIS SITE DOES NOT CLAIM</p><ul>{notClaimed.map(n=><li key={n}>{n}</li>)}</ul></div>

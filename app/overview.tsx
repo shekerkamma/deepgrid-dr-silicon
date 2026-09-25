@@ -3,6 +3,7 @@
 import {ArrowUpRight, ArrowRight, Check, Download} from 'lucide-react';
 import Silicon from './silicon';
 import FaultTrace from './fault-trace';
+import {MotionLoop} from './motion-loop';
 import {Eyebrow, DataTable, Callout} from './detail';
 import {evidenceLadder, faultPath, notClaimed} from './detail-content';
 import {areas, products} from './applications-story-data';
@@ -59,6 +60,8 @@ const evidenceIcons: Record<string, React.ReactNode> = {
 const outcomes = [
   {
     kpi: 'PREDICTABLE CONTROL',
+    loop: 'loop-cost',
+    loopLabel: 'Animation: one control-loop period at 50 MHz; the hardware share stays about 300 cycles while the CPU budget shrinks from 10 to 100 kHz',
     metric: '~100 kHz',
     title: 'The loop cost is fixed and known',
     summary:
@@ -70,6 +73,8 @@ const outcomes = [
   },
   {
     kpi: 'DEFINED FAULT RESPONSE',
+    loop: 'fault-response',
+    loopLabel: 'Animation: MAIN commits a wrong value, the comparator flags it, FAULT_N drops and the bridge turns off; 39 cycles, simulated',
     metric: '39 cycles',
     title: 'A wrong value reaches a safe bridge without firmware',
     summary:
@@ -81,6 +86,8 @@ const outcomes = [
   },
   {
     kpi: 'SUPPLY PLANNING',
+    loop: 'second-source',
+    loopLabel: 'Animation: one 130 nm design moving through three foundries in sequence: SkyWater (USA), IHP (Germany), SCL Mohali (India)',
     metric: '130 nm',
     title: 'A mature node with a second source',
     summary:
@@ -161,6 +168,7 @@ export function Overview({
           {outcomes.map((o, idx) => (
             <article key={o.kpi} className="dr-exec-card" data-rv data-rv-delay={idx * 150 + 300}>
               <div className="dr-exec-card-content">
+                <MotionLoop name={o.loop} label={o.loopLabel}/>
                 <div className="dr-exec-card-head">
                   <span className="mono dr-exec-kpi">{o.kpi}</span>
                   <span className="dr-exec-metric">{o.metric}</span>
@@ -246,6 +254,7 @@ export function Overview({
             </p>
           </div>
         </div>
+        <MotionLoop wide name="portfolio" label="Animation: the ten DeepGrid chips connecting in turn to the five kinds of system they go into; DG32-LITE is SKU-4"/>
         <nav className="st-families st-cols-5" aria-label="Where the chips go">
           {areas.map(a => (
             <a key={a.id} href={href('applications') + '#area-' + a.id}>
@@ -282,6 +291,7 @@ export function Overview({
             </p>
           </div>
         </div>
+        <MotionLoop wide name="evidence" label="Animation: each site figure dropping into its kind of evidence; the silicon lane stays empty until the September 2026 shuttle"/>
         <DataTable
           caption="The five kinds of evidence behind the figures on this site"
           head={['Evidence kind', 'What it means']}

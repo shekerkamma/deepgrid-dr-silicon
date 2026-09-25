@@ -24,6 +24,8 @@ const scene: Record<string, {src: string; alt: string}> = {
   motors: {src: '/media/deepgrid_robotics.jpg', alt: 'Concept render of an autonomous forklift in a warehouse aisle, its sensor beams sweeping the racks'},
   vehicles: {src: '/media/deepgrid_truck.jpg', alt: 'Concept render of a DeepGrid-liveried truck on a wet highway at dusk, a camera-mirror display beside the cab'},
   defence: {src: '/media/deepgrid_defence.jpg', alt: 'Concept render of a border surveillance tower seen from an operator cabin, with tracked targets on the glass'},
+  grid: {src: '/images/scenes/grid-meters-1536.webp', alt: 'Concept render of a row of electricity smart meters on a utility wall at dusk, one open to show its metrology board, a transformer beyond the doorway'},
+  boards: {src: '/images/scenes/boards-supervisor-1536.webp', alt: 'Concept render of an industrial controller board with a row of voltage regulators and a small supervisor chip beside them'},
 };
 const skuOf: Record<ProductId, string> = {
   sku1: 'SKU-1', sku2: 'SKU-2', sku3: 'SKU-3', sku4: 'SKU-4', sku5: 'SKU-5',

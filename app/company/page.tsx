@@ -6,6 +6,8 @@ import {DataTable, ExplainedGrid, Sec, SectionHead, Stats} from '../detail';
 import {PRE_SILICON} from '../copy';
 import CompanyStress from '../company-stress';
 import Related from '../related';
+import {SceneFigure} from '../scene-figure';
+import {MotionLoop} from '../motion-loop';
 import {
   companyNotClaimed, companyStats, milestones, moats, pillars, revenueBuild,
   stopRules, team, unitEconomics, fundsAllocation,
@@ -23,6 +25,9 @@ export default function Page() {
           copy="DeepGrid Semi Pvt Ltd designs motor control, condition monitoring and zonal compute on mature nodes. The bet is not that we can beat a 40 nm part on performance. It is that a ≥130 nm part designed in India can be bought where an imported one cannot."
         />
         <Stats items={companyStats}/>
+        <SceneFigure name="company-wafer"
+          alt="Illustration of a 200 mm silicon wafer covered in identical small dies, lit in copper"
+          caption="AI-generated illustration of a mature-node wafer. Not a DeepGrid wafer: DG32-LITE's first silicon is on the September 2026 shuttle."/>
 
         <Sec
           kicker="THE MARKET"
@@ -48,6 +53,7 @@ export default function Page() {
           em="with each spin committed to closing a named gap."
           copy="Each step has a job. First silicon proves the architecture; the second spin closes the two largest gaps against the incumbent; connectivity and debug follow."
         >
+          <MotionLoop wide name="shuttle-loop" label="Animation: one spin going round the loop, RTL to GDSII to shuttle to bring-up, 198 days shuttle to shuttle"/>
           <div className="dr-rail"><div className="dr-rail-stage"><div className="dr-rail-track">
             <ol className="dr-roadmap">{milestones.map(([when, title, what, proves]) => (
               <li key={title}>
