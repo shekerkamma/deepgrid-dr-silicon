@@ -26,6 +26,7 @@ export default function Page() {
    <p className="disclaimer">The 39-cycle figure is measured in simulation, from an injected fault to the latch.</p>
    <div className="dr-links dr-sec-gap">
      <button className="text-link" onClick={()=>navigate('safety')}>Follow the fault path step by step <ArrowUpRight size={16}/></button>
+     <a className="text-link" href={href('safety')+'#film'}>Watch it animated, in ninety seconds <ArrowUpRight size={16}/></a>
    </div>
   </Sec>
 

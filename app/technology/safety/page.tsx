@@ -1,15 +1,22 @@
 'use client';
 
+import {useEffect} from 'react';
 import {ArrowUpRight} from 'lucide-react';
 import {Shell, useNav} from '../../shell';
 import {ExplainedGrid,Sec,SectionHead,Steps} from '../../detail';
 import {faultPath} from '../../detail-content';
 import {PRE_SILICON} from '../../copy';
 import FaultTrace from '../../fault-trace';
+import {url} from '../../routes';
 import Related from '../../related';
 
 export default function Page() {
   const {href, go} = useNav();
+  // A link to #film (from Products) lands before the pinned fault map above has its height, so
+  // the browser's own jump falls short; land on the film once the page has laid out.
+  useEffect(() => {
+    if (location.hash === '#film') requestAnimationFrame(() => document.getElementById('film')?.scrollIntoView({block: 'start', behavior: 'instant'}));
+  }, []);
   return (
     <Shell route="safety">
       <section className="page-wrap">
@@ -31,6 +38,20 @@ export default function Page() {
           </>
         }/>
         <p className="disclaimer">{PRE_SILICON}</p>
+
+        {/* Motion explainer (HyperFrames + GSAP, rendered to MP4; narration Kokoro bm_george).
+            Source project: ~/hyperframes-videos/videos/dg32-fault-path-explained. */}
+        <Sec kicker="THE FAULT PATH, ANIMATED" title="The same path in ninety seconds," em="from a wrong value to a switched-off bridge.">
+          <figure className="st-film" id="film">
+            <video controls preload="none" playsInline width={1920} height={1080}
+              poster={url('/media/dg32-fault-path-explained-poster.jpg')}
+              aria-label="Animated explainer: how DG32-LITE's lockstep pair turns a CPU fault into a switched-off bridge">
+              <source src={url('/media/dg32-fault-path-explained.mp4')} type="video/mp4"/>
+              <track kind="captions" srcLang="en" label="English" src={url('/media/dg32-fault-path-explained.vtt')}/>
+            </video>
+            <figcaption>Animated explainer, 1:29, captioned. The 39-cycle figure is from simulation; DG32-LITE is pre-silicon.</figcaption>
+          </figure>
+        </Sec>
 
         {/* Story beats from docs/site-story.md: every failure ends at a signal; how the path is
             proven on silicon; where diagnostics stop; the close. Source: DG32-LITE Architecture

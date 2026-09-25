@@ -561,3 +561,9 @@
 .st-scene { position: relative; margin: 8px 0 40px; border: 1px solid var(--border); border-radius: var(--sc-radius-lg); overflow: hidden; background: var(--background); }
 .st-scene img { display: block; width: 100%; height: clamp(220px, 30vw, 420px); object-fit: cover; }
 .st-scene figcaption { padding: 10px 16px; border-top: 1px solid var(--rule); font-size: var(--text-meta); color: var(--ink-2); line-height: 1.5; }
+
+/* A narrated film in a section (Safety's motion explainer): the card edge, full width, 16:9. */
+.st-film { margin: 0; border: 1px solid var(--border); border-radius: var(--sc-radius-lg); overflow: hidden; background: var(--background); }
+.st-film video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: var(--background); }
+.st-film figcaption { padding: 10px 16px; border-top: 1px solid var(--rule); font-size: var(--text-meta); color: var(--ink-2); }
+.st-film { scroll-margin-top: 90px; }
