@@ -26,7 +26,7 @@ export type RouteId =
 export type Route = {id: RouteId; href: string; label: string; nav?: boolean; parent?: RouteId; tag?: string};
 
 export const routes: Route[] = [
-  {id: 'home',         href: '/',                        label: 'Home'},
+  {id: 'home',         href: '/',                        label: 'Home', nav: true},
   {id: 'products',     href: '/products',                label: 'Products',     nav: true, tag: '01 / PRODUCT FAMILY'},
   {id: 'technology',   href: '/technology',              label: 'Technology',   nav: true, tag: '02 / ARCHITECTURE'},
   {id: 'safety',       href: '/technology/safety',       label: 'Safety',       parent: 'technology', tag: '02.1 / SAFETY'},

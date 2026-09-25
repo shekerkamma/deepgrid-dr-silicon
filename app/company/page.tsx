@@ -8,6 +8,7 @@ import CompanyStress from '../company-stress';
 import Related from '../related';
 import {SceneFigure} from '../scene-figure';
 import {MotionLoop} from '../motion-loop';
+import {url} from '../routes';
 import {
   companyNotClaimed, companyStats, milestones, moats, pillars, revenueBuild,
   stopRules, team, unitEconomics, fundsAllocation,
@@ -73,6 +74,24 @@ export default function Page() {
           copy="What the team is built on, and how large the seed round makes it."
         >
           <ExplainedGrid items={team} cols={3}/>
+        </Sec>
+
+        <Sec
+          kicker="RECOGNITION"
+          title="Selected among the Top 50 Startups in Telangana,"
+          em="TiE50 Hyderabad, 2024."
+          copy="Recognised at the Hyderabad Entrepreneurship Summit for building an edge-first semiconductor and AI ecosystem in India. Source: DeepGrid Semi's own announcement on deepgridsemi.com."
+        >
+          <div className="st-recog">
+            <figure>
+              <img src={url('/images/deepgridsemi/tie50-award-ceremony-1280.webp')} srcSet={`${url('/images/deepgridsemi/tie50-award-ceremony-640.webp')} 640w, ${url('/images/deepgridsemi/tie50-award-ceremony-1280.webp')} 1280w`} sizes="(max-width: 900px) 100vw, 600px" alt="The DeepGrid Semi team receiving the TiE50 award on stage at the Hyderabad Entrepreneurship Summit" width={1280} height={960} loading="lazy" decoding="async"/>
+              <figcaption>The award, at the Hyderabad Entrepreneurship Summit.</figcaption>
+            </figure>
+            <figure>
+              <img src={url('/images/deepgridsemi/tie50-top50-telangana-1280.webp')} srcSet={`${url('/images/deepgridsemi/tie50-top50-telangana-640.webp')} 640w, ${url('/images/deepgridsemi/tie50-top50-telangana-1280.webp')} 1280w`} sizes="(max-width: 900px) 100vw, 600px" alt="TiE50 Hyderabad announcement: Congratulations to Team DeepGrid Semi, selected among the Top 50 Startups in Telangana" width={1280} height={1280} loading="lazy" decoding="async"/>
+              <figcaption>The TiE50 Hyderabad announcement.</figcaption>
+            </figure>
+          </div>
         </Sec>
 
         <Sec

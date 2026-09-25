@@ -577,3 +577,21 @@
 .st-loop-btn { position: absolute; right: 8px; bottom: 8px; width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid var(--border); border-radius: var(--sc-radius-sm); background: color-mix(in srgb, var(--background) 82%, transparent); color: var(--foreground); transition: border-color .15s ease; }
 .st-loop-btn:hover { border-color: var(--copper); }
 .st-loop-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+/* The company wordmark in the top bar and the "Deepgrid Semi" home entry in the menu, as on
+   deepgridsemi.com. The wordmark is the official white artwork on a transparent ground. */
+.brand-wordmark { display: block; height: 32px; width: auto; }
+.nav-home-icon { display: inline-block; width: 20px; height: 20px; margin-right: 8px; vertical-align: -4px; object-fit: contain; }
+@media (max-width: 720px) { .brand-wordmark { height: 26px; } }
+
+/* Company recognition: the two award images side by side, one column on a phone. */
+.st-recog { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.st-recog figure { margin: 0; border: 1px solid var(--border); border-radius: var(--sc-radius-md); overflow: hidden; background: var(--background); }
+.st-recog img { display: block; width: 100%; height: clamp(220px, 28vw, 380px); object-fit: cover; }
+.st-recog figcaption { padding: 10px 14px; border-top: 1px solid var(--rule); font-size: var(--text-meta); color: var(--ink-2); }
+@media (max-width: 900px) { .st-recog { grid-template-columns: 1fr; } }
+
+/* A single supporting render beside a section's argument (Products portfolio). */
+.st-art { margin: 0 0 24px; max-width: 544px; }
+.st-art img { display: block; width: 100%; height: auto; border-radius: var(--sc-radius-md); }
+.st-art figcaption { margin-top: 8px; font-size: var(--text-meta); color: var(--ink-2); }

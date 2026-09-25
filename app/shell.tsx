@@ -9,8 +9,8 @@ import {useDraw, useRail} from './devices';
 function Brand() {
   return (
     <>
-      <span className="brand-mark"><i/><i/><i/><i/></span>
-      <span className="wordmark">deepgrid<span>SEMI</span></span>
+      {/* The company's own wordmark, as on deepgridsemi.com. */}
+      <img className="brand-wordmark" src={url('/brand/deepgrid-semi-wordmark.png')} alt="Deepgrid Semi" width={480} height={96}/>
     </>
   );
 }
@@ -44,7 +44,9 @@ export function Shell({
       aria-current={route === r.id ? 'page' : undefined}
       onClick={() => setMenu(false)}
     >
-      {r.label}
+      {r.id === 'home'
+        ? <><img className="nav-home-icon" src={url('/brand/deepgrid-d-64.png')} alt="" aria-hidden="true" width={20} height={20}/>Deepgrid Semi</>
+        : r.label}
     </a>
   ));
 
@@ -60,7 +62,7 @@ export function Shell({
         </div>
         <a className="contact-link" href={href('/contact')}>Discuss your application <ArrowUpRight size={17}/></a>
         <button className="mobile-menu" aria-label="Open navigation" onClick={() => setMenu(true)}>
-          <span>{here.label}</span><Menu/>
+          <span>{here.id === 'home' ? 'Deepgrid Semi' : here.label}</span><Menu/>
         </button>
       </header>
 

@@ -9,6 +9,7 @@ import {parts} from '../content';
 import {ChipMap,LoopCost,WhyLockstep} from '../products-story';
 import {SceneFigure} from '../scene-figure';
 import Related from '../related';
+import {url} from '../routes';
 
 export default function Page() {
   const {navigate, go, href} = useNav();
@@ -62,6 +63,10 @@ export default function Page() {
     em="around the sub-10 nm core."
     copy="Sub-10 nm silicon cannot withstand 28 V to 120 V transient rails, carries no 24-bit high-dynamic-range analog front end, and does not survive automotive and military screening from −55 °C to +125 °C without external support. DeepGrid anchors those physical interfaces on 130 nm and 180 nm, taking the satellite sockets around the sub-10 nm central compute rather than competing with it. DG32 is SKU-4 of that portfolio, the lockstep safety MCU."
   >
+   <figure className="st-art">
+    <img src={url('/images/deepgridsemi/package-stack.webp')} alt="Exploded view of a layered chip package: die, substrate and lid separated" width={544} height={364} loading="lazy" decoding="async"/>
+    <figcaption>DeepGrid&rsquo;s multi-die package concept, from deepgridsemi.com. The D100 at the foot of this table is the portfolio&rsquo;s multi-die part.</figcaption>
+   </figure>
    <div className="table-scroll">
     <table className="dr-table dr-table-wide">
      {/* Per-chip facts live on /applications (one home per fact); this table keeps only what the
