@@ -37,10 +37,14 @@ function Lite({block,reduced,setReduced,exploded,setExploded,update,go}:Props){
  return <>
   <Intro kicker="DG32-LITE / LOCKSTEP ARCHITECTURE" title="DG32-LITE runs a second identical core two cycles behind the first," em="so a datapath fault reaches the gate driver without firmware.">
    <p>DG32-LITE combines a RISC-V microcontroller, the peripherals a brushless drive needs and a hardware safety monitor on one 130 nm die. The monitor is a second, identical core that runs two cycles behind the first. If the two ever disagree, the chip latches the first cause and drives a pin that can turn the power bridge off without waiting for firmware.</p>
-   <p>Six block groups share one deterministic bus on a single 50 MHz clock. Below: the full diagram, every block and why it exists, the four constraints that shaped them, and how a control loop, a boot and a fault move through the chip.</p>
+   <p>Six block groups share one deterministic bus on a single 50 MHz clock. Below: the four constraints that shaped the chip, then the full diagram, every block and why it exists, and how a control loop, a boot and a fault move through it.</p>
    <div className="dr-links"><button className="text-link" onClick={()=>go('library?pkg=lite')}>Architecture deck and film <ArrowUpRight size={16}/></button><button className="text-link" onClick={()=>go('control')}>Control-loop budget <ArrowUpRight size={16}/></button></div>
   </Intro>
   <Stats items={[['50 MHz','ONE CLOCK DOMAIN'],['2','BUS MASTERS'],['16','INTERRUPT SOURCES'],['64 KB','BOOT ROM'],['32 KB','DUAL-PORT SRAM'],['39 cycles','FAULT TO LATCH, SIMULATED']]}/>
+  <Sec kicker="ARCHITECTURAL CONSTRAINTS" title="Four hardening findings set the shape of every block," em="starting with a lockstep core that tops out near 55–62 MHz." copy="Read across a row to see what each constraint means and what the design does about it.">
+   <DataTable caption="Design premises and what they set" head={['Constraint','What it means','What the design does']} rows={litePremises} wide/>
+  </Sec>
+
   <Diagram src="/diagrams/dg32-lite-architecture.svg" title="DG32-LITE system architecture" width={1518} height={1045} drawio="/downloads/dg32-lite-architecture.drawio" guide="/downloads/dg32-lite-architecture-guide.md"
    alt="DG32-LITE system architecture diagram: safety core, memory and boot, supervision, on-chip bus, motor drive, sensing and math, connectivity and test, with the numbered current-control loop and the hardware fault path"
    caption={<>Numbered circles trace one current-control loop: ① the PWM fires the ADC sample, ② phase current goes to the CORDIC, ③ the transforms go to the CPU, ④ the PI output sets the PWM duty. The dashed red line is the hardware fault trip from the fault latch to the gate driver. Dashed boxes are off-chip.</>}/>
@@ -50,10 +54,6 @@ function Lite({block,reduced,setReduced,exploded,setExploded,update,go}:Props){
     <aside className="domain-panel"><Eyebrow>SIX BLOCK GROUPS</Eyebrow>{blocks.map((b,i)=>{const Icon=blockIcons[i];return <button className={block===i?'selected':''} key={b.code} onClick={()=>update({block:String(i)})} aria-pressed={block===i} aria-label={`Select ${b.name} block group`}><Icon size={18} aria-hidden="true"/><div><span>{b.code}<b>0{i+1}</b></span><strong>{b.name}</strong>{block===i&&<p>{b.short}</p>}</div><ArrowUpRight size={16} aria-hidden="true"/></button>})}</aside></div>
    <div className="dr-group" aria-live="polite"><div className="dr-group-head"><div><p className="dr-kicker">GROUP 0{block+1} / {g.code}</p><h3 className="dr-group-name">{g.name}</h3></div><p className="dr-group-why">{g.why}</p></div><ExplainedGrid items={groupMembers[block]}/></div>
    <p className="disclaimer">The 3D model is illustrative: region placement indicates grouping, not the fabricated floorplan.</p>
-  </Sec>
-
-  <Sec kicker="ARCHITECTURAL CONSTRAINTS" title="Four hardening findings set the shape of every block," em="starting with a lockstep core that tops out near 55–62 MHz." copy="Read across a row to see what each constraint means and what the design does about it.">
-   <DataTable caption="Design premises and what they set" head={['Constraint','What it means','What the design does']} rows={litePremises} wide/>
   </Sec>
 
   <Sec kicker="DETERMINISTIC DATA PATHS" title="One current loop costs about 300 hardware cycles at any loop rate," em="the boot has no rescue path, and the fault path never waits for firmware." copy="Three sequences explain most of the chip: the current loop it exists to run, the boot it performs on its own, and what happens when the two cores disagree.">

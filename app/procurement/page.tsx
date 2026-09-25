@@ -28,12 +28,19 @@ export default function Page() {
    <div className="dr-rail"><div className="dr-rail-stage"><div className="dr-rail-track"><ol className="dr-roadmap">{roadmapDetail.map(([when,t,what,proves])=><li key={t}><span className="mono">{when}</span><h3>{t}</h3><p>{what}</p><p className="dr-proves"><span className="mono">WHAT IT DELIVERS</span>{proves}</p></li>)}</ol></div><div className="dr-rail-progress" aria-hidden="true"><i/></div></div></div>
   </Sec>
   <div className="dr-notclaimed"><p className="dr-kicker">WHAT THIS SITE DOES NOT CLAIM</p><ul>{notClaimed.map(n=><li key={n}>{n}</li>)}</ul></div>
-  <div className="dr-links dr-sec-gap">
-    <button className="text-link" onClick={()=>go('library')}>Download Master Whitepaper (71-Page PDF) <ArrowUpRight size={16}/></button>
-    <button className="text-link" onClick={()=>navigate('pinout')}>Review QFN-64 pinout & package <ArrowUpRight size={16}/></button>
-    <button className="text-link" onClick={()=>navigate('control')}>Inspect 100 kHz control loop budget <ArrowUpRight size={16}/></button>
-    <button className="text-link" onClick={()=>go('ask')}>Audit 10-SKU roadmap in Ask DeepGrid <ArrowUpRight size={16}/></button>
-  </div>
+  {/* The close (docs/site-story.md): turn the leads and gaps into the buying decision. */}
+  <Sec kicker="WHAT TO DO NOW" title="Evaluate DG32-LITE now if the drive needs lockstep;" em="wait for the second spin if it needs a 12-bit ADC or embedded flash.">
+   <ExplainedGrid cols={2} items={[
+    {name:'Evaluate now',what:'A drive where hardware lockstep, native DShot or hardware CORDIC decides the part, and an 8-bit converter and boot-from-QSPI are acceptable.',why:'Those are the rows DG32-LITE leads on, and the pinout, package and supplies are fixed enough to lay out a board today.'},
+    {name:'Plan for the second spin',what:'A drive that needs a 12-bit multi-channel ADC, execute-in-place flash, USB or CAN-FD.',why:'Those are the G0 rows, and the roadmap closes the ADC and flash first, then CAN-FD and interactive debug.'},
+   ]}/>
+   <div className="dr-links dr-sec-gap">
+    <button className="primary" onClick={()=>navigate('contact')}>Discuss your application <ArrowUpRight size={17}/></button>
+    <button className="text-link" onClick={()=>navigate('pinout')}>QFN-64 pinout &amp; package <ArrowUpRight size={16}/></button>
+    <button className="text-link" onClick={()=>navigate('control')}>100 kHz control-loop budget <ArrowUpRight size={16}/></button>
+    <button className="text-link" onClick={()=>go('library')}>The whitepaper and datasheets <ArrowUpRight size={16}/></button>
+   </div>
+  </Sec>
  <Related route="procurement"/>
  </section>
     </Shell>

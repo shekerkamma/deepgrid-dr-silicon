@@ -2,36 +2,52 @@
 
 import {Shell, useNav} from '../shell';
 import {PRE_SILICON} from '../copy';
-import {ArrowRight,ArrowUpRight,Check} from 'lucide-react';
-import {DataTable,ExplainedGrid,Sec,SectionHead} from '../detail';
+import {ArrowRight,ArrowUpRight} from 'lucide-react';
+import {DataTable,ExplainedGrid,Sec,SectionHead,Stats} from '../detail';
 import {familyCompare, sovereignSkuHorizon} from '../detail-content';
 import {parts} from '../content';
-import Architecture from '../architecture';
+import {ChipMap,LoopCost,WhyLockstep} from '../products-story';
 import Related from '../related';
-import {url} from '../routes';
-
-// Use the source diagrams, with a full-size inspection link, rather than film title cards.
-const partPosters: Record<string, string> = {
-  lite: '/diagrams/dg32-lite-architecture.svg',
-  '2dom': '/diagrams/dg32-2dom-architecture.svg',
-};
-
-// Each card's heading states what the part is for; the name sits in the label above it.
-const partClaims: Record<string, string> = {
-  lite: 'Lockstep safety in one chip, on the September 2026 shuttle',
-  '2dom': 'The same chip and footprint, with an engine that watches the motor',
-};
 
 export default function Page() {
   const {navigate, go, href} = useNav();
   return (
     <Shell route="products">
-      <section className="page-wrap"><SectionHead tag="02 / PRODUCT FAMILY" title="One footprint, two chips" copy="DG32-LITE is the motor-control SoC. DG32-2DOM keeps every pin and peripheral and adds an INT8 attention engine, so a board designed for one takes the other."/>
-  <div className="dr-parts">{parts.map(p=><article className="dr-part" key={p.id}><figure className="dr-part-media"><a href={url(partPosters[p.id])} target="_blank" rel="noreferrer" aria-label={`Open ${p.name} architecture diagram at full size`}><img src={url(partPosters[p.id])} alt={`${p.name} architecture diagram`} loading="lazy" decoding="async" width={800} height={450}/></a><figcaption className="mono">{p.name} · ARCHITECTURE <a href={url(partPosters[p.id])} target="_blank" rel="noreferrer">Inspect full size <ArrowUpRight size={14} aria-hidden="true"/></a></figcaption></figure><div className="dr-part-head"><span className="mono">{p.id==='lite'?'PART 01':'PART 02'} / {p.name} · {p.tagline.toUpperCase()}</span><h2>{partClaims[p.id]}</h2><span className="dr-status"><i/>{p.status}</span><p>{p.summary}</p></div><dl className="dr-specs">{p.specs.map(([k,v])=><div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>{p.adds.length>0&&<div className="dr-adds"><span className="mono">WHAT THE ENGINE IS FOR</span><ul>{p.adds.map(a=><li key={a}><Check size={15}/>{a}</li>)}</ul></div>}<div className="dr-part-links"><button className="primary" onClick={()=>go('architecture'+(p.id==='lite'?'':'?chip=2dom'))}>Inside the architecture <ArrowUpRight size={17}/></button><button className="text-link" onClick={()=>go('library?pkg='+p.id)}>Architecture deck and film <ArrowRight size={16}/></button><button className="text-link" onClick={()=>go('library?pkg='+p.id+'-datasheet')}>Datasheet deck and film <ArrowRight size={16}/></button></div></article>)}</div>
-  <p className="disclaimer">{PRE_SILICON} The ~0.43 W power figure is a vectorless tool estimate at 25 °C and 1.8 V.</p>
-  <Sec kicker="CHIP COMPARISON" title="Everything outside the engine is identical," em="DG32-2DOM adds an INT8 attention engine and a second clock, and nothing else." copy="Everything outside the engine is the same design from the same source, which is why a DG32-LITE board takes DG32-2DOM unchanged and the control-loop budget carries over exactly.">
-   <DataTable caption="DG32-LITE and DG32-2DOM compared" head={['Area','DG32-LITE','DG32-2DOM']} rows={familyCompare} wide/>
+      <section className="page-wrap">
+  <SectionHead tag="02 / PRODUCT FAMILY" title="One footprint, two chips" copy="DG32-LITE puts a hardware lockstep safety monitor, the motor-drive peripherals and the FOC maths in one 64-pin chip. DG32-2DOM is the same chip with an attention engine on its own clock, so a board built for one takes the other."/>
+  <Stats items={[['2 cores','In lockstep: CHECKER runs two cycles behind MAIN'],['~300 cycles','Fixed hardware cost of one FOC loop'],['44 pins','One signal pinout for both chips']]}/>
+
+  <Sec kicker="WHY A SECOND CORE" title="Self-test cannot see a fault between runs;" em="lockstep checks every store." copy="Motor control drives power electronics, and a silent CPU fault can destroy a bridge. Hardware lockstep has lived in automotive MCUs such as Infineon AURIX, NXP S32K and TI Hercules; DG32-LITE brings it to the entry-level motor-control tier.">
+   <WhyLockstep/>
+   <p className="disclaimer">The 39-cycle figure is measured in simulation, from an injected fault to the latch.</p>
+   <div className="dr-links dr-sec-gap">
+     <button className="text-link" onClick={()=>navigate('safety')}>Follow the fault path step by step <ArrowUpRight size={16}/></button>
+   </div>
   </Sec>
+
+  <Sec kicker="WHAT IS IN THE CHIP" title="Six block groups on one clock;" em="DG32-2DOM adds a seventh on its own." copy="Choose a block to see what it does and why it is there. Then switch to DG32-2DOM: the six groups are the same design from the same source, and only the attention engine and its bridges are new.">
+   <ChipMap/>
+   <details className="ps-specs">
+    <summary>Full specifications, side by side</summary>
+    <DataTable caption="DG32-LITE and DG32-2DOM compared" head={['Area','DG32-LITE','DG32-2DOM']} rows={familyCompare} wide/>
+    <div className="ps-spec-cols">{parts.map(p=><div key={p.id}><h3>{p.name}</h3><p className="ps-spec-status">{p.status}</p><dl className="dr-specs">{p.specs.map(([k,v])=><div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl></div>)}</div>
+   </details>
+   <p className="disclaimer">{PRE_SILICON} The ~0.43 W power figure is a vectorless tool estimate at 25 °C and 1.8 V.</p>
+   <div className="dr-links dr-sec-gap">
+     <button className="text-link" onClick={()=>navigate('architecture')}>Inside the architecture, in 3D <ArrowUpRight size={16}/></button>
+     <button className="text-link" onClick={()=>go('library?pkg=lite')}>DG32-LITE architecture deck and film <ArrowRight size={16}/></button>
+     <button className="text-link" onClick={()=>go('library?pkg=2dom')}>DG32-2DOM architecture deck and film <ArrowRight size={16}/></button>
+   </div>
+  </Sec>
+
+  <Sec kicker="WILL IT RUN YOUR LOOP" title="The loop runs in hardware," em="so its cost is fixed." copy="Sampling, the Park transforms and the PWM update are dedicated blocks costing about 300 cycles at any loop rate; the CPU keeps only the two PI regulators. What is left at each rate is the firmware budget.">
+   <LoopCost/>
+   <p className="disclaimer">Cycle costs measured in simulation at the 50 MHz clock; 100 kHz is the simulated ceiling, not a bench result.</p>
+   <div className="dr-links dr-sec-gap">
+     <button className="text-link" onClick={()=>navigate('control')}>Pick a loop rate and see the budget <ArrowUpRight size={16}/></button>
+   </div>
+  </Sec>
+
   {/* Where DG32 sits. The mature-node thesis is the organising argument of the SKU Architecture
       Compendium and it appeared nowhere on this site: without it 130 nm reads as a limitation
       rather than the choice the portfolio is built on. */}
@@ -84,11 +100,10 @@ export default function Page() {
     {name:'Choose DG32-2DOM',what:'For a drive that should also watch its own motor: bearing-fault or anomaly detection on phase-current data, without a second processor.',why:'The engine runs on its own clock behind bridges, so condition monitoring cannot extend the control core’s worst-case execution time. Design complete, in physical trials.'},
    ]}/>
    <div className="dr-links dr-sec-gap">
-     <button className="text-link" onClick={()=>navigate('architecture')}>Explore the architecture <ArrowUpRight size={16}/></button>
-     <button className="text-link" onClick={()=>navigate('control')}>100 kHz control-loop budget <ArrowUpRight size={16}/></button>
+     <button className="primary" onClick={()=>navigate('contact')}>Discuss your application <ArrowUpRight size={17}/></button>
+     <button className="text-link" onClick={()=>go('library?pkg=lite-datasheet')}>DG32-LITE datasheet deck and film <ArrowRight size={16}/></button>
+     <button className="text-link" onClick={()=>go('library?pkg=2dom-datasheet')}>DG32-2DOM datasheet deck and film <ArrowRight size={16}/></button>
      <button className="text-link" onClick={()=>navigate('pinout')}>QFN-64 package & electrical limits <ArrowUpRight size={16}/></button>
-     <button className="text-link" onClick={()=>go('library')}>Official datasheets & publication PDFs <ArrowUpRight size={16}/></button>
-     <button className="text-link" onClick={()=>go('ask')}>Query DG32-2DOM in Ask DeepGrid <ArrowUpRight size={16}/></button>
    </div>
   </Sec>
  <Related route="products"/>

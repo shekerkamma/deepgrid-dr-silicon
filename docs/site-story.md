@@ -33,37 +33,46 @@ them at the first unsourced number.
 7. Resources, ask: check any of it against the documents.
 8. Contact: the one action.
 
-## 5. Per-section verdicts
+## 5. Per-section verdicts (second pass, 2026-09-25)
 
-| Route | Verdict | Why |
-|---|---|---|
-| Overview | Holds | Opens on the claim, ends on the routes into the site |
-| Technology, safety, control, die, package | Hold | Headings are already assertions; each proof beat carries its source |
-| Applications, evidence | Hold | Own packs, implemented earlier |
-| Procurement, company | Hold | Leads/gaps and stop rules argue; the unsourced scorecard is already gone |
-| Contact | Holds | One action, no customer list |
-| **Products** | **Rebuilt** | Chip headings were labels; the page ended on portfolio context, not the choice |
-| **Resources** | **Rebuilt** | No answer in the heading; "client-ready PowerPoint decks" is internal language; H2 was a question |
-| **Ask** | **Rebuilt** | "Verified Silicon Intelligence" overclaims (the review found wrong citation sections); the lead promised "authoritative" and "sovereign supply chain security" |
+The first pass judged sections from heading outlines and changed headlines. The user, on /products:
+"I do not think you have applied /story-architect". Correct; this pass judged every route against the
+whole contract (answer, tension, proof, visual, implication, close) on full-page renders at 1440 px,
+and rebuilt where a beat was missing, not only where a heading was weak.
 
-## 6. Section spines for the rebuilt three
+| Route | Verdict | Arc as rendered | What was missing, and what changed |
+|---|---|---|---|
+| Home | Holds | Answer, three outcomes, fault map, portfolio, evidence ladder, next step | Nothing |
+| Products | **Rebuilt** | Was: two spec cards, a spec table, portfolio, choice | Added tension, fault path, interactive chip map, loop cost; specs behind a disclosure. Own pack: `docs/products-story.md` |
+| Technology | **Reordered** | Was: diagram, blocks, then constraints | The four constraints (the why) now come before the diagram and blocks |
+| Safety | **Rebuilt** | Was: one beat (the fault map) | Added: every failure ends at a signal (four detectors); how the path is proven on silicon (injection, cause 001, 39 cycles); where diagnostics stop (advisory only, ASIL-D a path not a certificate); a close |
+| Control loop | Holds | Answer, six stages, why hardware, budget, limits, evidence | Nothing |
+| Die | Holds | Split stage: the die pinned, scroll walks the six groups, resolves on the frozen core | A full-page capture flattens the sticky die into what looks like a list; scrolled, it is a complete arc |
+| Package | Holds | Answer, pin map, supplies, limits, what can be locked now | The lock-status close is the board designer's decision |
+| Applications | Holds | Own pack (`docs/applications-story.md`) | Nothing |
+| Evidence | Holds | Own pack (`docs/evidence-story.md`) | Nothing |
+| Procurement | **Close added** | Answer, comparison, why the gaps, roadmap, not claimed | Ended on links; now closes on the buying decision: evaluate now if lockstep decides the part, plan for the second spin if the 12-bit ADC or embedded flash does |
+| Company | Holds | Market, strategy, milestones, team, plan and its stress test, moats, stop rules, funds, close | Nothing |
+| Resources | **Reordered** | Was: films and decks, then the documents | The page promises the source behind every figure, so the six documents come first; a link that names a package (`?pkg=`) still lands on its film |
+| Ask | Holds | Answer-first tool page | Heading and lead fixed in the first pass |
+| Contact | Holds | One action, the form, alternatives | Nothing |
 
-**Products** (answer, then parts, then difference, then context, then the choice):
+## 6. Rebuild spines
 
-| Beat | Heading (assertion) | Role |
-|---|---|---|
-| Head | One footprint, two chips | Answer: a board for one takes the other |
-| Card 1 | Lockstep safety in one chip, on the September 2026 shuttle | DG32-LITE, the first-silicon part |
-| Card 2 | The same chip and footprint, with an engine that watches the motor | DG32-2DOM |
-| Compare | Everything outside the engine is identical | Proof of the drop-in claim |
-| Context | Mature-node silicon, around the sub-10 nm core | Why 130 nm is a choice; links each chip to its card |
-| Close | Start on DG32-LITE; move to DG32-2DOM when the drive should watch its own motor | The decision and its actions |
+Products: see `docs/products-story.md`.
 
-**Resources**: H1 "The documents, decks and films behind every figure"; lead names the six documents
-and what form each takes; H2 "Every figure on this site traces to one of these six documents".
+Safety:
 
-**Ask**: H1 "Ask about DG32, and every answer names its source"; lead lists what can be asked and says
-the reader can check each answer against its PDF. "SOURCES CITED" badge stays (set in the review).
+| # | Heading | Role | Evidence |
+|---|---|---|---|
+| 1 | From a wrong value to a safe bridge | Answer | Guide: Safety core |
+| 2 | Two paths cross the die, and only one is firmware | Proof (fault map) | Guide: A CPU fault |
+| 3 | Each failure ends at a signal, never at silence | Implication: lockstep is one of four detectors | Guide: Safety core, Bus, Design Decisions ("faults are contained, never silent") |
+| 4 | Firmware fires the fault on purpose, because that is the only test real silicon allows | Proof on silicon | Guide: Fault injection; datasheet Fault CSR (cause 001, inject) |
+| 5 | A classifier can warn. Only hardware trips the bridge | Boundary and close | DG32 AI architecture §5 (advisory role); site rule: ASIL-D is a path |
+
+Procurement close: two cards from the page's own leads and gaps, then the actions (discuss, pinout,
+loop budget, documents).
 
 ## 7. Evidence map
 
@@ -80,11 +89,7 @@ the reader can check each answer against its PDF. "SOURCES CITED" badge stays (s
 
 ## 9. Rebuild instructions (implemented)
 
-- `app/products/page.tsx`: "Where DG32 sits" moved before "Which chip"; card h2 from `partClaims`,
-  name moved into the label; close heading rewritten.
-- `app/resources/page.tsx`, `app/documents-hub.tsx`: H1, lead, H2, kicker, aria-label.
-- `app/ask.tsx`: H1, lead, tooltip, link label. `app/documents-data.ts`: "Authoritative" dropped from two
-  summaries.
-
-Not changed: Ask's default answer stays the supply-chain theme (now corrected); moving the default to
-lockstep would change the semantic routing eval baseline for no factual gain.
+First pass: headlines on Products, Resources and Ask (see git history, e62343c).
+Second pass: `app/products/page.tsx` + `app/products-story.tsx/.css`; `app/technology/safety/page.tsx`;
+`app/architecture.tsx` (section order); `app/library.tsx` + `app/dr.css` (documents first, package
+links land on the film); `app/procurement/page.tsx` (close).

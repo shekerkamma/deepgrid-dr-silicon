@@ -2,7 +2,7 @@
 
 import {ArrowUpRight} from 'lucide-react';
 import {Shell, useNav} from '../../shell';
-import {SectionHead} from '../../detail';
+import {ExplainedGrid,Sec,SectionHead,Steps} from '../../detail';
 import {faultPath} from '../../detail-content';
 import {PRE_SILICON} from '../../copy';
 import FaultTrace from '../../fault-trace';
@@ -31,6 +31,35 @@ export default function Page() {
           </>
         }/>
         <p className="disclaimer">{PRE_SILICON}</p>
+
+        {/* Story beats from docs/site-story.md: every failure ends at a signal; how the path is
+            proven on silicon; where diagnostics stop; the close. Source: DG32-LITE Architecture
+            Guide (Safety core, Bus, Design Decisions) and the datasheet's Fault CSR row. */}
+        <Sec kicker="EVERY WAY THE CPU CAN FAIL" title="Each failure ends at a signal," em="never at silence." copy="Lockstep catches a wrong value. It does not catch a CPU that stops, or one that reads an address that is not there. Each of those has its own detector, because on a die with no debugger halt a silent failure is the one nobody can diagnose.">
+          <ExplainedGrid cols={2} items={[
+            {name:'A wrong value',what:'The lockstep comparator. CHECKER repeats every instruction two cycles later on mirrored inputs and bus responses; the first store that differs latches its cause and drives FAULT_N.',why:'A silent datapath fault produces a wrong PWM edge, and a wrong edge can destroy a bridge.'},
+            {name:'A hang or a runaway',what:'The windowed watchdog. A kick that arrives too late faults, and so does one that arrives too early.',why:'Too early catches code that is running, but running the wrong way. It arms only when firmware enables it, so it cannot deadlock a cold boot.'},
+            {name:'An address that is not there',what:'The error slave. An unmapped or disabled address completes with a bus error instead of hanging the bus.',why:'With no debugger on the die, a hung bus would be a brick.'},
+            {name:'A supply that sags',what:'Supply supervision: two supply-good inputs, deglitched, with reset sequencing.',why:'A brown-out would otherwise corrupt state that both cores then agree on.'},
+          ]}/>
+        </Sec>
+
+        <Sec kicker="HOW THE PATH IS PROVEN" title="Firmware fires the fault on purpose," em="because that is the only test real silicon allows." copy="A path that only ever runs when something breaks has to be exercised deliberately. The injection register is locked, so ordinary code cannot trip it by accident.">
+          <Steps label="Proving the fault path on silicon" steps={[
+            ['Unlock and inject','Firmware writes the magic value to the Fault CSR, which fires the comparator path without a real fault.'],
+            ['The path runs','The same hardware path as a real mismatch: comparator, latch, FAULT_N, gate-driver enable.'],
+            ['Read the first cause','The latch holds cause 001, DATA_MISMATCH, until reset, so firmware can confirm what fired.'],
+            ['Time it','39 cycles from injection to latch in simulation. First-silicon bring-up measures it on the September 2026 shuttle parts.'],
+          ]}/>
+        </Sec>
+
+        <Sec kicker="WHERE DIAGNOSTICS STOP" title="A classifier can warn." em="Only hardware trips the bridge." copy={<><p>Condition monitoring on DG32, including anything the DG32-2DOM engine runs, is advisory: it reports health and recommends service. Hard trip limits stay with the hardware path above, which no model output can hold open or close.</p><p>Lockstep is a mechanism for a safety case, not a certificate. ISO 26262 ASIL-D is the path the design is aimed at; no functional-safety certification is claimed.</p></>}>
+          <div className="dr-links">
+            <a className="text-link" href={href('applications')}>What the diagnostics watch, and what they never hold <ArrowUpRight size={16} aria-hidden="true"/></a>
+            <a className="text-link" href={href('evidence')}>What each figure here rests on <ArrowUpRight size={16} aria-hidden="true"/></a>
+            <a className="primary" href={href('contact')}>Discuss the safety case for your drive <ArrowUpRight size={17} aria-hidden="true"/></a>
+          </div>
+        </Sec>
       <Related route="safety"/>
       </section>
     </Shell>
