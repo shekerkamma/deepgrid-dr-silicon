@@ -27,7 +27,7 @@ export default function Page() {
         <Stats items={companyStats}/>
         <SceneFigure name="company-wafer"
           alt="Illustration of a 200 mm silicon wafer covered in identical small dies, lit in copper"
-          caption="AI-generated illustration of a mature-node wafer. Not a DeepGrid wafer: DG32-LITE's first silicon is on the September 2026 shuttle."/>
+          caption="Illustration of a mature-node wafer. DG32-LITE first silicon is on the September 2026 shuttle."/>
 
         <Sec
           kicker="THE MARKET"

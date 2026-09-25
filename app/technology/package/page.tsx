@@ -17,7 +17,7 @@ export default function Page() {
       <section className="page-wrap"><SectionHead tag="05 / PINOUT & PACKAGE" title="44 signals in a 9 × 9 mm package" copy="The 64-pin QFN carries every signal a brushless drive needs; the remaining 20 pins are supplies and grounds. DG32-2DOM uses the identical pinout, supplies and limits."/>
   <SceneFigure name="package-qfn" eager
     alt="Illustration of a small square leadless QFN package lifted just above its PCB footprint of 64 pads around a large ground pad"
-    caption="AI-generated illustration of a QFN-64 and its footprint: 64 pads, sixteen a side, around the exposed ground pad. Not a photograph of DG32; the pin map below is the real one."/>
+    caption="Illustration of a QFN-64 over its footprint: sixteen pads a side around the exposed ground pad. The DG32 pin map is below."/>
   <div className="dr-pinout"><PackageDiagram/>
    <div className="table-scroll"><table className="dr-table"><caption>Signal pins by function</caption><thead><tr><th scope="col">Function</th><th scope="col">Signals</th><th scope="col" className="num">Pins</th></tr></thead><tbody>{pinGroups.map(([f,s,n])=><tr key={f}><th scope="row">{f}</th><td>{s}</td><td className="num">{n}</td></tr>)}</tbody><tfoot><tr><th scope="row">Total</th><td>Signal pins</td><td className="num">{pinGroups.reduce((a,[, ,n])=>a+Number(n),0)}</td></tr></tfoot></table></div></div>
   <Stats items={[['QFN-64','PACKAGE'],['9 × 9 mm','BODY'],['0.5 mm','PITCH'],['Ground','EXPOSED PADDLE'],['1.8 V','CORE SUPPLY'],['3.3 V','I/O SUPPLY']]}/>

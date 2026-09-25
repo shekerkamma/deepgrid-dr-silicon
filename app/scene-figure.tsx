@@ -1,6 +1,6 @@
-// A section's scene image: an AI-generated illustration that sets the subject of the section
-// (docs/visuals/). The caption always says what the image is and what it is not, because a
-// generated board or die can be mistaken for DG32 hardware, and the site claims no silicon yet.
+// A section's scene image: an illustration that sets the subject of the section (sources in
+// docs/visuals/). The caption always says it is an illustration, because a board or die could be
+// mistaken for DG32 hardware, and the site claims no silicon yet.
 import {url} from './routes';
 
 export function SceneFigure({name, alt, caption, eager}: {name: string; alt: string; caption: string; eager?: boolean}) {

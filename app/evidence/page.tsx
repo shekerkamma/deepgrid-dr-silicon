@@ -107,7 +107,7 @@ export default function Page() {
         />
         <SceneFigure name="evidence-fpga" eager
           alt="Illustration of a validation bench: an FPGA development board wired to a small motor-drive board, with an oscilloscope out of focus behind"
-          caption="AI-generated illustration, not DeepGrid's bench. Before silicon, the evidence is simulation, static timing and logic run on an FPGA; this is what that stage looks like."/>
+          caption="Illustration of the pre-silicon stage: before a chip exists, the evidence is simulation, static timing and logic run on an FPGA."/>
         <div className="st-story">
           <section className="st-beat st-answer" id="ev-answer" aria-labelledby="ev-answer-h">
             <div className="st-beat-text">

@@ -18,7 +18,7 @@ export default function Page() {
   <SectionHead tag="02 / PRODUCT FAMILY" title="One footprint, two chips" copy="DG32-LITE puts a hardware lockstep safety monitor, the motor-drive peripherals and the FOC maths in one 64-pin chip. DG32-2DOM is the same chip with an attention engine on its own clock, so a board built for one takes the other."/>
   <SceneFigure name="products-hero" eager
     alt="Illustration of a compact brushless-motor drive board with a small square leadless chip at its centre, power transistors around it and a motor behind"
-    caption="AI-generated illustration of the kind of drive board DG32 is built for. Not a photograph of DG32 silicon: first silicon is on the September 2026 shuttle."/>
+    caption="Illustration: the kind of motor-drive board DG32 is built for. DG32-LITE first silicon is on the September 2026 shuttle."/>
   <Stats items={[['2 cores','In lockstep: CHECKER runs two cycles behind MAIN'],['~300 cycles','Fixed hardware cost of one FOC loop'],['44 pins','One signal pinout for both chips']]}/>
 
   <Sec kicker="WHY A SECOND CORE" title="Self-test cannot see a fault between runs;" em="lockstep checks every store." copy="Motor control drives power electronics, and a silent CPU fault can destroy a bridge. Hardware lockstep has lived in automotive MCUs such as Infineon AURIX, NXP S32K and TI Hercules; DG32-LITE brings it to the entry-level motor-control tier.">
