@@ -67,7 +67,7 @@ export default function GroundedDocumentsHub({go}: {go?: (hash: string) => void}
           readingDoc.stats.map(s => `- **${s.label}:** ${s.value}`).join('\n') +
           `\n\n## Core Engineering Takeaways\n\n` +
           readingDoc.highlights.map(h => `- ${h}`).join('\n') +
-          `\n\n---\n*Click "Download PDF" in the header to view the complete authoritative publication PDF.*`
+          `\n\n---\n*Click "Download PDF" in the header to view the complete publication PDF.*`
         );
         setLoadingContent(false);
       });
@@ -93,15 +93,14 @@ export default function GroundedDocumentsHub({go}: {go?: (hash: string) => void}
   };
 
   return (
-    <section className="dr-docs-hub" aria-label="Authoritative Design Documents & Specs">
+    <section className="dr-docs-hub" aria-label="Source documents and specifications">
       <header className="dr-docs-hub-header">
         <div>
-          <p className="dr-lib-kicker">AUTHORITATIVE DESIGN ARCHIVE · 6 CORE DESIGN DOCUMENTS & SPECS</p>
-          <h2>Where are DeepGrid&apos;s silicon benchmarks and architecture claims grounded?</h2>
+          <p className="dr-lib-kicker">SOURCE DOCUMENTS · 6 PDFS AND SPECIFICATIONS</p>
+          <h2>Every figure on this site traces to one of these six documents</h2>
           <p className="dr-docs-lead">
-            Every simulation benchmark, timing envelope, clock partition, and pin configuration on this platform is
-            grounded in these design authority documents. Download the original authoritative PDFs, read full markdown specifications,
-            or cross-reference technical claims directly in the{' '}
+            Simulation results, timing budgets, clock partitions and pin assignments all come from these
+            documents. Download a PDF, read its specification, or check a figure against its section in{' '}
             {go ? (
               <button className="dr-inline-link" onClick={() => go('ask')}>
                 Ask DeepGrid <ArrowUpRight size={14} />
@@ -110,8 +109,7 @@ export default function GroundedDocumentsHub({go}: {go?: (hash: string) => void}
               <a href="#ask" className="dr-inline-link">
                 Ask DeepGrid <ArrowUpRight size={14} />
               </a>
-            )}{' '}
-            intelligence section.
+            )}.
           </p>
         </div>
 

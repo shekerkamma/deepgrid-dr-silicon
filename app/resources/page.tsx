@@ -13,8 +13,8 @@ export default function Page() {
       <section className="page-wrap">
         <SectionHead
           tag="06 / DOCUMENTS & MEDIA"
-          title="Authoritative documents, decks and films"
-          copy="Complete publication PDFs, engineering specifications, client-ready PowerPoint decks, and narrated walkthrough films across the DG32 platform."
+          title="The documents, decks and films behind every figure"
+          copy="Six source documents carry every number on this site. Each one is here as the full PDF and as a readable specification, with the architecture and datasheet decks and the narrated films made from them."
         />
         <Library
           pkgId={params.get('pkg') || 'lite'}

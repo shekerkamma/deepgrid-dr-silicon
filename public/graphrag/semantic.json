@@ -82,8 +82,8 @@
   13,
   13
  ],
- "themeMin": 0.7,
- "themeGap": 0.09,
+ "themeMin": 0.65,
+ "themeGap": 0.1,
  "eval": {
   "positives": 15,
   "negatives": 10,
@@ -91,8 +91,8 @@
   "wrong": 0,
   "forced": 0,
   "missed": [
+   "Why is a single peakedness statistic a poor alarm for worn bearings?",
    "What diagnostic jobs can the entry chip handle in a factory?",
-   "Which pins are on which side of the package?",
    "Can supply be guaranteed if foreign fabs are cut off?"
   ]
  },
@@ -112,7 +112,7 @@
   "Three Factories, Three Countries: How the Supply Chain Is Sequenced",
   "Hardware Lockstep: How DG32 Catches a Faulty Computation"
  ],
- "indexSha256": "eb72104e2a2ba579d51e6ed263dee81885799bf8d83fbf23a8899cefdaa90b5d",
+ "indexSha256": "411428f8b2707762a50900ff24a237b4e02732aeaf0a6d610f8373303fed1d9b",
  "rowKeySha256": "ddc6c4a37a0372fa77f09747bee509dbe679950bacf8d95cbf392e73c23f52a6",
  "modelSha256": "6c9c6101a956d62dfb5e7190c538226c0c5bb9cb27b651234b6df063ee7dbfe4"
 }

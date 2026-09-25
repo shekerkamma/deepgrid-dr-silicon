@@ -25,6 +25,9 @@ export interface GraphNode {
   id: string;
   name: string;
   shortName: string;
+  // 'anchor' is kept as a type but no node uses it: the four anchor-customer nodes (MCEME, Airgap, Ripple,
+  // BEL) were removed 2026-09-24. The site publishes no customer list (/contact), MCEME failed verification
+  // (/evidence), and "Ripple: national rollout partner" overstated a letter the whitepaper says is unsigned.
   category: 'sku' | 'foundry' | 'moat' | 'architecture' | 'anchor' | 'governance' | 'ai';
   x: number; // 0-100 normalized coordinate
   y: number; // 0-100 normalized coordinate
@@ -345,7 +348,7 @@ export const deepGridCatalog: DeepGridItem[] = [
       'Replaces TI DRV83xx + external MCU combos.'
     ],
     citation: 'DeepGrid Semi SKU Compendium — Chapter 2: SKU-1 BLDC Motor',
-    connectedNodeIds: ['fab-skywater', 'anchor-airgap', 'moat-pil5', 'dg32-lite']
+    connectedNodeIds: ['fab-skywater', 'moat-pil5', 'dg32-lite']
   },
   {
     id: 'sku-2',
@@ -363,7 +366,7 @@ export const deepGridCatalog: DeepGridItem[] = [
       'Direct import substitution for Cirrus Logic and Analog Devices metrology front-ends under India Smart Meter National Programme.'
     ],
     citation: 'DeepGrid Semi SKU Compendium — Chapter 3: SKU-2 Smart Meter',
-    connectedNodeIds: ['anchor-ripple', 'fab-scl', 'moat-dap2020']
+    connectedNodeIds: ['fab-scl', 'moat-dap2020']
   },
   {
     id: 'sku-3',
@@ -399,7 +402,7 @@ export const deepGridCatalog: DeepGridItem[] = [
       'Trips FAULTn pin and enters hardware safe-state in under 2 clock cycles upon mismatch.'
     ],
     citation: 'DeepGrid Semi SKU Compendium — Chapter 5: SKU-4 Lockstep MCU',
-    connectedNodeIds: ['arch-lockstep', 'anchor-mceme', 'sku-5', 'dg32-lite']
+    connectedNodeIds: ['arch-lockstep', 'sku-5', 'dg32-lite']
   },
   {
     id: 'sku-5',
@@ -471,7 +474,7 @@ export const deepGridCatalog: DeepGridItem[] = [
       'Integrated LVDS receiver and gamma correction lookup tables on a single monolithic substrate.'
     ],
     citation: 'DeepGrid Semi SKU Compendium — Chapter 9: SKU-8 Display Driver',
-    connectedNodeIds: ['anchor-bel', 'moat-pil5', 'fab-skywater']
+    connectedNodeIds: ['moat-pil5', 'fab-skywater']
   },
   {
     id: 'sku-9',
@@ -507,7 +510,7 @@ export const deepGridCatalog: DeepGridItem[] = [
       'Designed for sovereign defense procurement under DAP-2020 Make-II scheme.'
     ],
     citation: 'DeepGrid Semi SKU Compendium — Chapter 11: D100 Tactical Drone SoC',
-    connectedNodeIds: ['arch-sip', 'moat-make2', 'anchor-mceme', 'dg32-lite']
+    connectedNodeIds: ['arch-sip', 'moat-make2', 'dg32-lite']
   },
   {
     id: 'dg-sdv-platform',
@@ -637,7 +640,7 @@ export const deepGridCatalog: DeepGridItem[] = [
       'Stop Rule S2: Cap layout burn rate if MPW yield drops below 85% on digital logic.',
       'Stop Rule S3: Transition to SCL Mohali only after commercial characterization passes on SkyWater/IHP.',
       'Stop Rule S4: Never compete on raw commodity wafer price against state-subsidized Chinese fabs; compete exclusively within legally protected PIL/Make-II moats.',
-      'Live pre-ASIC contracted revenue (₹2.88 Cr: MCEME ₹1.01 Cr, Infinis, Axitech) proves real market demand before mass silicon tapeout.'
+      'Board orders for FPGA-based hardware exist; they show delivery capability, not chip demand. The contracted total is not carried here because the MCEME part of it failed verification (see Evidence).'
     ],
     citation: 'DeepGrid Mature Silicon — Chapter 14: What Could Stop This (Charlie Munger Audit)',
     connectedNodeIds: ['fin-seed', 'three-factory', 'dap-2020-moats']
@@ -901,7 +904,7 @@ export const deepGridCatalog: DeepGridItem[] = [
     nodeFoundry: 'SkyWater sky130A · OpenFrame CI2609 & CI2612 Shuttles',
     voltageRail: '3.3V I/O (vddio) / 1.8V Core (vccd1)',
     standards: 'JEDEC MO-220 QFN-64 · OpenFrame Harness Pinout',
-    summary: 'Authoritative 64-pin QFN package definition with exact pin assignments across all 4 sides. Guarantees 100% pin-compatible drop-in board replacement between DG32-LITE and DG32-2DOM.',
+    summary: 'Authoritative 64-pin QFN package definition with exact pin assignments across all 4 sides. DG32-2DOM is a pin-compatible drop-in for DG32-LITE boards: the two share one pinout.',
     keyFacts: [
       'West Side (Pins 1–16): Analog SAR ADC negative input (pin 2), 3-phase gate drive PWM_AH..CL (pins 3–8), PWM_TRIG (pin 11), Quadrature ENC_A/B/Z (pins 12–14), Hall A/B (pins 15–16).',
       'South Side (Pins 17–32): vddio 3.3V (pin 17), vccd 1.8V (pin 18), resetb 3.3V (pin 21), Hall C (pin 22), JTAG TCK/TMS/TDI/TDO (pins 24–27), RST_N (pin 28), vdda 3.3V (pin 30), CLK 50 MHz (pin 31), QSPI_SCLK 25 MHz (pin 32).',
@@ -1013,10 +1016,6 @@ export const graphNodes: GraphNode[] = [
   { id: 'foc-loop-budget', name: 'FOC Loop Budget', shortName: 'FOC Budget', category: 'architecture', x: 38, y: 50, description: '100 kHz closed-loop bandwidth: 300 cycles fixed, 4700 cycles free at 10 kHz.' },
 
   // Anchor Customers
-  { id: 'anchor-mceme', name: 'MCEME Army', shortName: 'MCEME', category: 'anchor', x: 12, y: 75, description: 'Indian Army MCEME: ₹1.01 Cr contracted pre-ASIC validation.' },
-  { id: 'anchor-airgap', name: 'Airgap EV', shortName: 'Airgap', category: 'anchor', x: 10, y: 32, description: 'Commercial anchor for 15M units/year BLDC motor silicon.' },
-  { id: 'anchor-ripple', name: 'Ripple Metering', shortName: 'Ripple', category: 'anchor', x: 48, y: 88, description: 'National rollout partner for 250M smart meter front-ends.' },
-  { id: 'anchor-bel', name: 'BEL Avionics', shortName: 'BEL', category: 'anchor', x: 8, y: 62, description: 'Bharat Electronics Limited 17" cockpit tactical display program.' },
 
   // Governance & Finance
   { id: 'fin-seed', name: '₹10 Cr Model', shortName: '₹10 Cr', category: 'governance', x: 62, y: 46, description: 'Seed allocation for 6 MPW runs, ATE lines, and FY31 revenue.' },
@@ -1073,10 +1072,6 @@ export const nodeToCatalogMap: Record<string, string> = {
   'int8-attention-engine': 'int8-attention-engine',
   'avip-bearing-diagnostics': 'avip-bearing-diagnostics',
   'foc-loop-budget': 'foc-loop-budget',
-  'anchor-mceme': 'track-b-d100',
-  'anchor-airgap': 'sku-1',
-  'anchor-ripple': 'sku-2',
-  'anchor-bel': 'sku-8',
   'fin-seed': 'fin-funds',
   'fin-funds': 'fin-funds',
   'fin-munger': 'munger-audit',
@@ -1165,24 +1160,20 @@ export const graphEdges: GraphEdge[] = [
 
   // SKU to Foundry
   { from: 'sku-1', to: 'fab-skywater', label: '130nm BCD' },
-  { from: 'sku-1', to: 'anchor-airgap', label: 'Anchor Buyer' },
   { from: 'sku-1', to: 'moat-pil5', label: 'PIL-5 Substitution' },
 
   { from: 'sku-2', to: 'fab-scl', label: 'Domestic eNVM' },
-  { from: 'sku-2', to: 'anchor-ripple', label: '250M Meter Rollout' },
 
   { from: 'sku-3', to: 'fab-scl', label: '180nm BCD' },
   { from: 'sku-3', to: 'moat-srijan', label: 'NSG-5962' },
 
   { from: 'sku-4', to: 'arch-lockstep', label: 'Dual RV32IM' },
-  { from: 'sku-4', to: 'anchor-mceme', label: '₹1.01 Cr Order' },
   { from: 'sku-5', to: 'sku-4', label: 'Harness Companion' },
 
   { from: 'sku-6', to: 'fab-scl', label: 'MIL-883 Pathfinder' },
   { from: 'sku-7', to: 'fab-ihp', label: '350 GHz SiGe' },
   { from: 'sku-7', to: 'moat-dap2020', label: 'Non-ITAR' },
 
-  { from: 'sku-8', to: 'anchor-bel', label: 'BEL 17" Cockpit' },
   { from: 'sku-8', to: 'moat-pil5', label: 'PIL-5 #5' },
 
   { from: 'sku-9', to: 'dg-sdv-platform', label: 'Zonal Edge' },
@@ -1190,7 +1181,6 @@ export const graphEdges: GraphEdge[] = [
 
   { from: 'track-b-d100', to: 'arch-sip', label: 'Multi-Die Packaging' },
   { from: 'track-b-d100', to: 'moat-make2', label: 'Make-II Prototype' },
-  { from: 'track-b-d100', to: 'anchor-mceme', label: 'Army Drones' },
 
   { from: 'dg-sdv-platform', to: 'sku-7', label: 'Perception Radar' },
   { from: 'dg-sdv-platform', to: 'sku-9', label: 'TSN Mesh' },

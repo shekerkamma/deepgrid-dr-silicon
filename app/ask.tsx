@@ -290,8 +290,8 @@ export default function AskDeepGrid({go}: {go: (hash: string) => void}) {
     <section className="page-wrap dr-ask-section">
       <SectionHead 
         tag="08 / ASK DEEPGRID" 
-        title="Verified Silicon Intelligence" 
-        copy="Search DeepGrid Semi technology, manufacturing qualifications, sovereign supply chain security, and motor-control silicon architecture. Every answer is grounded in authoritative engineering whitepapers with downloadable primary references."
+        title="Ask about DG32, and every answer names its source" 
+        copy="Ask about the lockstep core, the control loop, the package, the portfolio or the supply chain. Each answer cites the document and section it comes from, with the PDF one click away, so you can check it rather than take it on trust."
       />
 
       {/* Top View Selector Strip */}
@@ -943,7 +943,7 @@ export default function AskDeepGrid({go}: {go: (hash: string) => void}) {
                             setReadingDocContent(null);
                             go('library');
                           }}
-                          title="Open Section 07 Authoritative Design Archive"
+                          title="Open the source documents"
                         >
                           <span>Inspect in Design Library</span>
                           <ArrowUpRight size={14} />
@@ -1009,7 +1009,7 @@ export default function AskDeepGrid({go}: {go: (hash: string) => void}) {
           06 / Multi-spin roadmap <ArrowUpRight size={16} />
         </button>
         <button className="text-link" onClick={() => go('library')}>
-          07 / Authoritative documents &amp; official PDFs <ArrowUpRight size={16} />
+          07 / Source documents and PDFs <ArrowUpRight size={16} />
         </button>
       </div>
     </section>

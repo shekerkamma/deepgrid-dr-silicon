@@ -491,16 +491,16 @@ export const executiveThemes: ExecutiveTheme[] = [
     keywords: ['10 cr', '₹10 cr', 'seed round', 'use of funds', 'runway', 'capital waterfall', 'financial model'],
     title: '₹10 Cr Capital Waterfall & 24-Month Seed Runway',
     tag: 'FINANCIAL MODEL & USE OF FUNDS · ₹10 CR SEED ROUND',
-    lead: 'The ₹10 Cr ($1.2M) seed round funds 24 months of operational runway across six parallel multi-project wafer (MPW) runs, four product qualifications, and production mask tooling for Chips 1 and 2, delivering ₹2.88 Cr in committed pre-ASIC customer revenue.',
+    lead: 'The ₹10 Cr ($1.2M) seed round funds 24 months of operational runway across six parallel multi-project wafer (MPW) runs, four product qualifications, and production mask tooling for Chips 1 and 2. No revenue figure here is contracted chip revenue: the plan is a target, not a result.',
     explanation: [
       'Capital Allocation Waterfall: The ₹10 Cr round is deployed with strict capital discipline: ₹3.8 Cr for factory wafer runs and shuttle reservations (SkyWater 130 nm, IHP 130 nm SiGe, SCL Mohali); ₹2.6 Cr for automated test equipment (ATE), high-reliability screening, and AEC-Q100 Grade 1 qualification; ₹2.4 Cr for core engineering payroll across RTL design, physical verification, and firmware; and ₹1.2 Cr for operational reserves and regulatory filing.',
       '10x Cost Advantage via Open-Source EDA: Conventional semiconductor startups spend $2M–$5M on commercial EDA software licenses (Synopsys, Cadence) before taping out first silicon. DeepGrid utilizes fully validated open-source toolchains (Yosys, OpenROAD, Magic, KLayout), reducing software license expenditure to ₹0 and enabling profitable operation at low volumes (10k–50k units/year).',
-      'Commercial Traction & De-Risking: Unlike speculative silicon ventures, DeepGrid anchors its seed round with ₹2.88 Cr in live pre-ASIC commercial agreements, including flight motor controllers for tactical UAVs and smart-meter metering SoCs.'
+      'Board orders are not chip demand: DeepGrid has sold FPGA-based boards, which shows it can specify, build and deliver a system, but a board buyer is a different customer, price and approval process from a chip buyer. The contracted figure is not carried on this site because part of it, the MCEME contract, failed verification (see Evidence).'
     ],
     facts: [
       'Seed Allocation: ₹3.8 Cr foundry runs, ₹2.6 Cr test/qualification, ₹2.4 Cr engineering, ₹1.2 Cr reserve.',
       'Operational Runway: 24 months covering 6 parallel shuttle runs and 4 product qualifications.',
-      'Pre-ASIC Traction: ₹2.88 Cr in active commercial orders de-risking first silicon production.',
+      'Board revenue, not chip revenue: FPGA-based board orders exist; no chip revenue exists yet.',
       'Capital Efficiency: Open-source EDA eliminates $2M+ in upfront software licensing overhead.'
     ],
     docNum: '05',
@@ -588,9 +588,9 @@ export const executiveThemes: ExecutiveTheme[] = [
     tag: 'SOVEREIGN SUPPLY CHAIN IMMUNITY · THREE-FACTORY ROADMAP',
     lead: 'DeepGrid designs for three foundries in sequence rather than one: SkyWater in the USA (130 nm) for first silicon, IHP in Germany (130 nm SiGe) for the radar front end, and SCL Mohali in India (180 nm) for production. That spreads the risk of any single fab. It does not make the supply chain domestic: only SCL is in India, and first silicon is made in the USA.',
     explanation: [
-      'The Three-Factory Redundancy Architecture: Unlike foreign microcontrollers tied to single geographic fabs (e.g. TSMC or UMC in Taiwan), DeepGrid designs its silicon masks to be process-portable across three independent foundries: (1) SkyWater Technology (USA) for commercial 130 nm CMOS tape-outs; (2) IHP Microelectronics (Germany) for 130 nm / 250 nm SiGe BiCMOS radar front-ends; and (3) SCL Mohali (India) for sovereign 180 nm BCD fabrication. If any single fab or trade route faces geopolitical embargo or disruption, production shifts across qualified masks without architectural redesign.',
-      'Open-Source EDA & Export Control Immunity: DeepGrid completely eliminates dependency on proprietary, ITAR-restricted EDA tools (Synopsys, Cadence) that require recurring foreign licenses. By pioneering full RTL-to-GDSII tape-outs using the open-source OpenLane/OpenROAD flow and open SkyWater PDKs, DeepGrid owns 100% of its intellectual property and mask tooling, ensuring that foreign sanctions or software revoking can never halt domestic silicon delivery.',
-      'Statutory Defence Moat & Standard Packaging: By standardizing on mature 9×9 mm 64-pin QFN packages with domestic wirebonding, DeepGrid avoids complex advanced packaging bottlenecks (such as CoWoS or TSVs). Under Ministry of Defence DAP-2020 Make-II regulations and the 5th Positive Indigenisation List (PIL-5), DeepGrid qualifies for Buy (Indian-IDDM) status with >50% domestic content, securing mandatory statutory purchasing priority over imported silicon.'
+      'Three foundries, in sequence: SkyWater in the USA is the proven first step; IHP in Germany is the differentiated step, its 130 nm SiGe process carrying the 77 GHz radar front end; SCL Mohali in India is the sovereign step, for 180 nm high-voltage and screened defence parts. The three-factory architecture sets out what ports between them and what has to be redesigned.',
+      'Open-source flow: tape-outs use an open-source flow (Yosys, OpenROAD) on the open SkyWater PDK, so there is no per-seat EDA licence, and DeepGrid owns 100% of its RTL and GDSII.',
+      'Procurement rules, not immunity: under DAP-2020, Buy (Indian-IDDM) requires at least 50% indigenous content with Indian design and fabrication, which the SCL Mohali route targets, and Buy (Indian) requires at least 60% indigenous content with Indian-owned design. First silicon is made in the USA, so the supply chain is spread across countries, not domestic.'
     ],
     facts: [
       'Three-Factory Foundry Redundancy: Portable GDSII masks qualified across SkyWater 130 nm, IHP SiGe, and SCL Mohali 180 nm.',
